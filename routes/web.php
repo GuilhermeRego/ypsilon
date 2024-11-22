@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Groups\HomeGroupsController;
 use App\Http\Controllers\Groups\UserGroupsController;
+use App\Http\Controllers\Groups\GroupController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,6 +47,6 @@ Route::get('/groups/discover', [HomeGroupsController::class, 'index']);
 Route::get('/groups/your-groups', [UserGroupsController::class, 'index'])
     ->middleware('auth')
     ->name('your-groups.index');
-
+Route::get('/groups/create', [GroupController::class, 'create'])->name('group.create');
 
 

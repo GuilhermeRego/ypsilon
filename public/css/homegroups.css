@@ -1,0 +1,70 @@
+/* General Styling for Tab Links */
+.nav-tabs .nav-link {
+    font-size: 1.25rem; /* Increase tab font size */
+    font-weight: bold; /* Make tabs bold */
+    padding: 12px 20px; /* Increase padding for spacing */
+    text-transform: uppercase; /* Make text uppercase */
+    color: black;
+  }
+
+  .nav-tabs .nav-link:hover{
+    color: black;
+  }
+  
+  .nav-tabs .nav-link.active {
+    color: #fff;
+    border-radius: 8px;
+  }
+  
+  /* General Card Styling for Group Items */
+  .card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Group Image Styling */
+  .card img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+  
+  /* Floating Add Group Button */
+  .floating-add-group-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999; /* Ensures it stays on top */
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-size: 2rem; /* Bigger icon size */
+    transition: all 0.3s ease;
+  }
+  
+  .floating-add-group-btn i {
+    font-size: 1.5rem; /* Plus icon size */
+  }
+  
+  /* Hover Effect */
+  .floating-add-group-btn:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+    text-decoration: none;
+  }
+  
