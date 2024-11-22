@@ -47,6 +47,9 @@ Route::get('/groups/discover', [HomeGroupsController::class, 'index']);
 Route::get('/groups/your-groups', [UserGroupsController::class, 'index'])
     ->middleware('auth')
     ->name('your-groups.index');
-Route::get('/groups/create', [GroupController::class, 'create'])->name('group.create');
+Route::get('/group/create', [GroupController::class, 'create'])
+    ->middleware('auth')
+    ->name('group.create');
+Route::post('/group/create', [GroupController::class, 'store'])->name('group.store');
 
 

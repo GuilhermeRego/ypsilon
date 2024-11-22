@@ -15,8 +15,7 @@ class HomeGroupsController extends Controller
     public function index()
     {
         if (auth()->check()) {
-            $user = User::find(1);
-    
+            $user = Auth()->user();
             $groups = Group::whereNotIn('id', $user->groupMembers->pluck('group_id'))->get();
         } else {
             $groups = Group::all();
