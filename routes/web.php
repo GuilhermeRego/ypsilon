@@ -5,7 +5,8 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HomeGroupsController;
+use App\Http\Controllers\Groups\HomeGroupsController;
+use App\Http\Controllers\Groups\UserGroupsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,8 +42,10 @@ Route::post('/home', [PostController::class, 'store'])->name('post.store');
 
 // Groups
 Route::redirect('/groups', '/groups/discover');
-Route::get('/groups/discover', [HomeGroupsController::class, 'discover'])->name('home');
-Route::get('/groups/test', [HomeGroupsController::class, 'showusergroups'])->name('groups.test');
+Route::get('/groups/discover', [HomeGroupsController::class, 'index']);
+Route::get('/groups/your-groups', [UserGroupsController::class, 'index'])
+    ->middleware('auth')
+    ->name('your-groups.index');
 
 
 
