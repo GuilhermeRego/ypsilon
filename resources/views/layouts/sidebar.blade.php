@@ -10,7 +10,7 @@
 
         <title>{{ config('app.name', 'Ypsilon') }}</title>
         <link rel="icon" href="{{ url('images/logo.png') }}" type="image/png">
-
+        
         <!-- Styles -->
         <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">

@@ -10,12 +10,17 @@ class HomeGroupsController extends Controller
     /**
      * Display the home groups page.
      */
-    public function index()
+    public function discover()
     {
         // Fetch groups
-        $groups = Group::all(); // Use all() to get all groups
-        return view('Groups.home', [
+        $groups = Group::all(); 
+        return view('Groups.discover', [
             'groups' => $groups,
         ]);
+    }
+
+    public function showUserGroups()
+    {
+        return view('Groups.usergroups'); 
     }
 }

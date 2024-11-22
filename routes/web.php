@@ -40,4 +40,9 @@ Route::controller(RegisterController::class)->group(function () {
 Route::post('/home', [PostController::class, 'store'])->name('post.store');
 
 // Groups
-Route::get('/groups', [HomeGroupsController::class, 'index'])->name('home');
+Route::redirect('/groups', '/groups/discover');
+Route::get('/groups/discover', [HomeGroupsController::class, 'discover'])->name('home');
+Route::get('/groups/test', [HomeGroupsController::class, 'showusergroups'])->name('groups.test');
+
+
+
