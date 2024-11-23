@@ -12,6 +12,9 @@
         <link rel="icon" href="{{ url('images/logo.png') }}" type="image/png">
         
         <!-- Styles -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ asset('css/homegroups.css') }}">
         <link href="{{ url('css/milligram.min.css') }}" rel="stylesheet">
         <link href="{{ url('css/sidebar.css') }}" rel="stylesheet">
         <link href="{{ url('css/post.css') }}" rel="stylesheet">
