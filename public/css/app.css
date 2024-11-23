@@ -227,31 +227,27 @@ body > div > aside > nav > div:nth-child(3) {
  * Some styles might be missing
  **/
 button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
+    background-color: #202020;
+    border-color: #202020;
 }
 a.button {
-    background-color: #9b4dca;
-    border-color: #9b4dca;
+    background-color: #202020;
+    border-color: #202020;
 }
 a.button.button-outline {
-    color: #9b4dca;
+    color: #202020;
 }
 a {
-    color: #9b4dca;
+    color: #202020;
 }
 input[type=text]:focus,
 input[type=email]:focus,
 input[type=password]:focus {
-    border-color: #9b4dca;
-}
-
-body > div > aside > a > img:hover {
-    /* Adicione os estilos necessários aqui */
+    border-color: #202020;
 }
 
 main {
-    margin-top: 50px; /* Ajuste conforme necessário para evitar sobreposição */
-    margin-left: 250px; /* Ajuste conforme necessário */
+    margin-top: 50px; 
+    margin-left: 250px; 
     padding: 20px;
 }

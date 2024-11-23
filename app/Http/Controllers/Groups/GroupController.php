@@ -50,14 +50,14 @@ class GroupController extends Controller
 
         $group_member = Group_Member::create([
             'group_id' => $group->id,
-            'user_id' =>  Auth()->user()->id,
+            'user_id' =>  auth()->user()->id,
         ]);
-        $group_member = Group_Owner::create([
+        Group_Owner::create([
             'member_id' => $group_member->id,
         ]);
 
 
-        return redirect()->route('your-groups.index')->with('success', 'Group created successfully!');
+        return redirect()->route('groups.my-groups')->with('success', 'Group created successfully.');
     }
 
 }

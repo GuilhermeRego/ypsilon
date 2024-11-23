@@ -10,7 +10,6 @@ class UserGroupsController extends Controller
 {
     public function index()
     {
-
         $user = auth()->user();
         $groups = Group::whereIn('id', $user->groupMembers->pluck('group_id'))->get();
         return view('Groups.usergroups', [
