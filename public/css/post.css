@@ -1,7 +1,41 @@
 .post {
-    margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px;
-    background-color: #f9f9f9;
+    background-color: #fff;
+    margin-bottom: 20px;
+    width: 100%; /* Ajuste a largura do post */
+}
+
+.post-body {
+    padding: 10px;
+}
+
+.post-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.post-stats span {
+    margin-bottom: 10px;
+}
+
+.post-stats form,
+.post-stats a {
+    margin-bottom: 5px;
+}
+
+.post-author {
+    font-weight: bold;
+}
+
+.post-content {
+    margin-top: 10px;
+}
+
+.post-date {
+    color: #888;
 }

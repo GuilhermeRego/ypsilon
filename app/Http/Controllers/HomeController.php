@@ -18,7 +18,7 @@ class HomeController extends Controller
 
     public function following()
     {
-        // Obtenha os posts que o usuário está seguindo
+        // Get the posts of the users the current user is following
         $posts = Post::whereHas('user', function ($query) {
             $query->whereIn('id', auth()->user()->following()->pluck('id'));
         })->orderBy('date_time', 'desc')->get();

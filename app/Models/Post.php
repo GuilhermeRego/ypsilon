@@ -54,14 +54,32 @@ class Post extends Model
     }
 
     // Eloquent relationship between Post and Reaction.
-    public function reaction()
+    public function reactions()
     {
         return $this->hasMany(Reaction::class, 'post_id', 'id');
     }
 
     // Eloquent relationship between Post and Repost.
-    public function repost()
+    public function reposts()
     {
         return $this->hasMany(Repost::class, 'post_id', 'id');
+    }
+
+    // Number of likes on the post.
+    public function likesCount()
+    {
+        return $this->reactions()->where('is_like', true)->count();
+    }
+
+    // Number of dislikes on the post.
+    public function dislikesCount()
+    {
+        return $this->reactions()->where('is_like', false)->count();
+    }
+
+    // Number of reposts on the post.
+    public function repostsCount()
+    {
+        return $this->reposts()->count();
     }
 }

@@ -13,7 +13,7 @@ class Repost extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Repost';
+    protected $table = 'repost';
 
     /**
      * The attributes that are mass assignable.
