@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomeGroupsController;
+use App\Http\Controllers\HomeFollowingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +23,7 @@ use App\Http\Controllers\HomeGroupsController;
 // Home
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::redirect('/', '/login');
+Route::get('/trending', [HomeController::class, 'index'])->name('home');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -40,4 +42,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::post('/home', [PostController::class, 'store'])->name('post.store');
 
 // Groups
-Route::get('/groups', [HomeGroupsController::class, 'index'])->name('home');
+Route::get('/groups', [HomeGroupsController::class, 'index'])->name('home.groups');
+
+// Following
+Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');
