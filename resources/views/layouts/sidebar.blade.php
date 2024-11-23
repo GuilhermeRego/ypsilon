@@ -49,10 +49,10 @@
                     </nav>
                     <ul class="nav flex-column mt-auto">
                         @auth
-                            <li class="nav-item"><a href="{{ url('profile') }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
+                            <li class="nav-item"><a href="{{ route('profile.show', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
                             <li class="nav-item">
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
+                                @csrf
                                 </form>
                                 <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     <i class="bi bi-box-arrow-right"></i> Logout

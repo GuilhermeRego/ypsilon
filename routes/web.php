@@ -9,6 +9,8 @@ use App\Http\Controllers\Groups\HomeGroupsController;
 use App\Http\Controllers\Groups\UserGroupsController;
 use App\Http\Controllers\Groups\GroupController;
 use App\Http\Controllers\HomeFollowingController;
+use App\Http\Controllers\ReactionController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,7 @@ use App\Http\Controllers\HomeFollowingController;
 
 // Home
 Route::redirect('/', '/home/trending');
+Route::redirect('/home', '/home/trending');
 Route::get('/home/trending', [HomeController::class, 'index'])->name('home.trending');
 Route::get('/home/following', [HomeFollowingController::class, 'following'])->name('home.following');
 
@@ -53,3 +56,13 @@ Route::post('/groups/create', [GroupController::class, 'store'])->name('groups.s
 
 // Following
 Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');
+
+// Reaction
+Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');
+
+// Profile
+Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
+
+// Edit Post
+Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
+Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');

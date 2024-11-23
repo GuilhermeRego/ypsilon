@@ -54,7 +54,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        // Check if the user is the owner of the post
+        if (auth()->user()->id != $post->user_id) abort(403);
+
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -62,7 +65,19 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        // Check if the user is the owner of the post
+        if (auth()->user()->id != $post->user_id) abort(403);
+
+        // Validate the request
+        $validatedData = $request->validate([
+            'content' => 'required|string|max:1000'
+        ]);
+
+        $post->content = $validatedData['content'];
+        $post->save();
+
+        return redirect()->route('profile.show', ['username' => auth()->user()->username])
+                         ->with('success', 'Post updated successfully!');
     }
 
     /**

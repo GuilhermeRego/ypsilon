@@ -13,7 +13,7 @@ class Reaction extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Reaction';
+    protected $table = 'reaction';
 
     /**
      * The attributes that are mass assignable.
