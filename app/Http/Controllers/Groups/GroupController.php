@@ -39,7 +39,7 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        dd("ola");
+        
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
