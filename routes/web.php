@@ -1,15 +1,15 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HomeGroupsController;
-use App\Http\Controllers\HomeFollowingController;
 use App\Http\Controllers\Groups\HomeGroupsController;
 use App\Http\Controllers\Groups\UserGroupsController;
 use App\Http\Controllers\Groups\GroupController;
+use App\Http\Controllers\HomeFollowingController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +24,7 @@ use App\Http\Controllers\Groups\GroupController;
 
 
 // Home
+Route::redirect('/','/home');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::redirect('/', '/login');
 Route::get('/trending', [HomeController::class, 'index'])->name('home');
@@ -56,7 +57,6 @@ Route::get('/group/create', [GroupController::class, 'create'])
 Route::post('/group/create', [GroupController::class, 'store'])->name('group.store');
 
 
-Route::get('/groups', [HomeGroupsController::class, 'index'])->name('home.groups');
 
 // Following
 Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');
