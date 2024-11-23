@@ -10,33 +10,40 @@ use App\Models\Group_Owner;
 class GroupController extends Controller
 {
 
-    public function index($group){
+    public function index($group)
+    {
         $group = Group::findOrFail($group);
         $posts = $group->post()->orderBy('date_time', 'desc')->get();
         $memberId = Group_Member::where('user_id', Auth()->user()->id)
-                                ->where('group_id', $group->id)
-                                ->value('id'); 
+            ->where('group_id', $group->id)
+            ->value('id');
 
-        $isMember = $memberId ? true : false; 
+        $isMember = $memberId ? true : false;
 
         $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
 
-        return view('Groups.index',[
-            'group' => $group, 'isMember' => $isMember, 'isOwner' => $isOwner, 'posts' => $posts, 
+        return view('Groups.index', [
+            'group' => $group,
+            'isMember' => $isMember,
+            'isOwner' => $isOwner,
+            'posts' => $posts,
 
-    ]);
+        ]);
     }
 
-    public function create(){
+    public function create()
+    {
         return view('Groups.creategroup');
 
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        dd("ola");
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
-            
+
         ]);
         $groupImageId = null;
         if ($request->hasFile('group_image')) {
@@ -45,7 +52,7 @@ class GroupController extends Controller
                 'url' => $imagePath,
                 'type' => 'group_profile',
             ]);
-            $groupImageId = $groupImage->id; 
+            $groupImageId = $groupImage->id;
         }
 
         $groupBannerId = null;
@@ -68,14 +75,44 @@ class GroupController extends Controller
 
         $group_member = Group_Member::create([
             'group_id' => $group->id,
-            'user_id' =>  auth()->user()->id,
+            'user_id' => auth()->user()->id,
         ]);
         Group_Owner::create([
             'member_id' => $group_member->id,
         ]);
-
-
         return redirect()->route('groups.my-groups')->with('success', 'Group created successfully.');
+    }
+
+    public function joinGroup($groupId)
+    {
+        $existingMember = Group_Member::where('user_id', Auth()->user()->id)
+            ->where('group_id', $groupId)
+            ->exists();
+
+        if ($existingMember) {
+            return redirect()->route('groups.show', $groupId)->with('error', 'You are already a member of this group.');
+        }
+
+        Group_Member::create([
+            'user_id' => Auth()->user()->id,
+            'group_id' => $groupId
+        ]);
+
+        return redirect()->route('groups.show', $groupId)->with('success', 'You have successfully joined the group!');
+
+    }
+    public function leaveGroup($groupId)
+    {
+        $groupMember = Group_Member::where('user_id', Auth()->user()->id)
+            ->where('group_id', $groupId);
+
+        if (!$groupMember) {
+            return redirect()->route('groups.show', $groupId)->with('error', 'You are not a member of this group.');
+        }
+
+        $groupMember->delete();
+
+        return redirect()->route('groups.show', $groupId)->with('success', 'You have successfully left the group!');
     }
 
 }

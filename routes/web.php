@@ -53,12 +53,11 @@ Route::get('/groups/my-groups', [UserGroupsController::class, 'index'])->name('g
 Route::get('/groups/create', [GroupController::class, 'create'])
     ->middleware('auth') 
     ->name('groups.create'); 
-Route::post('/groups/create', [GroupController::class, 'store'])->name('groups.store');
+Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
 Route::get('/groups/{group}', [GroupController::class, 'index'])->name('groups.show');
 Route::post('/groups/{group}/join', [GroupController::class, 'joinGroup'])->name('group.join');
+Route::delete('/groups/{group}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
 
-// Following
-Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');
 
 // Reaction
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');

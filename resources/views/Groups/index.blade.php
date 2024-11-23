@@ -31,7 +31,11 @@
                 @endif
 
                 @if ($isMember)
-                    <button class="btn">Leave Group</button>
+                    <form action="{{ route('group.leave', $group->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Leave Group</button>
+                    </form>
                 @else
                     <form action="{{ route('group.join', $group->id) }}" method="POST">
                         @csrf
