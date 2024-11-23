@@ -1,6 +1,10 @@
 /* Estilos gerais */
 body {
     background-color: #ffffff;
+    padding-top: 50px; /* Ajuste conforme necessário para evitar sobreposição */
+    display: flex;
+    margin: 0;
+    padding: 0;
 }
 
 /* Estilos para o header */
@@ -30,8 +34,11 @@ main > header span {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 100vh;
+    width: 250px; /* Ajuste conforme necessário */
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
 }
 
 .sidebar .nav-link {
@@ -70,6 +77,35 @@ body > div > aside > nav > div:nth-child(3) {
     bottom: 0;
 }
 
+.upperbar {
+    font-size: 2em;
+    background-color: #202020;
+    padding: 8px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 250px; 
+    width: calc(100% - 250px); 
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-left: 1px solid #404040;
+}
+
+.upperbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+.upperbar > a:hover {
+    background-color: #606060;
+    color: #ffffff; 
+    text-decoration: none;
+    transition: 0.2s;
+}
 
 #cards {
     display: grid;
@@ -208,4 +244,14 @@ input[type=text]:focus,
 input[type=email]:focus,
 input[type=password]:focus {
     border-color: #9b4dca;
+}
+
+body > div > aside > a > img:hover {
+    /* Adicione os estilos necessários aqui */
+}
+
+main {
+    margin-top: 50px; /* Ajuste conforme necessário para evitar sobreposição */
+    margin-left: 250px; /* Ajuste conforme necessário */
+    padding: 20px;
 }

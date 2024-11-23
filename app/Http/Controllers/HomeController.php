@@ -15,4 +15,14 @@ class HomeController extends Controller
         $posts = Post::orderBy('date_time', 'desc')->get();
         return view('home', compact('posts'));
     }
+
+    public function following()
+    {
+        // Obtenha os posts que o usuário está seguindo
+        $posts = Post::whereHas('user', function ($query) {
+            $query->whereIn('id', auth()->user()->following()->pluck('id'));
+        })->orderBy('date_time', 'desc')->get();
+
+        return view('homefollowing', compact('posts'));
+    }
 }
