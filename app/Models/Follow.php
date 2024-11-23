@@ -13,7 +13,7 @@ class Follow extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Follow';
+    protected $table = 'follow';
 
     /**
      * The attributes that are mass assignable.

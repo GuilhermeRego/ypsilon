@@ -14,7 +14,7 @@ class HomeGroupsController extends Controller
     {
         // Fetch groups
         $groups = Group::all(); // Use all() to get all groups
-        return view('Groups.home', [
+        return view('Groups.homegroups', [
             'groups' => $groups,
         ]);
     }

@@ -61,13 +61,6 @@
                         @endauth
                     </ul>
                 </aside>
-
-                <!-- Main content -->
-                <main class="flex-grow-1 p-3">
-                    <div class="container" style="margin-top: 20px;">
-                        @yield('content')
-                    </div>
-                </main>
             </div>
         </div>
     </body>

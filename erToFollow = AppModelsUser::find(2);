@@ -1,0 +1,14 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#5204
+    [34mid[39m: [35m3[39m,
+    [34mnickname[39m: "[32mgui[39m",
+    [34musername[39m: "[32mgui[39m",
+    [34mbirth_date[39m: "[32m2004-10-31[39m",
+    [34memail[39m: "[32mgui@gmail.com[39m",
+    [34mbio[39m: [36mnull[39m,
+    [34mis_private[39m: [36mfalse[39m,
+    [34mprofile_image[39m: [36mnull[39m,
+    [34mbanner_image[39m: [36mnull[39m,
+    #[33mpassword[39m: "[32m$2y$10$wWOs2hPpYa7hCiSNUWtYkesvyqKdm5CIZSWF1kHWSyxWMb8j1n1lG[39m",
+    #[33mremember_token[39m: [36mnull[39m,
+  }
+
