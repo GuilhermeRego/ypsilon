@@ -21,13 +21,10 @@ use App\Http\Controllers\HomeFollowingController;
 |
 */
 
-
-
 // Home
-Route::redirect('/','/home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::redirect('/', '/login');
-Route::get('/trending', [HomeController::class, 'index'])->name('home');
+Route::redirect('/', '/home/trending');
+Route::get('/home/trending', [HomeController::class, 'index'])->name('home.trending');
+Route::get('/home/following', [HomeFollowingController::class, 'following'])->name('home.following');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
@@ -47,16 +44,12 @@ Route::post('/home', [PostController::class, 'store'])->name('post.store');
 
 // Groups
 Route::redirect('/groups', '/groups/discover');
-Route::get('/groups/discover', [HomeGroupsController::class, 'index']);
-Route::get('/groups/your-groups', [UserGroupsController::class, 'index'])
-    ->middleware('auth')
-    ->name('your-groups.index');
-Route::get('/group/create', [GroupController::class, 'create'])
-    ->middleware('auth')
-    ->name('group.create');
-Route::post('/group/create', [GroupController::class, 'store'])->name('group.store');
-
-
+Route::get('/groups/discover', [HomeGroupsController::class, 'index'])->name('groups.discover');
+Route::get('/groups/my-groups', [UserGroupsController::class, 'index'])->name('groups.my-groups');
+Route::get('/groups/create', [GroupController::class, 'create'])
+    ->middleware('auth') 
+    ->name('groups.create'); 
+Route::post('/groups/create', [GroupController::class, 'store'])->name('groups.store');
 
 // Following
 Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');

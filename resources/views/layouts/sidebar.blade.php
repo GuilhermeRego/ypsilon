@@ -36,10 +36,10 @@
             <div class="d-flex flex-grow-1">
                 <!-- Sidebar -->
                 <aside class="sidebar d-flex flex-column p-3" style="width: 250px; background-color: #202020;">
-                    <a href="{{ url('home') }}"><img src="{{ url('images/logo.png') }}" style="width: 75px; height: 75px;" alt="logo" class="sidebar-img mb-4"></a>
+                    <a href="{{ url('home/trending') }}"><img src="{{ url('images/logo.png') }}" style="width: 75px; height: 75px;" alt="logo" class="sidebar-img mb-4"></a>
                     <nav class="menu flex-grow-1">
                         <ul class="nav flex-column">
-                            <li class="nav-item"><a href="{{ url('home') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
+                            <li class="nav-item"><a href="{{ url('home/trending') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
                             <li class="nav-item"><a href="{{ url('search') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
                             <li class="nav-item"><a href="{{ url('notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
                             <li class="nav-item"><a href="{{ url('saved') }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
