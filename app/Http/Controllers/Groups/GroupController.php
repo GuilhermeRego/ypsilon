@@ -9,6 +9,24 @@ use App\Models\Group_Member;
 use App\Models\Group_Owner;
 class GroupController extends Controller
 {
+
+    public function index($group){
+        $group = Group::findOrFail($group);
+        $posts = $group->post()->orderBy('date_time', 'desc')->get();
+        $memberId = Group_Member::where('user_id', Auth()->user()->id)
+                                ->where('group_id', $group->id)
+                                ->value('id'); 
+
+        $isMember = $memberId ? true : false; 
+
+        $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
+
+        return view('Groups.index',[
+            'group' => $group, 'isMember' => $isMember, 'isOwner' => $isOwner, 'posts' => $posts, 
+
+    ]);
+    }
+
     public function create(){
         return view('Groups.creategroup');
 

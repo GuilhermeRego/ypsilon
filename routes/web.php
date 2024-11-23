@@ -43,7 +43,8 @@ Route::controller(RegisterController::class)->group(function () {
 });
 
 // Create post
-Route::post('/home', [PostController::class, 'store'])->name('post.store');
+Route::post('/home/*', [PostController::class, 'store'])->name('post.store');
+Route::post('/groups/{group}', [PostController::class, 'store'])->name('post.store.group');
 
 // Groups
 Route::redirect('/groups', '/groups/discover');
@@ -53,6 +54,8 @@ Route::get('/groups/create', [GroupController::class, 'create'])
     ->middleware('auth') 
     ->name('groups.create'); 
 Route::post('/groups/create', [GroupController::class, 'store'])->name('groups.store');
+Route::get('/groups/{group}', [GroupController::class, 'index'])->name('groups.show');
+Route::post('/groups/{group}/join', [GroupController::class, 'joinGroup'])->name('group.join');
 
 // Following
 Route::get('/following', [HomeFollowingController::class, 'following'])->name('home.following');
@@ -66,3 +69,4 @@ Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('pro
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
+Route::redirect('/home', '/home/trending')->name('home');
