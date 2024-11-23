@@ -12,7 +12,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('date_time', 'desc')->get();
+        $posts = Post::whereNull('group_id')->orderBy('date_time', 'desc')->get();
         return view('home', compact('posts'));
     }
 

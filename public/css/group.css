@@ -1,0 +1,103 @@
+/* styles.css */
+  
+  .profile-page {
+    width: 100%;
+  }
+  
+  .profile-banner {
+    background-color: #444;
+    color: white;
+    padding: 20px;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+   
+  
+  .profile-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
+  
+  .profile-details h2 {
+    margin: 0;
+    font-size: 24px;
+  }
+  
+  .profile-details h2 span {
+    color: #ccc;
+    font-size: 18px;
+  }
+  
+  .profile-details p {
+    margin: 10px 0 0;
+  }
+  
+  .profile-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 16px;
+  }
+  
+  .stat strong {
+    font-size: 18px;
+  }
+  
+  .profile-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    background-color: #555;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn:hover {
+    background-color: #666;
+  }
+  
+  .posts {
+    margin: 20px;
+  }
+  
+  .post {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .post-user {
+    font-weight: bold;
+  }
+  
+  .post-actions {
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: #555;
+  }
+  

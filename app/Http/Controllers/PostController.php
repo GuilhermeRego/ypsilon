@@ -33,7 +33,7 @@ class PostController extends Controller
             'user_id' => 'required|integer',
             'date_time' => 'required|date',
             'content' => 'required|string|max:255',
-            'group_id' => 'required|integer'
+            'group_id' => 'nullable|integer'
         ]);
 
         Post::create($validatedData);
