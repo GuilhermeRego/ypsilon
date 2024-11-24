@@ -68,13 +68,7 @@
         <div class="posts">
             <!-- Post 1 -->
             @foreach($posts as $post)
-                <div class="post post mb-3">
-                    <div class="post-body">
-                        <h5 class="post-author">{{ $post->user->nickname }}</h5>
-                        <p class="post-content">{{ $post->content }}</p>
-                        <p class="post-date"><small class="text-muted">{{ $post->date_time }}</small></p>
-                    </div>
-                </div>
+                @include('post.post')
             @endforeach
         </div>
     </div>

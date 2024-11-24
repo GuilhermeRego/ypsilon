@@ -46,6 +46,9 @@ Route::controller(RegisterController::class)->group(function () {
 Route::post('/home/*', [PostController::class, 'store'])->name('post.store');
 Route::post('/groups/{group}', [PostController::class, 'store'])->name('post.store.group');
 
+// Delete post
+Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+
 // Groups
 Route::redirect('/groups', '/groups/discover');
 Route::get('/groups/discover', [HomeGroupsController::class, 'index'])->name('groups.discover');
