@@ -48,7 +48,7 @@
                     </nav>
                     <ul class="nav flex-column mt-auto">
                         @auth
-                            @if (auth()->user()->admin())
+                            @if (auth()->user()->isAdmin())
                                 <li class="nav-item"><a href="{{ url('admin') }}" class="nav-link"><i class="bi bi-shield-fill"></i> Admin</a></li>
                             @endif
                             <li class="nav-item"><a href="{{ route('profile.show', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
