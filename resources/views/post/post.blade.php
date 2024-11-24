@@ -8,18 +8,24 @@
             </div>
         </div>
         <div class="col-md-2 post-stats">
-            <form action="{{ route('reaction.store') }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                <input type="hidden" name="is_like" value="true">
-                <button type="submit" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-hand-thumbs-up"></i> {{ $post->likesCount() }}</button>
-            </form>
-            <form action="{{ route('reaction.store') }}" method="POST" class="d-inline">
-                @csrf
-                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                <input type="hidden" name="is_like" value="false">
-                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-hand-thumbs-down"></i> {{ $post->dislikesCount() }}</button>
-            </form>
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-hand-thumbs-up"></i> {{ $post->likesCount() }}</a>
+                <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-hand-thumbs-down"></i> {{ $post->dislikesCount() }}</a>
+            @endguest
+            @auth
+                <form action="{{ route('reaction.store') }}" method="POST" class="d-inline">
+                    @csrf
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="is_like" value="true">
+                    <button type="submit" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-hand-thumbs-up"></i> {{ $post->likesCount() }}</button>
+                </form>
+                <form action="{{ route('reaction.store') }}" method="POST" class="d-inline">
+                    @csrf
+                    <input type="hidden" name="post_id" value="{{ $post->id }}">
+                    <input type="hidden" name="is_like" value="false">
+                    <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-hand-thumbs-down"></i> {{ $post->dislikesCount() }}</button>
+                </form>
+            @endauth
             <span><i class="bi bi-arrow-repeat"></i> {{ $post->repostsCount() }}</span>
             <span><i class="bi bi-chat"></i> 0</span>
         </div>
