@@ -2,6 +2,11 @@
 
 @section('content')
 <div class="container mt-4">
+    <div class="container-fluid">
+        <input type="text" id="userSearch" placeholder="Search users..." class="form-control">
+        <ul id="userResults" class="list-group mt-2"></ul>
+    </div>
+    <script src="{{ asset('js/search.js') }}"></script>  
     <h1 class="mb-4">Welcome to the Trending Page</h1>
 
     @if(session('success'))
@@ -19,7 +24,6 @@
     @auth
         @include('post.create')
     @endauth
-
     <div class="posts">
         @foreach($posts as $post)
             @guest

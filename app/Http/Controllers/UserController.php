@@ -16,6 +16,21 @@ class UserController extends Controller
         return view('user.index', compact('users'));
     }
 
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|max:255',
+        ]);
+
+        $query = $request->input('query');
+        $users = User::where('username', 'LIKE', "%{$query}%")
+            ->orWhere('nickname', 'LIKE', "%{$query}%")
+            ->limit(10)
+            ->get();
+
+        return response()->json($users);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

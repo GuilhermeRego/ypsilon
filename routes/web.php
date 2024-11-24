@@ -11,6 +11,7 @@ use App\Http\Controllers\Groups\GroupController;
 use App\Http\Controllers\HomeFollowingController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::redirect('/', '/home/trending');
 Route::redirect('/home', '/home/trending')->name('home');
 Route::get('/home/trending', [HomeController::class, 'index'])->name('home.trending');
 Route::get('/home/following', [HomeFollowingController::class, 'following'])->name('home.following');
+Route::get('/home/search-users', [UserController::class, 'search'])->name('home.search.users');
 
 // Authentication
 Route::controller(LoginController::class)->group(function () {
