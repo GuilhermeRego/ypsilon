@@ -25,7 +25,7 @@ use App\Http\Controllers\ProfileController;
 
 // Home
 Route::redirect('/', '/home/trending');
-Route::redirect('/home', '/home/trending');
+Route::redirect('/home', '/home/trending')->name('home');
 Route::get('/home/trending', [HomeController::class, 'index'])->name('home.trending');
 Route::get('/home/following', [HomeFollowingController::class, 'following'])->name('home.following');
 
@@ -68,7 +68,10 @@ Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.s
 // Profile
 Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
 
+// Edit Profile
+Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
+
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
-Route::redirect('/home', '/home/trending')->name('home');

@@ -7,6 +7,8 @@ use App\Models\Group;
 use App\Models\Image;
 use App\Models\Group_Member;
 use App\Models\Group_Owner;
+use App\Models\Post;
+
 class GroupController extends Controller
 {
 
