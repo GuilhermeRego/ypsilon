@@ -85,6 +85,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        // Check if the user is the owner of the post
+        if (auth()->user()->id != $post->user_id) abort(403);
+
+        $post->delete();
+
+        return redirect()->back()->with('success', 'Post deleted successfully!');
     }
 }

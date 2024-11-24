@@ -82,4 +82,13 @@ class Post extends Model
     {
         return $this->reposts()->count();
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($post) {
+            $post->reactions()->delete();
+        });
+    }
 }
