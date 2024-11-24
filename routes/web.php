@@ -11,6 +11,7 @@ use App\Http\Controllers\Groups\GroupController;
 use App\Http\Controllers\HomeFollowingController;
 use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,12 @@ Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('pro
 Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
 
+// Delete Profile
+Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.delete');
+
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
+
+// Admin
+Route::get('/admin', [HomeAdminController::class, 'index'])->name('admin.index');

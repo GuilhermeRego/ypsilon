@@ -13,9 +13,12 @@
             <h2>{{ $user->username }}</h2>
             <h4>{{ $user->nickname }}</h4>
             <p>{{ $user->bio }}</p>
-            @if (auth()->user()->id == $user->id)
-                <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="btn btn-primary">Edit Profile</a>
-            @endif
+            @auth
+                @if (auth()->user()->id == $user->id || auth()->user()->admin())
+                    <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{{ route('profile.delete', ['username' => $user->username]) }}" class="btn btn-danger">Delete Profile</a>
+                @endif
+            @endauth
         </div>
         <!-- User Posts -->
         <div class="col-md-8">
