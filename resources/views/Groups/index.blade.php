@@ -27,7 +27,7 @@
             </div>
             <div class="profile-actions">
                 @if ($isOwner)
-                    <button class="btn">Edit Group</button>
+                    <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
                 @endif
 
                 @if ($isMember)
