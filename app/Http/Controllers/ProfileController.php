@@ -85,7 +85,7 @@ class ProfileController extends Controller
     public function destroy($username)
     {
         // Check if the current user is the owner of the profile or an admin
-        if (Auth::user()->id != $user->id && !Auth::user()->isAdmin()) {
+        if (Auth::user()->id != auth()->user()->id && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
