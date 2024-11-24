@@ -2,8 +2,10 @@
 
 @section('content')
 <div class="container mt-4">
-    <div class="container-fluid">
-        <input type="text" id="userSearch" placeholder="Search users..." class="form-control">
+<div class="container-fluid">
+        <form action="{{ route('results') }}" method="GET" id="searchForm">
+            <input type="text" id="userSearch" name="query" placeholder="Search users..." class="form-control">
+        </form>
         <ul id="userResults" class="list-group mt-2"></ul>
     </div>
     <script src="{{ asset('js/search.js') }}"></script>  

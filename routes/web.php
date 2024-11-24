@@ -13,6 +13,7 @@ use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeAdminController;
+use App\Http\Controllers\ResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -84,3 +85,7 @@ Route::post('/post/{post}/update', [PostController::class, 'update'])->name('pos
 
 // Admin
 Route::get('/admin', [HomeAdminController::class, 'index'])->name('admin.index');
+
+// Results
+
+Route::get('/results', [ResultsController::class, 'search'])->name('results');
