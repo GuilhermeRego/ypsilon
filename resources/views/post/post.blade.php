@@ -29,17 +29,19 @@
             <span><i class="bi bi-arrow-repeat"></i> {{ $post->repostsCount() }}</span>
             <span><i class="bi bi-chat"></i> 0</span>
         </div>
-        @if (auth()->check() && auth()->user()->id == $post->user_id)
-            <div class="post-edit">
-                <a href="{{ route('post.edit', ['post' => $post->id]) }}" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-pencil-square"></i> Edit</a>
-            </div>
-            <div class="post-delete">
-                <form action="{{ route('post.destroy', ['post' => $post->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
-                </form>
-            </div>
-        @endif
+        @auth
+            @if (auth()->check() && auth()->user()->id == $post->user_id || auth()->user()->admin())
+                <div class="post-edit">
+                    <a href="{{ route('post.edit', ['post' => $post->id]) }}" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-pencil-square"></i> Edit</a>
+                </div>
+                <div class="post-delete">
+                    <form action="{{ route('post.destroy', ['post' => $post->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
+                    </form>
+                </div>
+            @endif
+        @endauth
     </div>
 </div>

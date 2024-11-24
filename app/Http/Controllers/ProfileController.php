@@ -25,7 +25,7 @@ class ProfileController extends Controller
     public function edit($username)
     {
         // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username) abort(403);
+        if (auth()->user()->username != $username && !(auth()->user()->admin())) abort(403);
         
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
@@ -39,7 +39,7 @@ class ProfileController extends Controller
     public function update(Request $request, $username)
     {
         // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username) abort(403);
+        if (auth()->user()->username != $username && !(auth()->user()->admin())) abort(403);
 
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
