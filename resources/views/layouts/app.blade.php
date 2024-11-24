@@ -7,6 +7,7 @@
     <link href="{{ asset('css/post.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/group.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/profile.css') }}" rel="stylesheet">
 </head>
     <body>
         @include('layouts.sidebar')

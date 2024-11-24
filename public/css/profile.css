@@ -1,0 +1,29 @@
+/* FILE: public/css/profile.css */
+
+.profile-banner {
+    background-size: cover;
+    background-position: center;
+    padding: 50px 0;
+    color: white;
+    text-align: center;
+    position: relative;
+}
+
+.profile-info {
+    position: relative;
+    z-index: 1;
+}
+
+.profile-info img {
+    border: 5px solid white;
+}
+
+.profile-info h2,
+.profile-info h4,
+.profile-info p {
+    margin: 10px 0;
+}
+
+.profile-info .btn {
+    margin-top: 10px;
+}
