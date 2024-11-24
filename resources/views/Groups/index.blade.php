@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="profile-actions">
-                @if ($isOwner)
+                @if ($isOwner || auth()->user()->isAdmin())
                     <button class="btn">Edit Group</button>
                 @endif
 
