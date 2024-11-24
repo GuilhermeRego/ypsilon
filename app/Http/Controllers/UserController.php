@@ -111,7 +111,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // Check if the user is an admin or the owner of the profile
+        if (auth()->user()->id != $user->id && !(auth()->user()->admin())) abort(403);
+
         $user->delete();
-        return redirect()->route('users.index');
+        return redirect()->back();
     }
 }

@@ -54,8 +54,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // Check if the user is the owner of the post
-        if (auth()->user()->id != $post->user_id) abort(403);
+        // Check if the user is the owner of the post or an admin
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->admin())) abort(403);
 
         return view('post.edit', compact('post'));
     }
@@ -65,8 +65,8 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Check if the user is the owner of the post
-        if (auth()->user()->id != $post->user_id) abort(403);
+        // Check if the user is the owner of the post or an admin
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->admin())) abort(403);
 
         // Validate the request
         $validatedData = $request->validate([
@@ -76,7 +76,7 @@ class PostController extends Controller
         $post->content = $validatedData['content'];
         $post->save();
 
-        return redirect()->route('profile.show', ['username' => auth()->user()->username])
+        return redirect()->route('profile.show', ['username' => $post->user->username])
                          ->with('success', 'Post updated successfully!');
     }
 
@@ -85,11 +85,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        // Check if the user is the owner of the post
-        if (auth()->user()->id != $post->user_id) abort(403);
+        // Check if the user is the owner of the post or an admin
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->admin())) abort(403);
 
         $post->delete();
 
-        return redirect()->back()->with('success', 'Post deleted successfully!');
+        return redirect()->route('profile.show', ['username' => $post->user->username])
+                         ->with('success', 'Post deleted successfully!');
     }
 }

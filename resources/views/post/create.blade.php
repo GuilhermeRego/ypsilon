@@ -8,7 +8,7 @@
                 <div class="form-group mb-3">
                     <textarea class="form-control" id="content" name="content" rows="3" required placeholder="Write something..."></textarea>
                 </div>
-                <input type="hidden" name="group_id" value="1">
+                <input type="hidden" name="group_id" value="{{ isset($group) ? $group->id : null }}">
                 <button type="submit" class="btn btn-primary">Post</button>
             </form>
         </div>

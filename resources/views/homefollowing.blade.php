@@ -16,7 +16,9 @@
 
     <div class="posts">
         @foreach($posts as $post)
-            @include('post.post')
+            @if ($post->group_id === null)
+                @include('post.post')
+            @endif
         @endforeach
     </div>
 </div>
