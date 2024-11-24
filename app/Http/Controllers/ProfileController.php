@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Image;
+use App\Models\Follow;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -17,7 +18,11 @@ class ProfileController extends Controller
     {
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
-        return view('profile.show', compact('user'));
+        $isFollowedByAuth = Follow::where('follower_id', Auth::id())
+            ->where('followed_id', $user->id)
+            ->exists();
+
+        return view('profile.show', compact('user','isFollowedByAuth'));
     }
 
     /**
@@ -105,4 +110,25 @@ class ProfileController extends Controller
 
         return redirect()->route('home')->with('status', 'User deleted successfully');
     }
+
+    public function toggleFollow($id)
+    {
+        $authUserId = Auth::id();
+
+        $existingFollow = Follow::where('follower_id', $authUserId)
+            ->where('followed_id', $id)
+            ->first();
+
+        if ($existingFollow) {
+            $existingFollow->delete();
+            return response()->json(['message' => 'Unfollowed successfully']);
+        } else {
+            Follow::create([
+                'follower_id' => $authUserId,
+                'followed_id' => $id,
+            ]);
+            return response()->json(['message' => 'Followed successfully']);
+        }
+    }
+
 }

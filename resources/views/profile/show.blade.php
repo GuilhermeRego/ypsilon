@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container mt-5">
     <div class="row">
         <!-- Banner Image -->
@@ -21,6 +22,9 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete Profile</button>
                     </form>
+                @else
+                <button id="followButton" data-user-id="{{ $user->id }}" class="btn {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
+                <script src="{{ asset('js/follow.js') }}"></script> 
                 @endif
             @endauth
         </div>
