@@ -27,7 +27,12 @@
             </div>
             <div class="profile-actions">
                 @if ($isOwner)
-                    <a href="{{ route('groups.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
+                    <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
+                    <form action="{{ route('group.destroy', $group->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Group</button>
+                    </form>
                 @endif
 
                 @if ($isMember)
@@ -43,6 +48,16 @@
                     </form>
                 @endif
             </div>
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         @if ($isMember)
             <div class="createpost mb-4">
