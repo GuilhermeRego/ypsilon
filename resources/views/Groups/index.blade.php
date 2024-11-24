@@ -26,15 +26,6 @@
                 </div>
             </div>
             <div class="profile-actions">
-                @if ($isOwner)
-                    <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
-                    <form action="{{ route('group.destroy', $group->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete Group</button>
-                    </form>
-                @endif
-
                 @if ($isMember)
                     <form action="{{ route('group.leave', $group->id) }}" method="POST">
                         @csrf
@@ -45,6 +36,15 @@
                     <form action="{{ route('group.join', $group->id) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-primary">Join Group</button>
+                    </form>
+                @endif
+                
+                @if ($isOwner)
+                    <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
+                    <form action="{{ route('group.destroy', $group->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Group</button>
                     </form>
                 @endif
             </div>

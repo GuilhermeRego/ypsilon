@@ -59,6 +59,6 @@ class Group extends Model
     // Eloquent relationship with Image (group_banner).
     public function groupBanner()
     {
-        return $this->hasOne(Image::class, 'group_banner', 'id')->where('type', 'group_banner');
+        return $this->belongsTo(Image::class, 'group_banner', 'id')->where('type', 'group_banner');
     }
 }

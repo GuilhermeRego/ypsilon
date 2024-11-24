@@ -46,38 +46,50 @@ class ProfileController extends Controller
 
         // Validate Data
         $validatedData = $request->validate([
-            'nickname' => 'required|string|max:255',
+            'nickname' => 'required|string|max:16',
             'bio' => 'nullable|string|max:1000',
         ]);
 
-        // Handle profile image
-        if ($request->hasFile('profile_image')) {
-            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+        $user->nickname = $request->nickname;
+    $user->bio = $request->bio;
+
+    // Handle profile image
+    if ($request->hasFile('profile_image')) {
+        $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+        if ($user->profile_image) {
+            // Update the existing profile image
+            $user->profileImage->update(['url' => $profileImagePath]);
+        } else {
+            // Create a new profile image
             $profileImage = Image::create([
                 'url' => $profileImagePath,
                 'type' => 'user_profile',
             ]);
-            $profileImageId = $profileImage->id;
+            $user->profile_image = $profileImage->id; // Associate new image
         }
+    }
 
-        // Handle banner image
-        if ($request->hasFile('banner_image')) {
-            $bannerImagePath = $request->file('banner_image')->store('banner_images', 'public');
+    // Handle banner image
+    if ($request->hasFile('banner_image')) {
+        $bannerImagePath = $request->file('banner_image')->store('banner_images', 'public');
+        if ($user->banner_image) {
+            // Update the existing banner image
+            $user->bannerImage->update(['url' => $bannerImagePath]);
+        } else {
+            // Create a new banner image
             $bannerImage = Image::create([
                 'url' => $bannerImagePath,
-                'type' => 'banner_image',
+                'type' => 'user_banner',
             ]);
-            $bannerImageId = $bannerImage->id;
+            $user->banner_image = $bannerImage->id; // Associate new image
         }
-
-        // Update user profile
-        $user->update([
-            'nickname' => $validatedData['nickname'],
-            'bio' => $validatedData['bio'],
-            'profile_image' => $profileImageId ?? $user->profile_image,
-            'banner_image' => $bannerImageId ?? $user->banner_image,
-        ]);
-
-        return redirect()->route('profile.show', $user->username);
     }
+
+    // Save user profile changes
+    $user->save();
+
+    // Redirect back to the profile page with a success message
+    return redirect()->route('profile.show', $user->username)
+        ->with('success', 'Profile updated successfully!');
+}
 }
