@@ -15,7 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         users.forEach(user => {
                             const li = document.createElement('li');
                             li.className = 'list-group-item';
-                            li.textContent = `${user.nickname} (${user.username})`;
+                            const link = document.createElement('a');
+                            link.href = `/profile/${user.username}`;
+                            link.textContent = `${user.nickname} (${user.username})`;
+                            li.appendChild(link);
                             resultsContainer.appendChild(li);
                         });
                     } else {

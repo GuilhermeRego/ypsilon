@@ -10,19 +10,20 @@ class ResultsController extends Controller
 {
     public function search(Request $request)
     {
-        $query = $request->input('query');
-        $type = $request->input('type', 'users');
+        $query = strtolower($request->input('query'));
+        $type = $request->input('type', 'users'); // Default to 'users' if type is not specified
 
         if ($type === 'posts') {
-            $results = Post::where('content', 'LIKE', "%{$query}%")
+            $results = Post::whereRaw('LOWER(title) LIKE ?', ["%{$query}%"])
+                ->orWhereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
                 ->get();
         } elseif ($type === 'groups') {
-            $results = Group::where('name', 'LIKE', "%{$query}%")
-                ->orWhere('description', 'LIKE', "%{$query}%")
+            $results = Group::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
+                ->orWhereRaw('LOWER(description) LIKE ?', ["%{$query}%"])
                 ->get();
         } else {
-            $results = User::where('username', 'LIKE', "%{$query}%")
-                ->orWhere('nickname', 'LIKE', "%{$query}%")
+            $results = User::whereRaw('LOWER(username) LIKE ?', ["%{$query}%"])
+                ->orWhereRaw('LOWER(nickname) LIKE ?', ["%{$query}%"])
                 ->get();
         }
 
