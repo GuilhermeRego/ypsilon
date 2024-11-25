@@ -55,7 +55,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin())) abort(403);
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
+            abort(403);
 
         return view('post.edit', compact('post'));
     }
@@ -66,7 +67,8 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin())) abort(403);
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
+            abort(403);
 
         // Validate the request
         $validatedData = $request->validate([
@@ -77,7 +79,7 @@ class PostController extends Controller
         $post->save();
 
         return redirect()->route('profile.show', ['username' => $post->user->username])
-                         ->with('success', 'Post updated successfully!');
+            ->with('success', 'Post updated successfully!');
     }
 
     /**
@@ -86,11 +88,14 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin())) abort(403);
+        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
+            abort(403);
 
         $post->delete();
 
-        return redirect()->route('profile.show', ['username' => $post->user->username])
-                         ->with('success', 'Post deleted successfully!');
+        if ($post->group_id == null) {
+            return redirect()->route('profile.show', ['username' => $post->user->username])->with('success', 'Post deleted successfully!');
+        }
+        return redirect()->route('group.show', ['group' => $post->group_id])->with('success', 'Post deleted successfully!');
     }
 }

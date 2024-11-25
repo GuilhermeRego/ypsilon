@@ -207,6 +207,8 @@ class GroupController extends Controller
         return redirect()->route('group.show', $group)->with('success', 'Group updated successfully!');
     }
     public function destroy(Group $group){
+        foreach ($group->post as $post)
+            $post->delete();
         $group->delete();
         return redirect()->route('groups.my-groups')->with('success', 'Group deleted successfully!');
     }
