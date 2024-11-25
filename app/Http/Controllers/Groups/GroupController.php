@@ -158,7 +158,7 @@ class GroupController extends Controller
         $isMember = $memberId ? true : false;
 
         $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
-        if (!$isOwner) {
+        if (!$isOwner && !auth()->user()->isAdmin()) {
             return redirect()->route('groups.discover')->with('error', 'You are not authorized to edit this group.');
         }
         return view('Groups.edit', ['group' => $group]);
