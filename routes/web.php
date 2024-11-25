@@ -87,5 +87,4 @@ Route::post('/post/{post}/update', [PostController::class, 'update'])->name('pos
 Route::get('/admin', [HomeAdminController::class, 'index'])->name('admin.index');
 
 // Results
-
 Route::get('/results', [ResultsController::class, 'search'])->name('results');
