@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeAdminController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -92,3 +93,7 @@ Route::post('/post/{post}/update', [PostController::class, 'update'])->name('pos
 
 // Admin
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
+
+// Results
+Route::get('/results', [ResultsController::class, 'search'])->name('results');
+
