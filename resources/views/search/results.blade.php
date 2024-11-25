@@ -41,8 +41,16 @@
                     </li>
                 @elseif($type === 'groups')
                     <li class="list-group-item">
-                        <a href="{{ route('groups.show', ['name' => $result->name]) }}">
-                            {{ $result->name }}
+                        <a href="{{ url('groups/' . $result->id) }}" class="text-decoration-none text-dark">
+                            <div class="card my-2 p-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="{{ asset('storage/' . ($result->groupImage ? $result->groupImage->url : 'https://via.placeholder.com/50')) }}" class="rounded-circle me-3" alt="Group Image">
+                                    <div>
+                                        <h3>{{ $result->name }}</h3>
+                                        <p>{{ $result->memberCount() }} Members | {{ $result->description }}</p>
+                                    </div>
+                                </div>
+                            </div>
                         </a>
                     </li>
                 @endif
