@@ -87,7 +87,7 @@ CREATE TABLE Post (
 -- Reaction Table
 CREATE TABLE Reaction (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT,
     post_id INT NOT NULL,
     is_like BOOLEAN NOT NULL,
     FOREIGN KEY (user_id) REFERENCES "User"(id),
@@ -100,7 +100,7 @@ CREATE TABLE Reaction_Notification (
     reaction_id INT NOT NULL,
     is_read BOOLEAN NOT NULL DEFAULT FALSE,
     date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    notified_id INT NOT NULL,
+    notified_id INT,
     FOREIGN KEY (notified_id) REFERENCES "User"(id) ON DELETE CASCADE,
     FOREIGN KEY (reaction_id) REFERENCES Reaction(id) ON DELETE CASCADE
 );

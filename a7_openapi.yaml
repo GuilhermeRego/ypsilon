@@ -1,0 +1,423 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: 'Ypsilon Web API'
+  description: 'Web Resources Specification (A7) for OnlyFEUP'
+
+servers:
+  - url: https://lbaw2492.lbaw.fe.up.pt
+    description: Production server
+
+externalDocs:
+  description: Find more info here.
+  url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24092/-/wikis/EAP
+
+tags:
+  - name: 'M01: Authentication'
+  - name: 'M02: Users'
+  - name: 'M03: Posts'
+  - name: 'M04: Comments'
+  - name: 'M05: Groups'
+  - name: 'M06: Interaction with Posts'
+  - name: 'M07: Interaction with Users'
+  - name: 'M08: Administration'
+
+paths:
+
+#################################
+################# AUTHENTICATION 
+#################################
+
+################# LOGIN
+
+  /login:
+    get:
+      operationId: R101
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Access: GST'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'Ok. Show Log-in UI'
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: GST'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to trending page.'
+                  value: '/home/trending'
+                302Error:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+
+  /logout:
+    post:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the current authenticated user. Access: USR, OWN, ADM'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful logout. Redirect to login form.'
+                  value: '/login'
+
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form. Access: GST'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'Ok. Show Sign-Up UI'
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: GST'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                username:
+                  type: string
+                birth_date:
+                  type: string
+                  format: date
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - nickname
+                - username
+                - birth_date
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful registration. Redirect to user profile.'
+                  value: '/home/trending'
+                302Failure:
+                  description: 'Failed registration. Redirect to registration form.'
+                  value: '/register'
+
+#################################
+################# USERS
+#################################
+
+  /users/{id}:
+    get:
+      operationId: R201
+      summary: 'R201: View User Profile'
+      description: 'Show the individual user profile. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'M02: Users'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show User Profile UI'
+
+  /users/{username}/edit:
+    get:
+      operationId: R202
+      summary: 'R202: Edit User Profile Form'
+      description: 'Provide form to edit user profile. Access: USR, ADM'
+      tags:
+        - 'Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Profile UI'
+    put:
+      operationId: R203
+      summary: 'R203: Update User Profile'
+      description: 'Processes the user profile update form submission. Access: USR, ADM'
+      tags:
+        - 'Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+                bio:
+                  type: string
+                profile_image:
+                  type: string
+                banner_image:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect after processing the profile update.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to user profile.'
+                  value: '/users/{username}'
+                302Failure:
+                  description: 'Failed update. Redirect to edit profile form.'
+                  value: '/users/{username}/edit'
+
+  /users/{username}:
+    delete:
+      operationId: R204
+      summary: 'R204: Delete User Profile'
+      description: 'Deletes the user profile. Access: OWN, ADM'
+      tags:
+        - 'Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the profile deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to home page .'
+                  value: '/home'
+
+    delete:
+      operationId: R205
+      summary: 'R205: Delete Post'
+      description: 'Deletes the post. Access: OWN, ADM'
+      tags:
+        - 'Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the post deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect based on context.'
+                  value: 
+                    - '/home'
+                    - '/groups/{id}'
+
+#################################
+################# GROUPS
+#################################
+
+  /groups:
+    get:
+      operationId: R401
+      summary: 'R401: List Groups'
+      description: 'List all groups. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'Groups'
+      responses:
+        '200':
+          description: 'Ok. Show list of groups.'
+
+  /groups/{id}:
+    get:
+      operationId: R402
+      summary: 'R402: View Group'
+      description: 'Show the individual group. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Group UI'
+    put:
+      operationId: R403
+      summary: 'R403: Update Group'
+      description: 'Processes the group update form submission. Access: OWN, ADM'
+      tags:
+        - 'Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect after processing the group update.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to group.'
+                  value: '/groups/{id}'
+                302Failure:
+                  description: 'Failed update. Redirect to edit group form.'
+                  value: '/groups/{id}/edit'
+    delete:
+      operationId: R504
+      summary: 'R404: Delete Group'
+      description: 'Deletes the group. Access: OWN, ADM'
+      tags:
+        - 'Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the group deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to groups list.'
+                  value: '/groups'
+
+#########################################
+################# INTERACTIONS WITH POSTS
+#########################################
+
+  /reactions:
+    post:
+      operationId: R115
+      summary: 'R115: Create Reaction'
+      description: 'Creates a new reaction to a post. Access: USR, OWN, ADM'
+      tags:
+        - 'Interactions with Posts'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                post_id:
+                  type: integer
+                is_like:
+                  type: boolean
+      responses:
+        '302':
+          description: 'Redirect after processing the reaction creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful reaction. Redirect to post.'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed reaction. Redirect to post.'
+                  value: '/home'
+
+  /admin:
+    get:
+      operationId: R116
+      summary: 'R116: Admin Panel'
+      description: 'Show the admin panel. Access: ADM'
+      tags:
+        - 'Administration'
+      responses:
+        '200':
+          description: 'Ok. Show Admin Panel UI'

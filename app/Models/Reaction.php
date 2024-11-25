@@ -31,7 +31,7 @@ class Reaction extends Model
     // Define Eloquent relationship to User model.
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 
     // Define Eloquent relationship to Reaction_Notification model.
@@ -43,6 +43,6 @@ class Reaction extends Model
     // Define Eloquent relationship to Post model.
     public function post()
     {
-        return $this->belongsTo(Post::class, 'post_id', 'id');
+        return $this->belongsTo(Post::class);
     }
 }

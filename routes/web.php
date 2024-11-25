@@ -65,7 +65,6 @@ Route::get('/groups/{group}', [GroupController::class, 'index'])->name('groups.s
 Route::post('/groups/{group}/join', [GroupController::class, 'joinGroup'])->name('group.join');
 Route::delete('/groups/{group}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
 
-
 // Reaction
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');
 

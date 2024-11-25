@@ -102,8 +102,11 @@ class ProfileController extends Controller
             $post->reactions()->delete();
         }
 
+        // Make every user post as anonymous author
         for ($i = 0; $i < count($user->posts); $i++) {
-            $user->posts[$i]->delete();
+            $user->posts[$i]->update([
+                'user_id' => null,
+            ]);
         }
 
         $user->delete();
