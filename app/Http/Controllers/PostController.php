@@ -78,8 +78,8 @@ class PostController extends Controller
         $post->content = $validatedData['content'];
         $post->save();
 
-        return redirect()->route('profile.show', ['username' => $post->user->username])
-            ->with('success', 'Post updated successfully!');
+        // Redirect to home
+        return redirect()->route('home')->with('success', 'Post updated successfully!');
     }
 
     /**
@@ -93,9 +93,6 @@ class PostController extends Controller
 
         $post->delete();
 
-        if ($post->group_id == null) {
-            return redirect()->route('profile.show', ['username' => $post->user->username])->with('success', 'Post deleted successfully!');
-        }
-        return redirect()->route('group.show', ['group' => $post->group_id])->with('success', 'Post deleted successfully!');
+        return redirect()->route('home')->with('success', 'Post updated successfully!');
     }
 }

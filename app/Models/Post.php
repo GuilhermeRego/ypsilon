@@ -32,7 +32,7 @@ class Post extends Model
     // Eloquent relationship between User and Post.
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 
     // Eloquent relationship between Post and Comment.
@@ -56,7 +56,7 @@ class Post extends Model
     // Eloquent relationship between Post and Reaction.
     public function reactions()
     {
-        return $this->hasMany(Reaction::class, 'post_id', 'id');
+        return $this->hasMany(Reaction::class);
     }
 
     // Eloquent relationship between Post and Repost.
