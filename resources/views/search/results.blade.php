@@ -15,7 +15,11 @@
     @else
         <ul class="list-group">
             @foreach($users as $user)
-                <li class="list-group-item">{{ $user->name }} ({{ $user->username }})</li>
+                <li class="list-group-item">
+                    <a href="{{ route('profile.show', ['username' => $user->username]) }}">
+                        {{ $user->name }} ({{ $user->username }})
+                    </a>
+                </li>
             @endforeach
         </ul>
     @endif
