@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function profileImage()
     {
-        return $this->hasOne(Image::class,'profile_image', 'id')->where('type', 'user_profile');
+        return $this->belongsTo(Image::class,'profile_image', 'id')->where('type', 'user_profile');
     }
 
     /**
@@ -68,7 +68,7 @@ class User extends Authenticatable
      */
     public function bannerImage()
     {
-        return $this->hasOne(Image::class, 'banner_image', 'id')->where('type', 'user_banner');
+        return $this->belongsTo(Image::class, 'banner_image', 'id')->where('type', 'user_banner');
     }
 
     /**

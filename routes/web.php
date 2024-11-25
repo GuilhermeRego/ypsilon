@@ -60,11 +60,15 @@ Route::get('/groups/my-groups', [UserGroupsController::class, 'index'])->name('g
 Route::get('/groups/create', [GroupController::class, 'create'])
     ->middleware('auth') 
     ->name('groups.create'); 
-Route::post('/groups', [GroupController::class, 'store'])->name('groups.store');
-Route::get('/groups/{group}', [GroupController::class, 'index'])->name('groups.show');
+Route::post('/dumb', [GroupController::class, 'store'])->name('group.store');
+Route::get('/groups/{group}', [GroupController::class, 'index'])->name('group.show');
 Route::post('/groups/{group}/join', [GroupController::class, 'joinGroup'])->name('group.join');
 Route::delete('/groups/{group}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
-
+Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])
+    ->middleware('auth')
+    ->name('group.edit');
+Route::put('/groups/{group}', [GroupController::class, 'update'])->name('group.update');
+Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
 
 // Reaction
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');

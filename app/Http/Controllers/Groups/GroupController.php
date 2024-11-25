@@ -114,7 +114,7 @@ class GroupController extends Controller
 
         // If the user is already a member, redirect with an error message
         if ($existingMember) {
-            return redirect()->route('groups.show', $groupId)->with('error', 'You are already a member of this group.');
+            return redirect()->route('group.show', $groupId)->with('error', 'You are already a member of this group.');
         }
 
         // If not, create a new group member with the user ID and group ID
@@ -123,7 +123,7 @@ class GroupController extends Controller
             'group_id' => $groupId
         ]);
 
-        return redirect()->route('groups.show', $groupId)->with('success', 'You have successfully joined the group!');
+        return redirect()->route('group.show', $groupId)->with('success', 'You have successfully joined the group!');
 
     }
     public function leaveGroup($groupId)
@@ -139,13 +139,75 @@ class GroupController extends Controller
 
         // If the user is not a member, redirect with an error message
         if (!$groupMember) {
-            return redirect()->route('groups.show', $groupId)->with('error', 'You are not a member of this group.');
+            return redirect()->route('group.show', $groupId)->with('error', 'You are not a member of this group.');
         }
 
         // If the user is a member, delete the group member record
         $groupMember->delete();
 
-        return redirect()->route('groups.show', $groupId)->with('success', 'You have successfully left the group!');
+        return redirect()->route('group.show', $groupId)->with('success', 'You have successfully left the group!');
     }
 
+    public function edit($group)
+    {
+        $group = Group::findOrFail($group);
+        $memberId = Group_Member::where('user_id', Auth()->user()->id)
+            ->where('group_id', $group->id)
+            ->value('id');
+
+        $isMember = $memberId ? true : false;
+
+        $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
+        if (!$isOwner) {
+            return redirect()->route('groups.discover')->with('error', 'You are not authorized to edit this group.');
+        }
+        return view('Groups.edit', ['group' => $group]);
+    }
+
+    public function update(Request $request, Group $group)
+    {
+
+        $request->validate([
+            'name' => 'required|string|max:16',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        $group->name = $request->name;
+        $group->description = $request->description;
+
+        if ($request->hasFile('group_image')) {
+            $groupImagePath = $request->file('group_image')->store('group_images', 'public');
+            if ($group->group_image) {
+                $group->groupImage->update(['url' => $groupImagePath]);
+            } else {
+                $groupImage = Image::create([
+                    'url' => $groupImagePath,
+                    'type' => 'group_profile',
+                ]);
+                $group->group_image = $groupImage->id;
+            }
+        }
+
+        if ($request->hasFile('group_banner')) {
+            $groupBannerPath = $request->file('group_banner')->store('group_banners', 'public');
+            if ($group->group_banner) {
+                $group->groupBanner->update(['url' => $groupBannerPath]);
+            } else {
+                $groupBanner = Image::create([
+                    'url' => $groupBannerPath,
+                    'type' => 'group_banner',
+                ]);
+                $group->group_banner = $groupBanner->id;
+            }
+        }
+
+
+        $group->save();
+
+        return redirect()->route('group.show', $group)->with('success', 'Group updated successfully!');
+    }
+    public function destroy(Group $group){
+        $group->delete();
+        return redirect()->route('groups.my-groups')->with('success', 'Group deleted successfully!');
+    }
 }

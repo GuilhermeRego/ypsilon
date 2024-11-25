@@ -28,7 +28,12 @@
             <div class="profile-actions">
                 @auth
                     @if ($isOwner || auth()->user()->isAdmin())
-                        <button class="btn">Edit Group</button>
+                        <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
+                        <form action="{{ route('group.destroy', $group->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Group</button>
+                    </form>
                     @endif
                     @if ($isMember)
                         <form action="{{ route('group.leave', $group->id) }}" method="POST">
@@ -46,7 +51,18 @@
                 @guest
                     <a href="{{ route('login') }}" class="btn btn-primary">Join Group</a>
                 @endguest
+
             </div>
+            @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
         @if ($isMember)
             <div class="createpost mb-4">
