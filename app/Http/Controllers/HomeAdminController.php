@@ -8,6 +8,8 @@ class HomeAdminController extends Controller
 {
     public function index()
     {
-        return view('admin.home');
+        if (auth()->user()->isAdmin())
+            return view('admin.home');
+        else abort(403);
     }
 }

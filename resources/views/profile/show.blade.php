@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container mt-5">
     <div class="row">
         <!-- Banner Image -->
@@ -14,9 +15,17 @@
             <h4>{{ $user->nickname }}</h4>
             <p>{{ $user->bio }}</p>
             @auth
-                @if (auth()->user()->id == $user->id || auth()->user()->admin())
+                @if (auth()->user()->id == $user->id || auth()->user()->isAdmin())
                     <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="btn btn-primary">Edit Profile</a>
-                    <a href="{{ route('profile.delete', ['username' => $user->username]) }}" class="btn btn-danger">Delete Profile</a>
+                    <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete Profile</button>
+                    </form>
+                @endif
+                @if (auth()->user()->id != $user->id)
+                    <button id="followButton" data-user-id="{{ $user->id }}" class="btn {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
+                    <script src="{{ asset('js/follow.js') }}"></script> 
                 @endif
             @endauth
         </div>

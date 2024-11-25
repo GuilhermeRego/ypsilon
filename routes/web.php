@@ -13,7 +13,7 @@ use App\Http\Controllers\ReactionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeAdminController;
-use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,14 +77,18 @@ Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name
 Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
 
 // Delete Profile
-Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.delete');
+Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
+
+// Follow User
+Route::post('/profile/{id}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.toggleFollow');
 
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
 
 // Admin
-Route::get('/admin', [HomeAdminController::class, 'index'])->name('admin.index');
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
 
 // Results
 Route::get('/results', [ResultsController::class, 'search'])->name('results');
+

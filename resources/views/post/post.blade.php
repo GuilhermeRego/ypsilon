@@ -30,7 +30,7 @@
             <span><i class="bi bi-chat"></i> 0</span>
         </div>
         @auth
-            @if (auth()->check() && auth()->user()->id == $post->user_id || auth()->user()->admin())
+            @if (auth()->check() && auth()->user()->id == $post->user_id || auth()->user()->isAdmin())
                 <div class="post-edit">
                     <a href="{{ route('post.edit', ['post' => $post->id]) }}" class="btn btn-outline-primary btn-sm mb-0"><i class="bi bi-pencil-square"></i> Edit</a>
                 </div>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -212,5 +213,13 @@ class User extends Authenticatable
     public function chatMembers()
     {
         return $this->hasMany(Chat_Member::class, 'user_id', 'id');
+    }
+
+    /**
+     * Is the user an admin?
+     */
+    public function isAdmin()
+    {
+        return DB::table('Admin')->where('user_id', $this->id)->exists();
     }
 }

@@ -26,22 +26,26 @@
                 </div>
             </div>
             <div class="profile-actions">
-                @if ($isOwner)
-                    <button class="btn">Edit Group</button>
-                @endif
-
-                @if ($isMember)
-                    <form action="{{ route('group.leave', $group->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Leave Group</button>
-                    </form>
-                @else
-                    <form action="{{ route('group.join', $group->id) }}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary">Join Group</button>
-                    </form>
-                @endif
+                @auth
+                    @if ($isOwner || auth()->user()->isAdmin())
+                        <button class="btn">Edit Group</button>
+                    @endif
+                    @if ($isMember)
+                        <form action="{{ route('group.leave', $group->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Leave Group</button>
+                        </form>
+                    @else
+                        <form action="{{ route('group.join', $group->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Join Group</button>
+                        </form>
+                    @endif
+                @endauth
+                @guest
+                    <a href="{{ route('login') }}" class="btn btn-primary">Join Group</a>
+                @endguest
             </div>
         </div>
         @if ($isMember)

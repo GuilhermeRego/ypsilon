@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Image;
+use App\Models\Follow;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -16,7 +18,11 @@ class ProfileController extends Controller
     {
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
-        return view('profile.show', compact('user'));
+        $isFollowedByAuth = Follow::where('follower_id', Auth::id())
+            ->where('followed_id', $user->id)
+            ->exists();
+
+        return view('profile.show', compact('user','isFollowedByAuth'));
     }
 
     /**
@@ -25,7 +31,7 @@ class ProfileController extends Controller
     public function edit($username)
     {
         // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username && !(auth()->user()->admin())) abort(403);
+        if (auth()->user()->username != $username && !(auth()->user()->isAdmin())) abort(403);
         
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
@@ -39,7 +45,7 @@ class ProfileController extends Controller
     public function update(Request $request, $username)
     {
         // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username && !(auth()->user()->admin())) abort(403);
+        if (auth()->user()->username != $username && !(auth()->user()->isAdmin())) abort(403);
 
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
@@ -80,4 +86,49 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.show', $user->username);
     }
+
+    public function destroy($username)
+    {
+        // Check if the current user is the owner of the profile or an admin
+        if (Auth::user()->id != auth()->user()->id && !Auth::user()->isAdmin()) {
+            abort(403);
+        }
+
+        // Find the user by its username
+        $user = User::where('username', $username)->firstOrFail();
+
+        // Delete user's posts and then the account
+        foreach ($user->posts as $post) {
+            $post->reactions()->delete();
+        }
+
+        for ($i = 0; $i < count($user->posts); $i++) {
+            $user->posts[$i]->delete();
+        }
+
+        $user->delete();
+
+        return redirect()->route('home')->with('status', 'User deleted successfully');
+    }
+
+    public function toggleFollow($id)
+    {
+        $authUserId = Auth::id();
+
+        $existingFollow = Follow::where('follower_id', $authUserId)
+            ->where('followed_id', $id)
+            ->first();
+
+        if ($existingFollow) {
+            $existingFollow->delete();
+            return response()->json(['message' => 'Unfollowed successfully']);
+        } else {
+            Follow::create([
+                'follower_id' => $authUserId,
+                'followed_id' => $id,
+            ]);
+            return response()->json(['message' => 'Followed successfully']);
+        }
+    }
+
 }
