@@ -22,9 +22,10 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Delete Profile</button>
                     </form>
-                @else
-                <button id="followButton" data-user-id="{{ $user->id }}" class="btn {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
-                <script src="{{ asset('js/follow.js') }}"></script> 
+                @endif
+                @if (auth()->user()->id != $user->id)
+                    <button id="followButton" data-user-id="{{ $user->id }}" class="btn {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
+                    <script src="{{ asset('js/follow.js') }}"></script> 
                 @endif
             @endauth
         </div>

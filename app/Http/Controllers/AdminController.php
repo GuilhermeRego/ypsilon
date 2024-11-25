@@ -13,9 +13,12 @@ class AdminController extends Controller
 
     public function index()
     {
-        $users = User::all();
-        $posts = Post::all()->sortByDesc('date_time');
-        $groups = Group::all();
-        return view('admin.home', compact('users', 'posts', 'groups'));
+        if (auth()->user()->isAdmin()) {
+            $users = User::all();
+            $posts = Post::all()->sortByDesc('date_time');
+            $groups = Group::all();
+            return view('admin.home', compact('users', 'posts', 'groups'));
+        }
+        else abort(403);
     }
 }
