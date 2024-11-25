@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeAdminController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ResultsController;
 
 /*
 |--------------------------------------------------------------------------

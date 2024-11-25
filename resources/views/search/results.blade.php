@@ -37,13 +37,11 @@
                     </li>
                 @elseif($type === 'posts')
                     <li class="list-group-item">
-                        <a href="{{ route('posts.show', ['id' => $result->id]) }}">
-                            {{ $result->title }}
-                        </a>
+                        @include('post.post', ['post' => $result])
                     </li>
                 @elseif($type === 'groups')
                     <li class="list-group-item">
-                        <a href="{{ route('groups.show', ['id' => $result->id]) }}">
+                        <a href="{{ route('groups.show', ['name' => $result->name]) }}">
                             {{ $result->name }}
                         </a>
                     </li>
