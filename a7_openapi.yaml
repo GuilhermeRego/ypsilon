@@ -19,8 +19,8 @@ tags:
   - name: 'Posts'
   - name: 'Comments'
   - name: 'Groups'
-  - name: 'Interaction with Posts'
-  - name: 'Interaction with Users'
+  - name: 'Interactions with Posts'
+  - name: 'Interactions with Users'
   - name: 'Administration'
 
 paths:
