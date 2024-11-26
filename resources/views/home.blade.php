@@ -1,8 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-<div class="container-fluid">
+@include('layouts.upperbarmenu')
+<div class="container p-4" style="overflow-y: scroll">
+    <div class="container-fluid">
         <form action="{{ route('results') }}" method="GET" id="searchForm">
             <input type="text" id="userSearch" name="query" placeholder="Search users..." class="form-control">
         </form>

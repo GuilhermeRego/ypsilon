@@ -28,44 +28,34 @@
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </head>
-
-    <body>
-        <div class="d-flex flex-column" style="height: 100vh;">
-            <div class="d-flex flex-grow-1">
-                <!-- Sidebar -->
-                <aside class="sidebar d-flex flex-column p-3" style="width: 250px; background-color: #202020;">
-                    <a href="{{ url('home/trending') }}"><img src="{{ url('images/logo.png') }}" style="width: 75px; height: 75px;" alt="logo" class="sidebar-img mb-4"></a>
-                    <nav class="menu flex-grow-1">
-                        <ul class="nav flex-column">
-                            <li class="nav-item"><a href="{{ url('home/trending') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
-                            <li class="nav-item"><a href="{{ url('results') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
-                            <li class="nav-item"><a href="{{ url('notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
-                            <li class="nav-item"><a href="{{ url('saved') }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
-                            <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people-fill"></i> Groups</a></li>
-                            <li class="nav-item"><a href="{{ url('support') }}" class="nav-link"><i class="bi bi-question-circle"></i> Support</a></li>
-                        </ul>
-                    </nav>
-                    <ul class="nav flex-column mt-auto">
-                        @auth
-                            @if (auth()->user()->isAdmin())
-                                <li class="nav-item"><a href="{{ url('admin') }}" class="nav-link"><i class="bi bi-shield-fill"></i> Admin</a></li>
-                            @endif
-                            <li class="nav-item"><a href="{{ route('profile.show', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
-                            <li class="nav-item">
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                                </form>
-                                <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
-                                </a>
-                            </li>
-                        @else
-                            <li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-                            <li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="bi bi-pencil-square"></i> Register</a></li>
-                        @endauth
-                    </ul>
-                </aside>
-            </div>
-        </div>
-    </body>
+    <div class="sidebar d-flex flex-column justify-content-between p-3 align-items-center" style="width: 250px; background-color: #202020;">
+        <a href="{{ url('home/trending') }}"><img src="{{ url('images/logo.png') }}" style="width: 75px; height: 75px;" alt="logo" class="rounded-0 m-4"></a>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a href="{{ url('home/trending') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
+            <li class="nav-item"><a href="{{ url('results') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
+            <li class="nav-item"><a href="{{ url('notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
+            <li class="nav-item"><a href="{{ url('saved') }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
+            <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people-fill"></i> Groups</a></li>
+            <li class="nav-item"><a href="{{ url('support') }}" class="nav-link"><i class="bi bi-question-circle"></i> Support</a></li>
+        </ul>
+        <ul class="nav flex-column">
+            @auth
+                @if (auth()->user()->isAdmin())
+                    <li class="nav-item"><a href="{{ url('admin') }}" class="nav-link"><i class="bi bi-shield-fill"></i> Admin</a></li>
+                @endif
+                <li class="nav-item"><a href="{{ route('profile.show', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
+                <li class="nav-item">
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                    </form>
+                    <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </a>
+                </li>
+            @else
+                <li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                <li class="nav-item"><a href="{{ route('register') }}" class="nav-link"><i class="bi bi-pencil-square"></i> Register</a></li>
+            @endauth
+        </ul>
+    </div>
 </html>

@@ -3,7 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container p-4">
     <h2>Edit Post</h2>
     <form action="{{ route('post.update', ['post' => $post->id]) }}" method="POST">
         @csrf

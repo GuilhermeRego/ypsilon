@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+@include('layouts.upperbarmenu')
 <div class="container mt-5">
 
   <!-- Content -->

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<form method="POST" action="{{ route('register') }}">
+<form class="p-4 d-flex flex-column" method="POST" action="{{ route('register') }}">
     {{ csrf_field() }}
 
     <label for="nickname">Nickname</label>
@@ -46,10 +46,11 @@
 
     <label for="password-confirm">Confirm Password</label>
     <input id="password-confirm" type="password" name="password_confirmation" required>
-
-    <button type="submit">
-      Register
-    </button>
+    <div class="buttons d-flex flex-row gap-2 mt-3">
+      <button class="button" type="submit">
+        Register
+      </button>
     <a class="button button-outline" href="{{ route('login') }}">Login</a>
+  </div>
 </form>
 @endsection

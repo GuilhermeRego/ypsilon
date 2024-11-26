@@ -1,12 +1,9 @@
 /* FILE: public/css/profile.css */
 
-.profile-banner {
+.image-container {
     background-size: cover;
     background-position: center;
-    padding: 50px 0;
-    color: white;
-    text-align: center;
-    position: relative;
+    background-repeat: no-repeat;
 }
 
 .profile-info {

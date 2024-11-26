@@ -1,13 +1,16 @@
-<div class="post post mb-3">
+<div class="post mb-3">
     <div class="row">
         <div class="col-md-10">
             <div class="post-body">
                 <!-- If the user id is null, it is anonymous, otherwise, display the username -->
-                 @if ($post->user_id == null)
-                    <h5 class="post-username">Anonymous</h5>
-                @else
-                    <a href="{{ route('profile.show', ['username' => $post->user->username]) }}" class="btn btn-outline-primary btn-sm mb-0" style="font-size: 1.5em"> {{ $post->user->nickname }}</a>
-                @endif
+                <div class="post-author d-flex flex-row align-items-center">
+                    @if ($post->user_id == null)
+                        <h5 class="post-username">Anonymous</h5>
+                    @else
+                        <a href="{{ route('profile.show', ['username' => $post->user->username]) }}" class="btn btn-outline-primary btn-sm mb-0" style="font-size: 1.5em"> {{ $post->user->nickname }}</a>
+                        <p class="m-0 pl-1">&#64{{ $post->user->username}}</p>
+                    @endif
+                </div>
                 <p class="post-content">{{ $post->content }}</p>
                 <p class="post-date"><small class="text-muted">{{ $post->date_time }}</small></p>
             </div>

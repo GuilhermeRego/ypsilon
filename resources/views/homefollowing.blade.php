@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
+@include('layouts.upperbarmenu')
+<div class="container p-4">
     <h1 class="mb-4">Welcome to the Following Page</h1>
 
     @if(session('status'))
