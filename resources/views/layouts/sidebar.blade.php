@@ -38,7 +38,7 @@
                     <nav class="menu flex-grow-1">
                         <ul class="nav flex-column">
                             <li class="nav-item"><a href="{{ url('home/trending') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
-                            <li class="nav-item"><a href="{{ url('search') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
+                            <li class="nav-item"><a href="{{ url('results') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
                             <li class="nav-item"><a href="{{ url('notifications') }}" class="nav-link"><i class="bi bi-bell"></i> Notifications</a></li>
                             <li class="nav-item"><a href="{{ url('saved') }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
                             <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people-fill"></i> Groups</a></li>

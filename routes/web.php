@@ -100,5 +100,4 @@ Route::post('/post/{post}/update', [PostController::class, 'update'])->name('pos
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
 
 // Results
-Route::get('/results', [ResultsController::class, 'search'])->name('results');
-
+Route::get('/results', [ResultsController::class, 'index'])->name('results');

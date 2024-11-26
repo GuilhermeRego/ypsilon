@@ -8,7 +8,7 @@ use App\Models\Group;
 
 class ResultsController extends Controller
 {
-    public function search(Request $request)
+    public function index(Request $request)
     {
         $query = strtolower($request->input('query'));
         $type = $request->input('type', 'users'); // Default to 'users' if type is not specified
