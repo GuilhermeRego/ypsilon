@@ -78,6 +78,8 @@ paths:
                   description: 'Failed authentication. Redirect to login form.'
                   value: '/login'
 
+################# LOGOUT
+
   /logout:
     post:
       operationId: R103
@@ -96,6 +98,8 @@ paths:
                 302Success:
                   description: 'Successful logout. Redirect to login form.'
                   value: '/login'
+
+################# REGISTER
 
   /register:
     get:
@@ -156,7 +160,7 @@ paths:
 ################# USERS
 #################################
 
-  /users/{id}:
+  /profile/{username}:
     get:
       operationId: R201
       summary: 'R201: View User Profile'
@@ -173,11 +177,11 @@ paths:
         '200':
           description: 'Ok. Show User Profile UI'
 
-  /users/{username}/edit:
+  /profile/{username}/edit:
     get:
       operationId: R202
       summary: 'R202: Edit User Profile Form'
-      description: 'Provide form to edit user profile. Access: USR, ADM'
+      description: 'Provide form to edit user profile. Access: USR, OWN, ADM'
       tags:
         - 'Users'
       parameters:
@@ -226,12 +230,12 @@ paths:
               examples:
                 302Success:
                   description: 'Successful update. Redirect to user profile.'
-                  value: '/users/{username}'
+                  value: '/profile/{username}'
                 302Failure:
                   description: 'Failed update. Redirect to edit profile form.'
-                  value: '/users/{username}/edit'
+                  value: '/profile/{username}/edit'
 
-  /users/{username}:
+  /profile/{username}:
     delete:
       operationId: R204
       summary: 'R204: Delete User Profile'

@@ -13,7 +13,7 @@ class Comment extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Comment';
+    protected $table = 'comment';
 
     /**
      * The attributes that are mass assignable.
