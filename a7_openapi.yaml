@@ -151,7 +151,7 @@ paths:
               examples:
                 302Success:
                   description: 'Successful registration. Redirect to user profile.'
-                  value: '/home/trending'
+                  value: '/home'
                 302Failure:
                   description: 'Failed registration. Redirect to registration form.'
                   value: '/register'
@@ -264,6 +264,8 @@ paths:
 ################# POSTS
 #################################
 
+################# DELETE POST
+
     delete:
       operationId: R301
       summary: 'R301: Delete Post'
@@ -288,7 +290,8 @@ paths:
                   description: 'Successful deletion. Redirect based on context.'
                   value: 
                     - '/home'
-                    - '/groups/{id}'
+
+################# EDIT POST
 
   /post/{id}/edit:
     get:
@@ -325,11 +328,7 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
                 content:
-                  type: string
-                image:
                   type: string
       responses:
         '302':
@@ -346,11 +345,55 @@ paths:
                   description: 'Failed update. Redirect to edit post form.'
                   value: '/post/{id}/edit'
 
-    
+################# CREATE POST
+
+  /home:
+    /groups/{id}:
+      post:
+        operationId: R304
+        summary: 'R304: Create Post'
+        description: 'Processes the post creation form submission. Access: USR, OWN, ADM'
+        tags:
+          - 'Posts'
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+        requestBody:
+          required: true
+          content:
+            application/x-www-form-urlencoded:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+        responses:
+          '302':
+            description: 'Redirect after processing the post creation.'
+            headers:
+              Location:
+                schema:
+                  type: string
+                examples:
+                  302Success:
+                    description: 'Successful creation. Redirect to where the post is.'
+                    value:
+                    - '/home'
+                    - '/groups/{id}'
+                  302Failure:
+                    description: 'Failed creation. Redirect to where the post is.'
+                    value:
+                    - '/home'
+                    - '/groups/{id}'
 
 #################################
 ################# GROUPS
 #################################
+
+################# LIST GROUPS THAT IS NOT A MEMBER
 
   /groups/discover:
     get:
@@ -363,6 +406,8 @@ paths:
         '200':
           description: 'Ok. Show list of groups.'
 
+################# LIST GROUPS THAT IS A MEMBER
+
   /groups/my-groups:
     get:
       operationId: R502
@@ -373,6 +418,8 @@ paths:
       responses:
         '200':
           description: 'Ok. Show list of groups.'
+
+################# VIEW GROUP
 
   /groups/{id}:
     get:
@@ -390,6 +437,9 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Group UI'
+
+################# UPDATE GROUP
+
     put:
       operationId: R504
       summary: 'R504: Update Group'
@@ -413,6 +463,10 @@ paths:
                   type: string
                 description:
                   type: string
+                group_image:
+                  type: url
+                group_banner:
+                  type: url
       responses:
         '302':
           description: 'Redirect after processing the group update.'
@@ -427,6 +481,9 @@ paths:
                 302Failure:
                   description: 'Failed update. Redirect to edit group form.'
                   value: '/groups/{id}/edit'
+
+################# DELETE GROUP
+
     delete:
       operationId: R505
       summary: 'R505: Delete Group'
@@ -449,7 +506,9 @@ paths:
               examples:
                 302Success:
                   description: 'Successful deletion. Redirect to groups list.'
-                  value: '/groups'
+                  value: '/groups/my-groups'
+
+################# CREATE GROUP
 
   /groups/create:
     get:
@@ -478,6 +537,10 @@ paths:
                   type: string
                 description:
                   type: string
+                group_image:
+                  type: url
+                group_banner:
+                  type: url
       responses:
         '302':
           description: 'Redirect after processing the group creation.'
@@ -492,6 +555,8 @@ paths:
                 302Failure:
                   description: 'Failed creation. Redirect to create group form.'
                   value: '/groups/create'
+
+################# EDIT GROUP
 
   /groups/{id}/edit:
     get:
@@ -510,11 +575,30 @@ paths:
         '200':
           description: 'Ok. Show Edit Group UI'
 
+################# MANAGE GROUP
+
+  /groups/{id}/management:
+    get:
+      operationId: R509
+      summary: 'R509: Manage Group'
+      description: 'Show the group management panel. Access: OWN, ADM'
+      tags:
+        - 'Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Group Management UI'
+
 #########################################
 ################# INTERACTIONS WITH POSTS
 #########################################
 
-  /reactions:
+  /reaction:
     post:
       operationId: R601
       summary: 'R601: Create Reaction'
@@ -528,6 +612,8 @@ paths:
             schema:
               type: object
               properties:
+                user_id:
+                  type: integer
                 post_id:
                   type: integer
                 is_like:
@@ -545,12 +631,14 @@ paths:
                   value:
                   - '/home'
                   - '/groups/{id}'
+                  - 'profile/{username}'
 
                 302Failure:
                   description: 'Failed reaction. Redirect to where the post is.'
                   value:
                   - '/home'
                   - '/groups/{id}'
+                  - 'profile/{username}'
 
 #########################################
 ################# INTERACTIONS WITH USERS
@@ -590,7 +678,7 @@ paths:
                   value:
                   - '/profile/{username}'
 
-  /unfollows:
+  /unfollow:
     post:
       operationId: R702
       summary: 'R702: Unfollow User'

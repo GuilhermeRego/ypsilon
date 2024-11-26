@@ -28,21 +28,9 @@
             </table>
         </div>
     </div>
-    
-    <!-- Posts List -->
-    <div class="card mt-5">
-        <div class="card-header" class="text-center">
-            <strong>Posts</strong>
-        </div>
-        <div class="card-body">
-            @foreach($posts as $post)
-                @include('post.post')
-            @endforeach
-        </div>
-    </div>
 
     <!-- Groups List -->
-     <div class="card mt-5">
+    <div class="card mt-5">
         <div class="card-header" class="text-center">
             <strong>Groups</strong>
         </div>
@@ -64,5 +52,17 @@
                 </tbody>
             </table>
         </div>
+    
+    <!-- Posts List -->
+    <div class="card mt-5">
+        <div class="card-header" class="text-center">
+            <strong>Posts</strong>
+        </div>
+        <div class="card-body">
+            @foreach($posts as $post)
+                @include('post.post')
+            @endforeach
+        </div>
+    </div>
 </div>
 @endsection
