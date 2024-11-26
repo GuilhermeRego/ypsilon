@@ -14,8 +14,7 @@ class ResultsController extends Controller
         $type = $request->input('type', 'users'); // Default to 'users' if type is not specified
 
         if ($type === 'posts') {
-            $results = Post::whereRaw('LOWER(title) LIKE ?', ["%{$query}%"])
-                ->orWhereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
+            $results = Post::WhereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
                 ->get();
         } elseif ($type === 'groups') {
             $results = Group::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
