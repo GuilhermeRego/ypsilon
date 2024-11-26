@@ -34,7 +34,6 @@ class Group extends Model
     {
         return $this->hasMany(Group_Member::class, 'group_id', 'id');
     }
-
     public function memberCount() {
         return $this->group_member()->count();
     }
