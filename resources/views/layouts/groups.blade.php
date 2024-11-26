@@ -16,7 +16,11 @@
               <img src="{{ asset('storage/' . ($group->groupImage ? $group->groupImage->url : 'https://via.placeholder.com/50')) }}" class="rounded-circle me-3" alt="Group Image">
               <div>
                 <h3>{{ $group->name }}</h3>
-                <p>{{ $group->memberCount() }} Members | {{ $group->description }}</p>
+                @if ($group->memberCount() == 1)
+                  <p>{{ $group->memberCount() }} Member | {{ $group->description }}</p>
+                @else
+                  <p>{{ $group->memberCount() }} Members | {{ $group->description }}</p>
+                @endif
               </div>
             </div>
           </div>

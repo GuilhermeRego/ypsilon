@@ -29,7 +29,7 @@
                 @auth
                     @if ($isOwner || auth()->user()->isAdmin())
                         <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
-                        <a href="{{ route('group-management.index', $group->id) }}" class="btn btn-warning">Edit Group</a>
+                        <a href="{{ route('group-management.index', $group->id) }}" class="btn btn-warning">Manage Group</a>
                         <form action="{{ route('group.destroy', $group->id) }}" method="POST">
                         @csrf
                         @method('DELETE')
