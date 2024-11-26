@@ -14,14 +14,14 @@ externalDocs:
   url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24092/-/wikis/EAP
 
 tags:
-  - name: 'M01: Authentication'
-  - name: 'M02: Users'
-  - name: 'M03: Posts'
-  - name: 'M04: Comments'
-  - name: 'M05: Groups'
-  - name: 'M06: Interaction with Posts'
-  - name: 'M07: Interaction with Users'
-  - name: 'M08: Administration'
+  - name: 'Authentication'
+  - name: 'Users'
+  - name: 'Posts'
+  - name: 'Comments'
+  - name: 'Groups'
+  - name: 'Interaction with Posts'
+  - name: 'Interaction with Users'
+  - name: 'Administration'
 
 paths:
 
@@ -37,7 +37,7 @@ paths:
       summary: 'R101: Login Form'
       description: 'Provide login form. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '200':
           description: 'Ok. Show Log-in UI'
@@ -46,7 +46,7 @@ paths:
       summary: 'R102: Login Action'
       description: 'Processes the login form submission. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       requestBody:
         required: true
         content:
@@ -86,7 +86,7 @@ paths:
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, OWN, ADM'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '302':
           description: 'Redirect after processing logout.'
@@ -107,7 +107,7 @@ paths:
       summary: 'R104: Register Form'
       description: 'Provide new user registration form. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '200':
           description: 'Ok. Show Sign-Up UI'
@@ -116,7 +116,7 @@ paths:
       summary: 'R105: Register Action'
       description: 'Processes the new user registration form submission. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       requestBody:
         required: true
         content:
@@ -166,7 +166,7 @@ paths:
       summary: 'R201: View User Profile'
       description: 'Show the individual user profile. Access: GST, USR, OWN, ADM'
       tags:
-        - 'M02: Users'
+        - 'Users'
       parameters:
         - in: path
           name: id
