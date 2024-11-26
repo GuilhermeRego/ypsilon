@@ -5,9 +5,12 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <div class="container p-4">
     <div class="profile-header container d-flex flex-column">
-        <div class="image-container w-100 p-4 d-flex align-items-end" style="height: 250px; background-image: url({{ url('images/' . ($user->bannerImage ? $user->bannerImage->url : 'banner-default.png')) }})">
-            <img src="{{ url('images/' . ($user->profileImage ? $user->profileImage->url : 'profile-default.png')) }}"
-                class="img-thumbnail rounded-circle mb-3" alt="Profile Image" style="width: 150px; height: 150px;">
+        <div class="image-container w-100 p-4 d-flex align-items-end" 
+            style="height: 250px; background-image: url('{{ $user->bannerImage ? asset('storage/' . $user->bannerImage->url) : asset('images/banner-default.png') }}');">
+            <img src="{{ $user->profileImage ? asset('storage/' . $user->profileImage->url) : asset('images/profile-default.png') }}"
+                class="img-thumbnail rounded-circle mb-3" 
+                alt="Profile Image" 
+                style="width: 150px; height: 150px;">
         </div>
         <div class="identification p-2">
             <h2>{{ $user->username }}</h2>
