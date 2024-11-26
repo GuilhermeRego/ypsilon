@@ -734,20 +734,19 @@ paths:
 ################# SEARCH
 #########################################
 
-
   /results:
-  get:
-    operationId: R901
-    summary: 'R901: Show Results for a Search'
-    description: 'Show the Results of a Search. Access: GST, USR, OWN, ADM'
-    tags:
-      - 'M09: Search'
-    parameters:
-      - in: query
-        name: query
-        schema:
-          type: string
-        required: true
-    responses:
-      '200':
-        description: 'Ok. Show Search Results UI'
+    get:
+      operationId: R901
+      summary: 'R901: Show Results for a Search'
+      description: 'Show the Results of a Search. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'Search'
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Search Results UI'
