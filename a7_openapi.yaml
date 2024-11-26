@@ -256,9 +256,13 @@ paths:
                   description: 'Successful deletion. Redirect to home page .'
                   value: '/home'
 
+#################################
+################# POSTS
+#################################
+
     delete:
-      operationId: R205
-      summary: 'R205: Delete Post'
+      operationId: R301
+      summary: 'R301: Delete Post'
       description: 'Deletes the post. Access: OWN, ADM'
       tags:
         - 'Posts'
@@ -282,15 +286,84 @@ paths:
                     - '/home'
                     - '/groups/{id}'
 
+  /post/{id}/edit:
+    get:
+      operationId: R302
+      summary: 'R302: Edit Post Form'
+      description: 'Provide form to edit post. Access: OWN, ADM'
+      tags:
+        - 'Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Post UI'
+    put:
+      operationId: R303
+      summary: 'R303: Update Post'
+      description: 'Processes the post update form submission. Access: OWN, ADM'
+      tags:
+        - 'Posts'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                image:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect after processing the post update.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful update. Redirect to post.'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed update. Redirect to edit post form.'
+                  value: '/post/{id}/edit'
+
+    
+
 #################################
 ################# GROUPS
 #################################
 
-  /groups:
+  /groups/discover:
     get:
-      operationId: R401
-      summary: 'R401: List Groups'
+      operationId: R501
+      summary: 'R501: List Groups that User is not a Member'
       description: 'List all groups. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'Groups'
+      responses:
+        '200':
+          description: 'Ok. Show list of groups.'
+
+  /groups/my-groups:
+    get:
+      operationId: R502
+      summary: 'R502: List Groups that User is a Member'
+      description: 'List all groups that the user is a member. Access: USR, OWN, ADM'
       tags:
         - 'Groups'
       responses:
@@ -299,8 +372,8 @@ paths:
 
   /groups/{id}:
     get:
-      operationId: R402
-      summary: 'R402: View Group'
+      operationId: R503
+      summary: 'R503: View Group'
       description: 'Show the individual group. Access: GST, USR, OWN, ADM'
       tags:
         - 'Groups'
@@ -314,8 +387,8 @@ paths:
         '200':
           description: 'Ok. Show Group UI'
     put:
-      operationId: R403
-      summary: 'R403: Update Group'
+      operationId: R504
+      summary: 'R504: Update Group'
       description: 'Processes the group update form submission. Access: OWN, ADM'
       tags:
         - 'Groups'
@@ -351,8 +424,8 @@ paths:
                   description: 'Failed update. Redirect to edit group form.'
                   value: '/groups/{id}/edit'
     delete:
-      operationId: R504
-      summary: 'R404: Delete Group'
+      operationId: R505
+      summary: 'R505: Delete Group'
       description: 'Deletes the group. Access: OWN, ADM'
       tags:
         - 'Groups'
@@ -374,14 +447,73 @@ paths:
                   description: 'Successful deletion. Redirect to groups list.'
                   value: '/groups'
 
+  /groups/create:
+    get:
+      operationId: R506
+      summary: 'R506: Create Group Form'
+      description: 'Provide form to create group. Access: USR, OWN, ADM'
+      tags:
+        - 'Groups'
+      responses:
+        '200':
+          description: 'Ok. Show Create Group UI'
+    post:
+      operationId: R507
+      summary: 'R507: Create Group'
+      description: 'Processes the group creation form submission. Access: USR, ADM'
+      tags:
+        - 'Groups'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '302':
+          description: 'Redirect after processing the group creation.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful creation. Redirect to group.'
+                  value: '/groups/my-groups'
+                302Failure:
+                  description: 'Failed creation. Redirect to create group form.'
+                  value: '/groups/create'
+
+  /groups/{id}/edit:
+    get:
+      operationId: R508
+      summary: 'R508: Edit Group Form'
+      description: 'Provide form to edit group. Access: OWN, ADM'
+      tags:
+        - 'Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Group UI'
+
 #########################################
 ################# INTERACTIONS WITH POSTS
 #########################################
 
   /reactions:
     post:
-      operationId: R115
-      summary: 'R115: Create Reaction'
+      operationId: R601
+      summary: 'R601: Create Reaction'
       description: 'Creates a new reaction to a post. Access: USR, OWN, ADM'
       tags:
         - 'Interactions with Posts'
@@ -405,16 +537,97 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful reaction. Redirect to post.'
-                  value: '/home'
+                  description: 'Successful reaction. Redirect to where the post is.'
+                  value:
+                  - '/home'
+                  - '/groups/{id}'
+
                 302Failure:
-                  description: 'Failed reaction. Redirect to post.'
-                  value: '/home'
+                  description: 'Failed reaction. Redirect to where the post is.'
+                  value:
+                  - '/home'
+                  - '/groups/{id}'
+
+#########################################
+################# INTERACTIONS WITH USERS
+#########################################
+
+  /follow:
+    post:
+      operationId: R701
+      summary: 'R701: Follow User'
+      description: 'Follows a user. Access: USR, OWN, ADM'
+      tags:
+        - 'Interactions with Users'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '302':
+          description: 'Redirect after processing the follow.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful follow. Redirect to where the user is.'
+                  value:
+                  - '/profile/{username}'
+
+                302Failure:
+                  description: 'Failed follow. Redirect to where the user is.'
+                  value:
+                  - '/profile/{username}'
+
+  /unfollows:
+    post:
+      operationId: R702
+      summary: 'R702: Unfollow User'
+      description: 'Unfollows a user. Access: USR, OWN, ADM'
+      tags:
+        - 'Interactions with Users'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '302':
+          description: 'Redirect after processing the unfollow.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful unfollow. Redirect to where the user is.'
+                  value:
+                  - '/profile/{username}'
+
+                302Failure:
+                  description: 'Failed unfollow. Redirect to where the user is.'
+                  value:
+                  - '/profile/{username}'
+
+#########################################
+################# ADMIN
+#########################################
 
   /admin:
     get:
-      operationId: R116
-      summary: 'R116: Admin Panel'
+      operationId: R801
+      summary: 'R801: Admin Panel'
       description: 'Show the admin panel. Access: ADM'
       tags:
         - 'Administration'
