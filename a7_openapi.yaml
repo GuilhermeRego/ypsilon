@@ -22,6 +22,7 @@ tags:
   - name: 'Interactions with Posts'
   - name: 'Interactions with Users'
   - name: 'Administration'
+  - name: 'Search'
 
 paths:
 
@@ -727,3 +728,26 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Admin Panel UI'
+
+
+#########################################
+################# SEARCH
+#########################################
+
+
+  /results:
+  get:
+    operationId: R901
+    summary: 'R901: Show Results for a Search'
+    description: 'Show the Results of a Search. Access: GST, USR, OWN, ADM'
+    tags:
+      - 'M09: Search'
+    parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+        required: true
+    responses:
+      '200':
+        description: 'Ok. Show Search Results UI'
