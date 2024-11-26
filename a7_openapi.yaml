@@ -176,6 +176,30 @@ paths:
       responses:
         '200':
           description: 'Ok. Show User Profile UI'
+    delete:
+      operationId: R204
+      summary: 'R204: Delete User Profile'
+      description: 'Deletes the user profile. Access: OWN, ADM'
+      tags:
+        - 'Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the profile deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to home page .'
+                  value: '/home'
+      
 
   /profile/{username}/edit:
     get:
@@ -235,30 +259,7 @@ paths:
                   description: 'Failed update. Redirect to edit profile form.'
                   value: '/profile/{username}/edit'
 
-  /profile/{username}:
-    delete:
-      operationId: R204
-      summary: 'R204: Delete User Profile'
-      description: 'Deletes the user profile. Access: OWN, ADM'
-      tags:
-        - 'Users'
-      parameters:
-        - in: path
-          name: username
-          schema:
-            type: string
-          required: true
-      responses:
-        '302':
-          description: 'Redirect after processing the profile deletion.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to home page .'
-                  value: '/home'
+
 
 #################################
 ################# POSTS
