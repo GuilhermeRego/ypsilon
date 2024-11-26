@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeAdminController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResultsController;
+use App\Http\Controllers\Groups\ManagementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,10 @@ Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])
     ->name('group.edit');
 Route::put('/groups/{group}', [GroupController::class, 'update'])->name('group.update');
 Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
+Route::get('/groups/{group}/management', [ManagementController::class,'index'])->name('group-management.index');
+Route::post('/groups/{group}/management/add-member', [ManagementController::class,'addMember'])->name('group.addMember');
+Route::delete('/groups/{group}/management/delete/{member}', [ManagementController::class,'removeMember'])->name('group.removeMember');
+Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');
 
 // Reaction
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');
