@@ -14,14 +14,15 @@ externalDocs:
   url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24092/-/wikis/EAP
 
 tags:
-  - name: 'M01: Authentication'
-  - name: 'M02: Users'
-  - name: 'M03: Posts'
-  - name: 'M04: Comments'
-  - name: 'M05: Groups'
-  - name: 'M06: Interaction with Posts'
-  - name: 'M07: Interaction with Users'
-  - name: 'M08: Administration'
+  - name: 'Authentication'
+  - name: 'Users'
+  - name: 'Posts'
+  - name: 'Comments'
+  - name: 'Groups'
+  - name: 'Interactions with Posts'
+  - name: 'Interactions with Users'
+  - name: 'Administration'
+  - name: 'Search'
 
 paths:
 
@@ -37,7 +38,7 @@ paths:
       summary: 'R101: Login Form'
       description: 'Provide login form. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '200':
           description: 'Ok. Show Log-in UI'
@@ -46,7 +47,7 @@ paths:
       summary: 'R102: Login Action'
       description: 'Processes the login form submission. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       requestBody:
         required: true
         content:
@@ -86,7 +87,7 @@ paths:
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, OWN, ADM'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '302':
           description: 'Redirect after processing logout.'
@@ -107,7 +108,7 @@ paths:
       summary: 'R104: Register Form'
       description: 'Provide new user registration form. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       responses:
         '200':
           description: 'Ok. Show Sign-Up UI'
@@ -116,7 +117,7 @@ paths:
       summary: 'R105: Register Action'
       description: 'Processes the new user registration form submission. Access: GST'
       tags:
-        - 'M01: Authentication'
+        - 'Authentication'
       requestBody:
         required: true
         content:
@@ -166,7 +167,7 @@ paths:
       summary: 'R201: View User Profile'
       description: 'Show the individual user profile. Access: GST, USR, OWN, ADM'
       tags:
-        - 'M02: Users'
+        - 'Users'
       parameters:
         - in: path
           name: id
@@ -176,6 +177,30 @@ paths:
       responses:
         '200':
           description: 'Ok. Show User Profile UI'
+    delete:
+      operationId: R204
+      summary: 'R204: Delete User Profile'
+      description: 'Deletes the user profile. Access: OWN, ADM'
+      tags:
+        - 'Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the profile deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to home page .'
+                  value: '/home'
+      
 
   /profile/{username}/edit:
     get:
@@ -235,30 +260,7 @@ paths:
                   description: 'Failed update. Redirect to edit profile form.'
                   value: '/profile/{username}/edit'
 
-  /profile/{username}:
-    delete:
-      operationId: R204
-      summary: 'R204: Delete User Profile'
-      description: 'Deletes the user profile. Access: OWN, ADM'
-      tags:
-        - 'Users'
-      parameters:
-        - in: path
-          name: username
-          schema:
-            type: string
-          required: true
-      responses:
-        '302':
-          description: 'Redirect after processing the profile deletion.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to home page .'
-                  value: '/home'
+
 
 #################################
 ################# POSTS
@@ -726,3 +728,25 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Admin Panel UI'
+
+
+#########################################
+################# SEARCH
+#########################################
+
+  /results:
+    get:
+      operationId: R901
+      summary: 'R901: Show Results for a Search'
+      description: 'Show the Results of a Search. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'Search'
+      parameters:
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: 'Ok. Show Search Results UI'
