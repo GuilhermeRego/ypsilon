@@ -14,28 +14,26 @@
             <h4>{{ $user->nickname }}</h4>
             <p>{{ $user->bio }}</p>
         </div>
-        <div class="interactions d-flex flex-column gap-2">
+        <div class="interactions d-flex gap-2 pb-3 border-bottom">
         @auth
             @if (auth()->user()->id == $user->id || auth()->user()->isAdmin())
-                <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="btn btn-primary">Edit
+                <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="button btn-primary m-0">Edit
                     Profile</a>
-                <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST"
-                    style="display:inline;">
+                <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST" class="mb-0">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Profile</button>
+                    <button type="submit" class="button btn-danger m-0">Delete Profile</button>
                 </form>
             @endif
             @if (auth()->user()->id != $user->id)
                 <button id="followButton" data-user-id="{{ $user->id }}"
-                    class="btn {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
+                    class="button {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
                 <script src="{{ asset('js/follow.js') }}"></script>
             @endif
         @endauth
         </div>
     </div>
-    <!-- User Posts -->
-    <div class="col-md-8">
+    <div class="post-container pt-3">
         @if(session('error'))
             <div class="alert alert-danger">
                 {{ session('error') }}
@@ -46,7 +44,7 @@
                 {{ session('success') }}
             </div>
         @endif
-        <h3>Posts</h3>
+        <h2>Posts</h2>
         @foreach($user->posts()->orderBy('date_time', 'desc')->get() as $post)
             @include('post.post')
         @endforeach
