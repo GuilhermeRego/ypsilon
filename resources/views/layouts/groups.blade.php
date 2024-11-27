@@ -13,7 +13,7 @@
         <a href="{{ url('groups/' . $group->id) }}" class="text-decoration-none text-dark">
           <div class="card my-2 p-3">
             <div class="d-flex align-items-center">
-              <img src="{{ asset('storage/' . ($group->groupImage ? $group->groupImage->url : 'https://via.placeholder.com/50')) }}" class="rounded-circle me-3" alt="Group Image">
+            <img src="{{ $group->groupImage ? asset('storage/' . $group->groupImage->url) : asset('images/group-default.png') }}" class="rounded-circle me-3" alt="Group Image">
               <div>
                 <h3>{{ $group->name }}</h3>
                 @if ($group->memberCount() == 1)
