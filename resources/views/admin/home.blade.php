@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container p-4" style="overflow-y: scroll"> 
     <h1>Admin Dashboard</h1>
 
     <!-- Users List -->

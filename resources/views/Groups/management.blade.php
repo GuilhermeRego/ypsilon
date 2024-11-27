@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container p-4" style="overflow-y: scroll">
     <h1>Manage Group Members</h1>
 
     {{-- Lista de proprietários --}}

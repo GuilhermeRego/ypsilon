@@ -2,7 +2,7 @@
 
 @section('content')
 @include('layouts.upperbarmenu')
-<div class="container mt-5">
+<div class="container p-4" style="overflow-y: scroll">
 
   <!-- Content -->
   <div class="tab-content">

@@ -3,7 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container p-4">
+<div class="container p-4" style="overflow-y: scroll">
     <h2>Edit Post</h2>
     <form action="{{ route('post.update', ['post' => $post->id]) }}" method="POST">
         @csrf

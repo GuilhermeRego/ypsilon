@@ -2,7 +2,7 @@
 
 @section('content')
 @include('layouts.upperbarmenu')
-<div class="container p-4">
+<div class="container p-4" style="overflow-y: scroll">
     <h1 class="mb-4">Welcome to the Following Page</h1>
 
     @if(session('status'))

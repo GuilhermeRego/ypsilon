@@ -1,7 +1,7 @@
 /* Estilos gerais */
 body {
     background-color: #ffffff;
-    padding-top: 50px; /* Ajuste conforme necessário para evitar sobreposição */
+    padding-top: 50px;
     display: flex;
     margin: 0;
     padding: 0;
@@ -16,6 +16,7 @@ body {
 /* Sidebar */
 .sidebar {
     background-color: #202020;
+    overflow-y: scroll;
 }
 
 .content,.sidebar {

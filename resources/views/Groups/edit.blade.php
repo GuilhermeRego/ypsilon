@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container p-4" style="overflow-y: scroll">
     <h2>Edit Group</h2>
     <form action="{{ route('group.update', $group->id) }}" method="POST" enctype="multipart/form-data">
         @csrf

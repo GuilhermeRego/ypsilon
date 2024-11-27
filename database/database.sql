@@ -430,10 +430,10 @@ $$ LANGUAGE plpgsql;
 
 -- Populate User table and capture user IDs
 INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) 
-VALUES ('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '1234');
+VALUES ('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password: 1234
 
 INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) 
-VALUES ('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '1234');
+VALUES ('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password: 1234
 
 -- Populate Group table and capture group IDs
 
