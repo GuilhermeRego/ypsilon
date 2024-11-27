@@ -114,6 +114,12 @@ class UserController extends Controller
         // Check if the user is an admin or the owner of the profile
         if (auth()->user()->id != $user->id && !(auth()->user()->isAdmin())) abort(403);
 
+        // Make every reaction that the user made to be anonymous
+        $user->reactions()->update(['user_id' => null]);
+
+        // Make every post that the user made to be anonymous
+        $user->posts()->update(['user_id' => null]);
+
         $user->delete();
         return redirect()->back();
     }

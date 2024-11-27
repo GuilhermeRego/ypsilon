@@ -110,8 +110,10 @@ class ProfileController extends Controller
         $user = User::where('username', $username)->firstOrFail();
 
         // Delete user's reactions and then the account
-        foreach ($user->posts as $post) {
-            $post->reactions()->delete();
+        for ($i = 0; $i < count($user->reactions); $i++) {
+            $user->reactions[$i]->update([
+                'user_id' => null,
+            ]);
         }
 
         // Make every user post as anonymous author
