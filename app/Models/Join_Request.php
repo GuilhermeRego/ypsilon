@@ -13,7 +13,7 @@ class Join_Request extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Join_Request';
+    protected $table = 'join_request';
 
     /**
      * The attributes that are mass assignable.

@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Image;
 use App\Models\Group_Member;
 use App\Models\Group_Owner;
+use App\Models\Join_Request;
 
 class GroupController extends Controller
 {
@@ -35,13 +36,13 @@ class GroupController extends Controller
         $isMember = $memberId ? true : false;
 
         $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
-
+        $has_join_request=($group->join_request()->where('user_id', auth()->id())->exists());
         return view('Groups.index', [
             'group' => $group,
             'isMember' => $isMember,
             'isOwner' => $isOwner,
             'posts' => $posts,
-
+            'has_join_request' => $has_join_request,
         ]);
     }
 
@@ -213,5 +214,26 @@ class GroupController extends Controller
             $post->delete();
         $group->delete();
         return redirect()->route('groups.my-groups')->with('success', 'Group deleted successfully!');
+    }
+
+    public function sendJoinRequest($groupId){
+        $group = Group::findOrFail($groupId);
+        if (!$group->is_private) {
+            return redirect()->route('group.show', $groupId)->with('error', 'This group is not private.');
+        }
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to request to join a group.');
+        }
+        if ($group->group_member()->where('user_id', auth()->id())->exists()) {
+            return redirect()->route('group.show', $groupId)->with('error', 'You are already a member of this group.');
+        }
+        if ($group->join_request()->where('user_id', auth()->id())->exists()) {
+            return redirect()->route('group.show', $groupId)->with('error', 'You have already sent a request to join this group.');
+        }
+        Join_Request::Create([
+            'user_id' => auth()->id(),
+            'group_id' => $groupId,
+        ]);
+        return redirect()->route('group.show', $groupId)->with('success', 'Your join request has been sent!');
     }
 }

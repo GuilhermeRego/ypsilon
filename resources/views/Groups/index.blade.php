@@ -46,11 +46,16 @@
                             @csrf
                             <button type="submit" class="btn btn-primary">Join Group</button>
                         </form>
-                    @else 
-                        <form action="{{ route('group.join', $group->id) }}" method="POST">
+                    @elseif (!$isMember && $group->is_private && !$has_join_request)
+                        <form action="{{ route('group.join-request', $group->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary">Join Request</button>
                         </form>
+                    @elseif ($has_join_request)
+                        <button type="button" class="btn btn-primary" disabled>
+                            You have already requested to join
+                        </button>
+
                     @endif
                 @endauth
                 @guest
@@ -92,7 +97,7 @@
                 </div>
             </div>
         @endif
-        @if (!$group->is_private  || ($group->is_private && ($isMember || auth()->user()?->isAdmin()) ))
+        @if (!$group->is_private || ($group->is_private && ($isMember || auth()->user()?->isAdmin())))
             <!-- Posts Section -->
             <div class="posts">
                 <!-- Post 1 -->
