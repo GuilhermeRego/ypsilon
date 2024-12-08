@@ -57,6 +57,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
+            'is_private' => 'nullable|boolean'
 
         ]);
 
@@ -87,6 +88,7 @@ class GroupController extends Controller
             'description' => $request->description,
             'group_image' => $groupImageId,  // Store the ID of the group image
             'group_banner' => $groupBannerId, // Store the ID of the group banner
+            'is_private' => $request->has('is_private'),
         ]);
 
         $group_member = Group_Member::create([
@@ -173,6 +175,7 @@ class GroupController extends Controller
 
         $group->name = $request->name;
         $group->description = $request->description;
+        $group->is_private = $request->has('is_private');
 
         if ($request->hasFile('group_image')) {
             $groupImagePath = $request->file('group_image')->store('group_images', 'public');

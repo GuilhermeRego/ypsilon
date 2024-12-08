@@ -12,7 +12,7 @@
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
-        
+
         <div class="mb-3">
             <label for="description" class="form-label">Group Description</label>
             <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description') }}</textarea required>
@@ -35,6 +35,13 @@
             @error('group_banner')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
+        </div>
+        <div class="mb-3 d-flex align-items-center">
+            <label for="is_private" class="form-label">Make Group Private</label>
+            <div class="form-check form-switch" style="transform: scale(1.5);">
+                <input type="checkbox" class="form-check-input" id="is_private" name="is_private" value="1" 
+                {{ old('is_private') ? 'checked' : '' }}>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Create Group</button>
