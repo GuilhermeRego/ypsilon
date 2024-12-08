@@ -67,6 +67,7 @@ CREATE TABLE "Group" (
     description TEXT,
     group_image INT,
     group_banner INT,
+    is_private BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (group_image) REFERENCES "Image"(id),
     FOREIGN KEY (group_banner) REFERENCES "Image"(id),
     CHECK(LENGTH(description) <= 1000)
