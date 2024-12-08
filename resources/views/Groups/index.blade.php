@@ -4,7 +4,6 @@
 
 <body>
     <div class="profile-page">
-        <!-- Profile Banner -->
         <div class="profile-banner">
             <div class="profile-info">
                 <img src="{{ $group->groupImage ? asset('storage/' . $group->groupImage->url) : asset('images/group-default.png') }}"
@@ -84,14 +83,17 @@
                 </div>
             </div>
         @endif
-
-        <!-- Posts Section -->
-        <div class="posts">
-            <!-- Post 1 -->
-            @foreach($posts as $post)
-                @include('post.post')
-            @endforeach
-        </div>
+        @if (!$group->is_private || ($group->is_private && ($isMember || auth()->user()->isAdmin()) ))
+            <!-- Posts Section -->
+            <div class="posts">
+                <!-- Post 1 -->
+                @foreach($posts as $post)
+                    @include('post.post')
+                @endforeach
+            </div>
+        @else
+            <h2>This is a private group</h2>
+        @endif
     </div>
 </body>
 @endsection
