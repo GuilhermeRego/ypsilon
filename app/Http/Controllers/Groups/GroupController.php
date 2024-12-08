@@ -173,10 +173,25 @@ class GroupController extends Controller
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
         ]);
-
+        $previousIsPrivate = $group->is_private;
         $group->name = $request->name;
         $group->description = $request->description;
         $group->is_private = $request->has('is_private');
+
+        if ($previousIsPrivate && !$group->is_private) {
+            $joinRequests = $group->join_request;
+    
+            // Add those users as members of the group
+            foreach ($joinRequests as $joinRequest) {
+                Group_Member::create([
+                    'user_id' => $joinRequest->user_id,
+                    'group_id' => $group->id,
+                ]);
+            }
+    
+            // Optionally, delete the join requests (if you no longer need them)
+            Join_Request::where('group_id', $group->id)->delete();
+        }
 
         if ($request->hasFile('group_image')) {
             $groupImagePath = $request->file('group_image')->store('group_images', 'public');
