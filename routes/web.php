@@ -16,6 +16,7 @@ use App\Http\Controllers\HomeAdminController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\Groups\ManagementController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,56 +49,73 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register');
 });
 
-// Create post
-Route::post('/home/*', [PostController::class, 'store'])->name('post.store');
-Route::post('/groups/{group}', [PostController::class, 'store'])->name('post.store.group');
-
-// Delete post
-Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
-
-// Groups
+// Groups:
 Route::redirect('/groups', '/groups/discover');
+// Show discover, my-groups, and create pages
 Route::get('/groups/discover', [HomeGroupsController::class, 'index'])->name('groups.discover');
 Route::get('/groups/my-groups', [UserGroupsController::class, 'index'])->name('groups.my-groups');
 Route::get('/groups/create', [GroupController::class, 'create'])
     ->middleware('auth') 
     ->name('groups.create'); 
+
+// Create group
 Route::post('/dumb', [GroupController::class, 'store'])->name('group.store');
+// Show a specific group
 Route::get('/groups/{group}', [GroupController::class, 'index'])->name('group.show');
+// Create a join request on a group
 Route::post('/groups/{group}/join', [GroupController::class, 'joinGroup'])->name('group.join');
+// Delete my id on group member's list
 Route::delete('/groups/{group}/leave', [GroupController::class, 'leaveGroup'])->name('group.leave');
+// Show edit a specific group page
 Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])
     ->middleware('auth')
     ->name('group.edit');
+// Update group after edit page
 Route::put('/groups/{group}', [GroupController::class, 'update'])->name('group.update');
+// Delete group
 Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
+// Show group management page
 Route::get('/groups/{group}/management', [ManagementController::class,'index'])->name('group-management.index');
+// Add a member to a group
 Route::post('/groups/{group}/management/add-member', [ManagementController::class,'addMember'])->name('group.addMember');
+// Remove a member from a group
 Route::delete('/groups/{group}/management/delete/{member}', [ManagementController::class,'removeMember'])->name('group.removeMember');
+// Make a member a owner of the group
 Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');
 
-// Reaction
+// Interaction with other users:
+// Reaction creation
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');
-
-// Profile
-Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
-
-// Edit Profile
-Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
-
-// Delete Profile
-Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
-
 // Follow User
 Route::post('/profile/{id}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.toggleFollow');
 
+// Profile:
+// Show profile of a user 
+Route::get('/profile/{username}', [ProfileController::class, 'show'])->name('profile.show');
+// Edit Profile
+Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
+// Delete Profile
+Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
+
+// Posts:
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
 Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
+// Create post
+Route::post('/home/*', [PostController::class, 'store'])->name('post.store');
+Route::post('/groups/{group}', [PostController::class, 'store'])->name('post.store.group');
+// Delete post
+Route::delete('/post/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+// Show Post's page by its ID
+Route::get('/posts/{post}', [PostController::class, 'show'])->name('post.show');
 
-// Admin
+// Comments:
+// Create comment
+Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
+
+// Show administration page
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
 
-// Results
+// Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');

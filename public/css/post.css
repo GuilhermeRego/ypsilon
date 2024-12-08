@@ -7,6 +7,15 @@
     width: 100%; /* Ajuste a largura do post */
 }
 
+.stretched-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
 .post-body {
     padding: 10px;
 }

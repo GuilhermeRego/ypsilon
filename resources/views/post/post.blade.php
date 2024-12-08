@@ -1,4 +1,3 @@
-
 <div class="post mb-3">
     <div class="row">
         <div class="col-md-10">
@@ -12,8 +11,10 @@
                         <p class="m-0 pl-1">&#64{{ $post->user->username}}</p>
                     @endif
                 </div>
-                <p class="post-content">{{ $post->content }}</p>
-                <p class="post-date"><small class="text-muted">{{ $post->date_time }}</small></p>
+                <a href="{{ route('post.show', ['post' => $post->id]) }}" class="post-content" style="text-decoration: none; color: black;">
+                    <p>{{ $post->content }}</p>
+                    <p class="post-date"><small class="text-muted">{{ $post->date_time }}</small></p>
+                </a>
             </div>
         </div>
         <div class="col-md-2 post-stats">
