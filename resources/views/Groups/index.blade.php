@@ -41,15 +41,24 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Leave Group</button>
                         </form>
-                    @else
+                    @elseif (!$isMember && !$group->is_private)
                         <form action="{{ route('group.join', $group->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="btn btn-primary">Join Group</button>
                         </form>
+                    @else 
+                        <form action="{{ route('group.join', $group->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Join Request</button>
+                        </form>
                     @endif
                 @endauth
                 @guest
-                    <a href="{{ route('login') }}" class="btn btn-primary">Join Group</a>
+                    @if(!$group->is_private)
+                        <a href="{{ route('login') }}" class="btn btn-primary">Join Group</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-primary">Join Request</a>
+                    @endif
                 @endguest
 
             </div>
@@ -83,7 +92,7 @@
                 </div>
             </div>
         @endif
-        @if (!$group->is_private || ($group->is_private && ($isMember || auth()->user()->isAdmin()) ))
+        @if (!$group->is_private  || ($group->is_private && ($isMember || auth()->user()?->isAdmin()) ))
             <!-- Posts Section -->
             <div class="posts">
                 <!-- Post 1 -->
