@@ -3,7 +3,7 @@ openapi: 3.0.0
 info:
   version: '1.0'
   title: 'Ypsilon Web API'
-  description: 'Web Resources Specification (A7) for OnlyFEUP'
+  description: 'Web Resources Specification (A7) for Ypsilon'
 
 servers:
   - url: https://lbaw2492.lbaw.fe.up.pt
@@ -14,15 +14,15 @@ externalDocs:
   url: https://gitlab.up.pt/lbaw/lbaw2425/lbaw24092/-/wikis/EAP
 
 tags:
-  - name: 'Authentication'
-  - name: 'Users'
-  - name: 'Posts'
-  - name: 'Comments'
-  - name: 'Groups'
-  - name: 'Interactions with Posts'
-  - name: 'Interactions with Users'
-  - name: 'Administration'
-  - name: 'Search'
+  - name: 'M01: Authentication'
+  - name: 'M02: Users'
+  - name: 'M03: Posts'
+  - name: 'M04: Comments'
+  - name: 'M05: Groups'
+  - name: 'M06: Interaction with Posts'
+  - name: 'M07: Interaction with Users'
+  - name: 'M08: Administration'
+  - name: 'M09: Search'
 
 paths:
 
@@ -38,7 +38,7 @@ paths:
       summary: 'R101: Login Form'
       description: 'Provide login form. Access: GST'
       tags:
-        - 'Authentication'
+        - 'M01: Authentication'
       responses:
         '200':
           description: 'Ok. Show Log-in UI'
@@ -47,7 +47,7 @@ paths:
       summary: 'R102: Login Action'
       description: 'Processes the login form submission. Access: GST'
       tags:
-        - 'Authentication'
+        - 'M01: Authentication'
       requestBody:
         required: true
         content:
@@ -87,7 +87,7 @@ paths:
       summary: 'R103: Logout Action'
       description: 'Logout the current authenticated user. Access: USR, OWN, ADM'
       tags:
-        - 'Authentication'
+        - 'M01: Authentication'
       responses:
         '302':
           description: 'Redirect after processing logout.'
@@ -108,7 +108,7 @@ paths:
       summary: 'R104: Register Form'
       description: 'Provide new user registration form. Access: GST'
       tags:
-        - 'Authentication'
+        - 'M01: Authentication'
       responses:
         '200':
           description: 'Ok. Show Sign-Up UI'
@@ -117,7 +117,7 @@ paths:
       summary: 'R105: Register Action'
       description: 'Processes the new user registration form submission. Access: GST'
       tags:
-        - 'Authentication'
+        - 'M01: Authentication'
       requestBody:
         required: true
         content:
@@ -167,7 +167,7 @@ paths:
       summary: 'R201: View User Profile'
       description: 'Show the individual user profile. Access: GST, USR, OWN, ADM'
       tags:
-        - 'Users'
+        - 'M02: Users'
       parameters:
         - in: path
           name: id
@@ -177,30 +177,6 @@ paths:
       responses:
         '200':
           description: 'Ok. Show User Profile UI'
-    delete:
-      operationId: R204
-      summary: 'R204: Delete User Profile'
-      description: 'Deletes the user profile. Access: OWN, ADM'
-      tags:
-        - 'Users'
-      parameters:
-        - in: path
-          name: username
-          schema:
-            type: string
-          required: true
-      responses:
-        '302':
-          description: 'Redirect after processing the profile deletion.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to home page .'
-                  value: '/home'
-      
 
   /profile/{username}/edit:
     get:
@@ -208,7 +184,7 @@ paths:
       summary: 'R202: Edit User Profile Form'
       description: 'Provide form to edit user profile. Access: USR, OWN, ADM'
       tags:
-        - 'Users'
+        - 'M02: Users'
       parameters:
         - in: path
           name: username
@@ -223,7 +199,7 @@ paths:
       summary: 'R203: Update User Profile'
       description: 'Processes the user profile update form submission. Access: USR, ADM'
       tags:
-        - 'Users'
+        - 'M02: Users'
       parameters:
         - in: path
           name: username
@@ -260,7 +236,52 @@ paths:
                   description: 'Failed update. Redirect to edit profile form.'
                   value: '/profile/{username}/edit'
 
+  /profile/{username}:
+    delete:
+      operationId: R204
+      summary: 'R204: Delete User Profile'
+      description: 'Deletes the user profile. Access: OWN, ADM'
+      tags:
+        - 'M02: Users'
+      parameters:
+        - in: path
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the profile deletion.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful deletion. Redirect to home page .'
+                  value: '/home'
 
+  /home/trending:
+    get:
+      operationId: R205
+      summary: 'R205: Trending Page'
+      description: 'Displays the Trending Page. Access: GST, USR, OWN, ADM'
+      tags:
+        - 'M02: Users'
+      responses:
+        '200':
+          description: 'Ok. Show Trending Page UI'
+  
+  /home/following:
+    get:
+      operationId: R206
+      summary: 'R206: Following Page'
+      description: 'Displays the Following Page. Access: USR, OWN, ADM'
+      tags:
+        - 'M02: Users'
+      responses:
+        '200':
+          description: 'Ok. Show Following Page UI'
 
 #################################
 ################# POSTS
@@ -268,12 +289,13 @@ paths:
 
 ################# DELETE POST
 
+  /post/{post}:
     delete:
       operationId: R301
       summary: 'R301: Delete Post'
       description: 'Deletes the post. Access: OWN, ADM'
       tags:
-        - 'Posts'
+        - 'M03: Posts'
       parameters:
         - in: path
           name: id
@@ -301,7 +323,7 @@ paths:
       summary: 'R302: Edit Post Form'
       description: 'Provide form to edit post. Access: OWN, ADM'
       tags:
-        - 'Posts'
+        - 'M03: Posts'
       parameters:
         - in: path
           name: id
@@ -313,10 +335,10 @@ paths:
           description: 'Ok. Show Edit Post UI'
     put:
       operationId: R303
-      summary: 'R303: Update Post'
+      summary: 'R303: Edit Post Action'
       description: 'Processes the post update form submission. Access: OWN, ADM'
       tags:
-        - 'Posts'
+        - 'M03: Posts'
       parameters:
         - in: path
           name: id
@@ -356,7 +378,7 @@ paths:
         summary: 'R304: Create Post'
         description: 'Processes the post creation form submission. Access: USR, OWN, ADM'
         tags:
-          - 'Posts'
+          - 'M03: Posts'
         parameters:
           - in: path
             name: id
@@ -400,10 +422,10 @@ paths:
   /groups/discover:
     get:
       operationId: R501
-      summary: 'R501: List Groups that User is not a Member'
+      summary: 'R501: List Groups that the User is not a Member'
       description: 'List all groups. Access: GST, USR, OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       responses:
         '200':
           description: 'Ok. Show list of groups.'
@@ -413,23 +435,23 @@ paths:
   /groups/my-groups:
     get:
       operationId: R502
-      summary: 'R502: List Groups that User is a Member'
+      summary: 'R502: List Groups that the User is a Member'
       description: 'List all groups that the user is a member. Access: USR, OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       responses:
         '200':
           description: 'Ok. Show list of groups.'
 
 ################# VIEW GROUP
 
-  /groups/{id}:
+  /groups/{group}:
     get:
       operationId: R503
       summary: 'R503: View Group'
       description: 'Show the individual group. Access: GST, USR, OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       parameters:
         - in: path
           name: id
@@ -440,20 +462,30 @@ paths:
         '200':
           description: 'Ok. Show Group UI'
 
-################# UPDATE GROUP
+################# EDIT GROUP
 
-    put:
+  /groups/{group}/edit:
+    get:
       operationId: R504
-      summary: 'R504: Update Group'
-      description: 'Processes the group update form submission. Access: OWN, ADM'
+      summary: 'R504: Edit Group Form'
+      description: 'Form of edit group. Access: OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       parameters:
         - in: path
           name: id
           schema:
             type: integer
           required: true
+      responses:
+        '200':
+          description: 'Ok. Show Edit Group UI'
+    put:
+      operationId: R505
+      summary: 'R505: Edit Group Action'
+      description: 'Action for edit group. Access: OWN, ADM'
+      tags:
+        - 'M05: Groups'
       requestBody:
         required: true
         content:
@@ -466,9 +498,9 @@ paths:
                 description:
                   type: string
                 group_image:
-                  type: url
+                  type: string
                 group_banner:
-                  type: url
+                  type: string
       responses:
         '302':
           description: 'Redirect after processing the group update.'
@@ -486,48 +518,48 @@ paths:
 
 ################# DELETE GROUP
 
-    delete:
-      operationId: R505
-      summary: 'R505: Delete Group'
-      description: 'Deletes the group. Access: OWN, ADM'
-      tags:
-        - 'Groups'
-      parameters:
-        - in: path
-          name: id
-          schema:
-            type: integer
-          required: true
-      responses:
-        '302':
-          description: 'Redirect after processing the group deletion.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful deletion. Redirect to groups list.'
-                  value: '/groups/my-groups'
+  delete:
+    operationId: R506
+    summary: 'R506: Delete Group'
+    description: 'Deletes the group. Access: OWN, ADM'
+    tags:
+      - 'M05: Groups'
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+    responses:
+      '302':
+        description: 'Redirect after processing the group deletion.'
+        headers:
+          Location:
+            schema:
+              type: string
+            examples:
+              302Success:
+                description: 'Successful deletion. Redirect to groups list.'
+                value: '/groups/my-groups'
 
 ################# CREATE GROUP
 
   /groups/create:
     get:
-      operationId: R506
-      summary: 'R506: Create Group Form'
+      operationId: R507
+      summary: 'R507: Create Group Form'
       description: 'Provide form to create group. Access: USR, OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       responses:
         '200':
           description: 'Ok. Show Create Group UI'
     post:
-      operationId: R507
-      summary: 'R507: Create Group'
+      operationId: R508
+      summary: 'R508: Create Group Action'
       description: 'Processes the group creation form submission. Access: USR, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       requestBody:
         required: true
         content:
@@ -560,13 +592,13 @@ paths:
 
 ################# EDIT GROUP
 
-  /groups/{id}/edit:
+  /groups/{group}/edit:
     get:
-      operationId: R508
-      summary: 'R508: Edit Group Form'
+      operationId: R509
+      summary: 'R509: Edit Group Form'
       description: 'Provide form to edit group. Access: OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       parameters:
         - in: path
           name: id
@@ -579,13 +611,13 @@ paths:
 
 ################# MANAGE GROUP
 
-  /groups/{id}/management:
+  /groups/{group}/management:
     get:
-      operationId: R509
-      summary: 'R509: Manage Group'
+      operationId: R510
+      summary: 'R510: Manage Group Form'
       description: 'Show the group management panel. Access: OWN, ADM'
       tags:
-        - 'Groups'
+        - 'M05: Groups'
       parameters:
         - in: path
           name: id
@@ -595,6 +627,131 @@ paths:
       responses:
         '200':
           description: 'Ok. Show Group Management UI'
+    
+  /groups/{group}/management/add-member:
+    post:
+      operationId: R511
+      summary: 'R511: Add User to a Group'
+      description: 'Add a User to a Group. Access: OWN, ADM'
+      tags:
+        - 'M05: Groups'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+        schema:
+          type: object
+          properties:
+            user_id:
+          type: integer
+      responses:
+        '302':
+          description: 'Redirect after adding the user to the group.'
+          headers:
+        Location:
+          schema:
+            type: string
+          examples:
+            302Success:
+          description: 'Successful addition. Redirect to group management.'
+          value: '/groups/{id}/management'
+            302Failure:
+          description: 'Failed addition. Redirect to group management.'
+          value: '/groups/{id}/management'
+      
+  /groups/{group}/management/delete/{member}:
+    delete:
+      operationId: R512
+      summary: 'Remove a Member from a Group'
+      description: 'Remove a Member from a Group. Access: OWN, ADM'
+      tags:
+        - 'M05: Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+        type: integer
+          required: true
+        - in: path
+          name: member
+          schema:
+        type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the member removal.'
+          headers:
+        Location:
+          schema:
+            type: string
+          examples:
+            302Success:
+          description: 'Successful removal. Redirect to group management.'
+          value: '/groups/{id}/management'
+            302Failure:
+          description: 'Failed removal. Redirect to group management.'
+          value: '/groups/{id}/management'
+        
+  /groups/{group}/management/make-owner/{member}:
+    post:
+      operationId: R513
+      summary: 'Make a Member the Owner of a Group'
+      description: 'Make a Member the Owner of a Group. Access: OWN, ADM'
+      tags:
+        - 'M05: Groups'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - in: path
+          name: member
+          schema:
+            type: integer
+          required: true
+      responses:
+        '302':
+          description: 'Redirect after processing the ownership transfer.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful transfer. Redirect to group management.'
+                  value: '/groups/{id}/management'
+                302Failure:
+                  description: 'Failed transfer. Redirect to group management.'
+                  value: '/groups/{id}/management'
+      
+  /groups/{group}/join:
+    post:
+      operationId: R514
+      summary: 'Join a Group'
+      description: 'Join a Group. Access: USR, OWN, ADM'
+      tags:
+      - 'M05: Groups'
+      parameters:
+      - in: path
+        name: id
+        schema:
+        type: integer
+        required: true
+      responses:
+      '302':
+        description: 'Redirect after processing the join request.'
+        headers:
+        Location:
+          schema:
+          type: string
+          examples:
+          302Success:
+            description: 'Successful join. Redirect to group.'
+            value: '/groups/{id}'
+          302Failure:
+            description: 'Failed join. Redirect to group.'
+            value: '/groups/{id}'
 
 #########################################
 ################# INTERACTIONS WITH POSTS
@@ -646,10 +803,10 @@ paths:
 ################# INTERACTIONS WITH USERS
 #########################################
 
-  /follow:
+  /profile/{username}/toggleFollow:
     post:
       operationId: R701
-      summary: 'R701: Follow User'
+      summary: 'R701: Follow or unfollow an User'
       description: 'Follows a user. Access: USR, OWN, ADM'
       tags:
         - 'Interactions with Users'
@@ -671,46 +828,12 @@ paths:
                 type: string
               examples:
                 302Success:
-                  description: 'Successful follow. Redirect to where the user is.'
+                  description: 'Successful follow or unfollow. Redirect to where the user is.'
                   value:
                   - '/profile/{username}'
 
                 302Failure:
-                  description: 'Failed follow. Redirect to where the user is.'
-                  value:
-                  - '/profile/{username}'
-
-  /unfollow:
-    post:
-      operationId: R702
-      summary: 'R702: Unfollow User'
-      description: 'Unfollows a user. Access: USR, OWN, ADM'
-      tags:
-        - 'Interactions with Users'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                user_id:
-                  type: integer
-      responses:
-        '302':
-          description: 'Redirect after processing the unfollow.'
-          headers:
-            Location:
-              schema:
-                type: string
-              examples:
-                302Success:
-                  description: 'Successful unfollow. Redirect to where the user is.'
-                  value:
-                  - '/profile/{username}'
-
-                302Failure:
-                  description: 'Failed unfollow. Redirect to where the user is.'
+                  description: 'Failed follow or unfollow. Redirect to where the user is.'
                   value:
                   - '/profile/{username}'
 
@@ -724,11 +847,10 @@ paths:
       summary: 'R801: Admin Panel'
       description: 'Show the admin panel. Access: ADM'
       tags:
-        - 'Administration'
+        - 'M08: Administration'
       responses:
         '200':
           description: 'Ok. Show Admin Panel UI'
-
 
 #########################################
 ################# SEARCH
@@ -740,7 +862,7 @@ paths:
       summary: 'R901: Show Results for a Search'
       description: 'Show the Results of a Search. Access: GST, USR, OWN, ADM'
       tags:
-        - 'Search'
+        - 'M09: Search'
       parameters:
         - in: query
           name: query
