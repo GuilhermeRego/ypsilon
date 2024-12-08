@@ -71,7 +71,8 @@ Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])
     ->name('group.edit');
 Route::put('/groups/{group}', [GroupController::class, 'update'])->name('group.update');
 Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
-Route::get('/groups/{group}/management', [ManagementController::class,'index'])->name('group-management.index');
+Route::get('/groups/{group}/management/members', [ManagementController::class,'manageMembers'])->name('group-management-members.index');
+Route::get('/groups/{group}/management/requests', [ManagementController::class,'manageRequests'])->name('group-management-requests.index');
 Route::post('/groups/{group}/management/add-member', [ManagementController::class,'addMember'])->name('group.addMember');
 Route::delete('/groups/{group}/management/delete/{member}', [ManagementController::class,'removeMember'])->name('group.removeMember');
 Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');

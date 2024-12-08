@@ -181,7 +181,6 @@ class GroupController extends Controller
         if ($previousIsPrivate && !$group->is_private) {
             $joinRequests = $group->join_request;
     
-            // Add those users as members of the group
             foreach ($joinRequests as $joinRequest) {
                 Group_Member::create([
                     'user_id' => $joinRequest->user_id,
@@ -189,7 +188,6 @@ class GroupController extends Controller
                 ]);
             }
     
-            // Optionally, delete the join requests (if you no longer need them)
             Join_Request::where('group_id', $group->id)->delete();
         }
 

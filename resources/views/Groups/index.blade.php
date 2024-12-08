@@ -28,7 +28,7 @@
                 @auth
                     @if ($isOwner || auth()->user()->isAdmin())
                         <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
-                        <a href="{{ route('group-management.index', $group->id) }}" class="btn btn-warning">Manage Group</a>
+                        <a href="{{ route('group-management-members.index', $group->id) }}" class="btn btn-warning">Manage Group</a>
                         <form action="{{ route('group.destroy', $group->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -100,7 +100,6 @@
         @if (!$group->is_private || ($group->is_private && ($isMember || auth()->user()?->isAdmin())))
             <!-- Posts Section -->
             <div class="posts">
-                <!-- Post 1 -->
                 @foreach($posts as $post)
                     @include('post.post')
                 @endforeach
