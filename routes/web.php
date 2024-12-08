@@ -77,6 +77,7 @@ Route::post('/groups/{group}/management/add-member', [ManagementController::clas
 Route::delete('/groups/{group}/management/delete/{member}', [ManagementController::class,'removeMember'])->name('group.removeMember');
 Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');
 Route::post('/groups/{group}/join-request', [GroupController::class, 'sendJoinRequest'])->name('group.join-request');
+Route::delete('/groups/{group}/cancel-request', [GroupController::class, 'cancelJoinRequest'])->name('group.cancel-request');
 
 // Reaction
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');

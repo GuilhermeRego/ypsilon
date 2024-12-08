@@ -28,7 +28,8 @@
                 @auth
                     @if ($isOwner || auth()->user()->isAdmin())
                         <a href="{{ route('group.edit', $group->id) }}" class="btn btn-warning">Edit Group</a>
-                        <a href="{{ route('group-management-members.index', $group->id) }}" class="btn btn-warning">Manage Group</a>
+                        <a href="{{ route('group-management-members.index', $group->id) }}" class="btn btn-warning">Manage
+                            Group</a>
                         <form action="{{ route('group.destroy', $group->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
@@ -52,9 +53,11 @@
                             <button type="submit" class="btn btn-primary">Join Request</button>
                         </form>
                     @elseif ($has_join_request)
-                        <button type="button" class="btn btn-primary" disabled>
-                            You have already requested to join
-                        </button>
+                        <form action="{{ route('group.cancel-request', $group->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Cancel Join Request</button>
+                        </form>
 
                     @endif
                 @endauth

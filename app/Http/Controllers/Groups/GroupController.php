@@ -249,4 +249,16 @@ class GroupController extends Controller
         ]);
         return redirect()->route('group.show', $groupId)->with('success', 'Your join request has been sent!');
     }
+    public function cancelJoinRequest($groupId){
+        $group = Group::findOrFail($groupId);
+        $joinRequest = Join_Request::where('group_id', $groupId)
+        ->where('user_id', auth()->id());
+        if ($joinRequest) {
+            $joinRequest->delete();
+    
+            return redirect()->route('group.show', $groupId)->with('success', 'Join request has been canceled.');
+        } else {
+            return redirect()->route('group.show', $groupId)->with('error', 'No join request found to cancel.');
+        }
+    }
 }
