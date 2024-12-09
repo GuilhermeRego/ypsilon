@@ -8,6 +8,7 @@
         <link href="{{ asset('css/layout.css') }}" rel="stylesheet">
         <link href="{{ asset('css/group.css') }}" rel="stylesheet">
         <link href="{{ asset('css/profile.css') }}" rel="stylesheet">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     </head>
     <body>
         <main>
@@ -20,5 +21,7 @@
                 </div>
             </div>
         </main>
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        @yield('scripts')
     </body>
 </html>

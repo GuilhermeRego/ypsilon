@@ -29,16 +29,19 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'user_id' => 'required|integer',
-            'date_time' => 'required|date',
-            'content' => 'required|string|max:255',
-            'group_id' => 'nullable|integer'
+        // Adicione validação para garantir que o conteúdo não esteja vazio
+        $request->validate([
+            'content' => 'required',
         ]);
 
-        Post::create($validatedData);
+        $post = Post::create([
+            'user_id' => auth()->id(),
+            'date_time' => now(),
+            'content' => $request->content,
+            'group_id' => $request->group_id
+        ]);
 
-        return redirect()->back()->with('success', 'Post created successfully!');
+        return redirect()->route('post.show', $post)->with('success', 'Post created successfully!');
     }
 
     /**
@@ -54,10 +57,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
-            abort(403);
-
         return view('post.edit', compact('post'));
     }
 
@@ -66,19 +65,14 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
-            abort(403);
-
-        // Validate the request
-        $validatedData = $request->validate([
-            'content' => 'required|string|max:1000'
+        $request->validate([
+            'content' => 'required',
         ]);
 
-        $post->content = $validatedData['content'];
-        $post->save();
+        $post->update([
+            'content' => $request->content,
+        ]);
 
-        // Redirect to home
         return redirect()->route('post.show', $post)->with('success', 'Post updated successfully!');
     }
 
@@ -87,12 +81,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        // Check if the user is the owner of the post or an admin
-        if (auth()->user()->id != $post->user_id && !(auth()->user()->isAdmin()))
-            abort(403);
-
         $post->delete();
 
-        return redirect()->route('home')->with('success', 'Post updated successfully!');
+        if ($post->group_id == null) {
+            return redirect()->route('home');
+        }
+        else {
+            return redirect()->route('group.show', $post->group_id);
+        }
     }
 }

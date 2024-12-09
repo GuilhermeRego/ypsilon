@@ -12,7 +12,7 @@
                     @endif
                 </div>
                 <a href="{{ route('post.show', ['post' => $post->id]) }}" class="post-content" style="text-decoration: none; color: black;">
-                    <p>{{ $post->content }}</p>
+                    <div>{!! $post->content !!}</div>
                     <p class="post-date"><small class="text-muted">{{ $post->date_time }}</small></p>
                 </a>
             </div>
@@ -37,7 +37,7 @@
                 </form>
             @endauth
             <span><i class="bi bi-arrow-repeat"></i> {{ $post->repostsCount() }}</span>
-            <span><i class="bi bi-chat"></i> 0</span>
+            <span class="mb-2"><i class="bi bi-chat"></i> {{ $post->commentsCount() }}</span>
         </div>
         @auth
             @if (auth()->check() && auth()->user()->id == $post->user_id || auth()->user()->isAdmin())

@@ -41,6 +41,11 @@ class Post extends Model
         return $this->hasMany(Comment::class, 'post_id', 'id');
     }
 
+    public function commentsCount()
+    {
+        return $this->comments()->count();
+    }
+
     // Eloquent relationship between Post and Group.
     public function group()
     {
