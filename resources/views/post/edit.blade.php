@@ -27,15 +27,26 @@
         var quill = new Quill('#editor-container', {
             theme: 'snow',
             modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    ['image', 'code-block']
-                ]
+                toolbar: {
+                    container: [
+                        [{ 'header': [1, 2, false] }],
+                        ['bold', 'italic', 'underline'],
+                        ['image', 'code-block']
+                    ],
+                    handlers: {
+                        'image': function() {
+                            var range = this.quill.getSelection();
+                            var value = prompt('What is the image URL');
+                            if(value){
+                                this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+                            }
+                        }
+                    }
+                }
             }
         });
 
-        // Carregar o conteúdo existente do post no editor Quill
+        // Preencher o editor Quill com o conteúdo do post
         quill.root.innerHTML = `{!! $post->content !!}`;
 
         document.getElementById('post-form').onsubmit = function(event) {
