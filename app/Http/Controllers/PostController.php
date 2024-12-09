@@ -79,7 +79,7 @@ class PostController extends Controller
         $post->save();
 
         // Redirect to home
-        return redirect()->route('home')->with('success', 'Post updated successfully!');
+        return redirect()->route('post.show', $post)->with('success', 'Post updated successfully!');
     }
 
     /**

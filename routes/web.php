@@ -113,6 +113,11 @@ Route::get('/posts/{post}', [PostController::class, 'show'])->name('post.show');
 // Comments:
 // Create comment
 Route::post('/comments', [CommentController::class, 'store'])->name('comment.store');
+// Edit comment
+Route::get('/comments/{comment}/edit', [CommentController::class, 'edit'])->name('comment.edit');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comment.update');
+// Delete comment
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
 // Show administration page
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
