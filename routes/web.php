@@ -101,7 +101,7 @@ Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->nam
 // Posts:
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
-Route::post('/post/{post}/update', [PostController::class, 'update'])->name('post.update');
+Route::put('/post/{post}', [PostController::class, 'update'])->name('post.update');
 // Create post
 Route::post('/home/*', [PostController::class, 'store'])->name('post.store');
 Route::post('/groups/{group}', [PostController::class, 'store'])->name('post.store.group');
