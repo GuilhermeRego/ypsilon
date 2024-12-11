@@ -6,7 +6,7 @@
 <div class="container p-4" style="overflow-y: scroll">
     <form action="{{ route('post.update', ['post' => $post->id]) }}" method="POST" id="post-form">
         @csrf
-        @method('PUT') <!-- Adicionado para usar o método PUT -->
+        @method('PUT')
         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
         <input type="hidden" name="date_time" value="{{ now() }}">
         <div class="form-group mb-3">
@@ -37,8 +37,13 @@
                         'image': function() {
                             var range = this.quill.getSelection();
                             var value = prompt('What is the image URL');
-                            if(value){
-                                this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+                            if (value) {
+                                // Ensure the URL is valid
+                                if (isValidUrl(value)) {
+                                    this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
+                                } else {
+                                    alert('Invalid URL');
+                                }
                             }
                         }
                     }
@@ -46,29 +51,21 @@
             }
         });
 
-        // Preencher o editor Quill com o conteúdo do post
-        quill.root.innerHTML = `{!! $post->content !!}`;
-
-        document.getElementById('post-form').onsubmit = function(event) {
-            // Prevenir o envio do formulário até que o campo de entrada oculto seja preenchido
-            event.preventDefault();
-
-            // Copie o conteúdo do editor Quill para o campo de entrada oculto
-            var content = quill.root.innerHTML;
-            document.getElementById('content').value = content;
-
-            // Verifique se o conteúdo está sendo copiado corretamente
-            console.log('Content:', content);
-
-            // Verifique se o campo de entrada oculto está sendo preenchido corretamente
-            console.log('Hidden input value:', document.getElementById('content').value);
-
-            // Envie o formulário após preencher o campo de entrada oculto
-            if (content.trim() !== '') {
-                this.submit();
-            } else {
-                alert('Content field is required.');
+        // Function to validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;  
             }
+        }
+
+        // Update the hidden input with the content of the editor
+        var form = document.getElementById('post-form');
+        form.onsubmit = function() {
+            var content = document.querySelector('input[name=content]');
+            content.value = quill.root.innerHTML;
         };
     });
 </script>

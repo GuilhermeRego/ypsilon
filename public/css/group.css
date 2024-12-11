@@ -23,7 +23,7 @@
     align-items: center;
   }
   
-  img {
+  body > main > div > div.content.d-flex.flex-column > div.profile-banner > div.profile-info > img {
     width: 150px;
     height: 150px;
     border-radius: 50%;

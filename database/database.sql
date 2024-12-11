@@ -81,8 +81,7 @@ CREATE TABLE Post (
     content TEXT NOT NULL,
     group_id INT,
     FOREIGN KEY (user_id) REFERENCES "User"(id),
-    FOREIGN KEY (group_id) REFERENCES "Group"(id),
-    CHECK (LENGTH(content) <= 1000)
+    FOREIGN KEY (group_id) REFERENCES "Group"(id)
 );
 
 -- Reaction Table

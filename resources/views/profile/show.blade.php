@@ -47,10 +47,15 @@
                 {{ session('success') }}
             </div>
         @endif
-        <h2>Posts</h2>
-        @foreach($user->posts()->orderBy('date_time', 'desc')->get() as $post)
-            @include('post.post')
-        @endforeach
+        @if($user->posts()->count() == 0)
+            <div class="alert alert-info">
+                No posts yet.
+            </div>
+        @else
+            @foreach($user->posts()->orderBy('date_time', 'desc')->get() as $post)
+                @include('post.post')
+            @endforeach
+        @endif
     </div>
 </div>
 @endsection

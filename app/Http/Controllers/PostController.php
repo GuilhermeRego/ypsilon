@@ -84,10 +84,11 @@ class PostController extends Controller
         $post->delete();
 
         if ($post->group_id == null) {
-            return redirect()->route('home');
+            return redirect()->route('home')->with('success', 'Post deleted successfully!');
         }
         else {
-            return redirect()->route('group.show', $post->group_id);
+            return redirect()->route('group.show', $post->group_id)->with('success', 'Post deleted successfully!');
         }
+        
     }
 }
