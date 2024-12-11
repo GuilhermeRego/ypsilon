@@ -1,6 +1,6 @@
 @extends('layouts.app')
-
 @section('content')
+@include('layouts.upperbarmenu')
 <div class="container p-4" style="overflow-y: scroll">
     <h1>Manage Group Members</h1>
 

@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class ManagementController extends Controller
 {
-    public function index($group)
+    public function manageMembers($group)
     {
         $group = Group::findOrFail($group);
         if (auth()->user()->isAdmin() || $this->authorize('isOwner', $group)) {
@@ -25,7 +25,16 @@ class ManagementController extends Controller
                     $members[] = $member;
                 }
             }
-            return view("Groups.management", compact('group', 'owners','members'));
+            return view("Groups.managemembers", compact('group', 'owners','members'));
+        } else {
+            abort(403, 'Unauthorized');
+        }
+    }
+    public function manageRequests($group)
+    {
+        $group = Group::findOrFail($group);
+        if (auth()->user()->isAdmin() || $this->authorize('isOwner', $group)) {
+            return view("Groups.managerequests", ['group'=>$group]);
         } else {
             abort(403, 'Unauthorized');
         }

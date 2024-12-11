@@ -25,6 +25,7 @@ class Group extends Model
         'description',
         'group_image',
         'group_banner',
+        'is_private',
     ];
 
     protected $primaryKey = 'id';

@@ -74,14 +74,15 @@ Route::get('/groups/{group}/edit', [GroupController::class, 'edit'])
 Route::put('/groups/{group}', [GroupController::class, 'update'])->name('group.update');
 // Delete group
 Route::delete('/groups/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
-// Show group management page
-Route::get('/groups/{group}/management', [ManagementController::class,'index'])->name('group-management.index');
-// Add a member to a group
+Route::get('/groups/{group}/management/members', [ManagementController::class,'manageMembers'])->name('group-management-members.index');
+Route::get('/groups/{group}/management/requests', [ManagementController::class,'manageRequests'])->name('group-management-requests.index');
 Route::post('/groups/{group}/management/add-member', [ManagementController::class,'addMember'])->name('group.addMember');
 // Remove a member from a group
 Route::delete('/groups/{group}/management/delete/{member}', [ManagementController::class,'removeMember'])->name('group.removeMember');
 // Make a member a owner of the group
 Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');
+Route::post('/groups/{group}/join-request', [GroupController::class, 'sendJoinRequest'])->name('group.join-request');
+Route::delete('/groups/{group}/cancel-request', [GroupController::class, 'cancelJoinRequest'])->name('group.cancel-request');
 
 // Interaction with other users:
 // Reaction creation

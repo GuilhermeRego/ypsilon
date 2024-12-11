@@ -7,6 +7,7 @@ use App\Models\Group;
 use App\Models\Image;
 use App\Models\Group_Member;
 use App\Models\Group_Owner;
+use App\Models\Join_Request;
 
 class GroupController extends Controller
 {
@@ -35,13 +36,13 @@ class GroupController extends Controller
         $isMember = $memberId ? true : false;
 
         $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
-
+        $has_join_request=($group->join_request()->where('user_id', auth()->id())->exists());
         return view('Groups.index', [
             'group' => $group,
             'isMember' => $isMember,
             'isOwner' => $isOwner,
             'posts' => $posts,
-
+            'has_join_request' => $has_join_request,
         ]);
     }
 
@@ -57,6 +58,7 @@ class GroupController extends Controller
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
+            'is_private' => 'nullable|boolean'
 
         ]);
 
@@ -87,6 +89,7 @@ class GroupController extends Controller
             'description' => $request->description,
             'group_image' => $groupImageId,  // Store the ID of the group image
             'group_banner' => $groupBannerId, // Store the ID of the group banner
+            'is_private' => $request->has('is_private'),
         ]);
 
         $group_member = Group_Member::create([
@@ -170,9 +173,23 @@ class GroupController extends Controller
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
         ]);
-
+        $previousIsPrivate = $group->is_private;
         $group->name = $request->name;
         $group->description = $request->description;
+        $group->is_private = $request->has('is_private');
+
+        if ($previousIsPrivate && !$group->is_private) {
+            $joinRequests = $group->join_request;
+    
+            foreach ($joinRequests as $joinRequest) {
+                Group_Member::create([
+                    'user_id' => $joinRequest->user_id,
+                    'group_id' => $group->id,
+                ]);
+            }
+    
+            Join_Request::where('group_id', $group->id)->delete();
+        }
 
         if ($request->hasFile('group_image')) {
             $groupImagePath = $request->file('group_image')->store('group_images', 'public');
@@ -210,5 +227,38 @@ class GroupController extends Controller
             $post->delete();
         $group->delete();
         return redirect()->route('groups.my-groups')->with('success', 'Group deleted successfully!');
+    }
+
+    public function sendJoinRequest($groupId){
+        $group = Group::findOrFail($groupId);
+        if (!$group->is_private) {
+            return redirect()->route('group.show', $groupId)->with('error', 'This group is not private.');
+        }
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You must be logged in to request to join a group.');
+        }
+        if ($group->group_member()->where('user_id', auth()->id())->exists()) {
+            return redirect()->route('group.show', $groupId)->with('error', 'You are already a member of this group.');
+        }
+        if ($group->join_request()->where('user_id', auth()->id())->exists()) {
+            return redirect()->route('group.show', $groupId)->with('error', 'You have already sent a request to join this group.');
+        }
+        Join_Request::Create([
+            'user_id' => auth()->id(),
+            'group_id' => $groupId,
+        ]);
+        return redirect()->route('group.show', $groupId)->with('success', 'Your join request has been sent!');
+    }
+    public function cancelJoinRequest($groupId){
+        $group = Group::findOrFail($groupId);
+        $joinRequest = Join_Request::where('group_id', $groupId)
+        ->where('user_id', auth()->id());
+        if ($joinRequest) {
+            $joinRequest->delete();
+    
+            return redirect()->route('group.show', $groupId)->with('success', 'Join request has been canceled.');
+        } else {
+            return redirect()->route('group.show', $groupId)->with('error', 'No join request found to cancel.');
+        }
     }
 }
