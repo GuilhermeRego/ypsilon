@@ -83,7 +83,11 @@ Route::delete('/groups/{group}/management/delete/{member}', [ManagementControlle
 Route::post('/groups/{group}/management/make-owner/{member}', [ManagementController::class,'makeOwner'])->name('group.makeOwner');
 Route::post('/groups/{group}/join-request', [GroupController::class, 'sendJoinRequest'])->name('group.join-request');
 Route::delete('/groups/{group}/cancel-request', [GroupController::class, 'cancelJoinRequest'])->name('group.cancel-request');
+// Route for accepting the request
+Route::post('/groups/accept-request/{id}', [ManagementController::class, 'acceptRequest'])->name('group.accept-request');
 
+// Route for declining the request
+Route::post('/groups/decline-request/{id}', [ManagementController::class, 'declineRequest'])->name('group.decline-request');
 // Interaction with other users:
 // Reaction creation
 Route::post('/reaction', [ReactionController::class, 'store'])->name('reaction.store');
