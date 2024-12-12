@@ -14,7 +14,7 @@ class ManagementController extends Controller
     public function manageMembers($group)
     {
         $group = Group::findOrFail($group);
-        if (auth()->user()->isAdmin() || $this->authorize('isOwner', $group)) {
+        if ($this->authorize('isOwner', $group)) {
             $owners = [];
             $members = [];
             foreach ($group->group_member as $member) {
@@ -33,7 +33,7 @@ class ManagementController extends Controller
     public function manageRequests($group)
     {
         $group = Group::findOrFail($group);
-        if (auth()->user()->isAdmin() || $this->authorize('isOwner', $group)) {
+        if ($this->authorize('isOwner', $group)) {
             return view("Groups.managerequests", ['group'=>$group]);
         } else {
             abort(403, 'Unauthorized');
