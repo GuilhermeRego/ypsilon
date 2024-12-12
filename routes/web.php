@@ -98,6 +98,7 @@ Route::get('/profile/{username}/edit', [ProfileController::class, 'edit'])->name
 Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->name('profile.update');
 // Delete Profile
 Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
+Route::post('/profile/{username}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.follow');
 
 // Posts:
 // Edit Post

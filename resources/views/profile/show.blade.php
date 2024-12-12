@@ -13,9 +13,28 @@
                 style="width: 150px; height: 150px;">
         </div>
         <div class="identification p-2">
-            <h2>{{ $user->username }}</h2>
-            <h4>{{ $user->nickname }}</h4>
-            <p>{{ $user->bio }}</p>
+            <h2><strong>{{ $user->nickname }}</strong></h4>
+            <h4>{{ $user->username }}</h2>
+            <p class="bio m-0">{{ $user->bio }}</p>
+        </div>
+        <div class="profile-stats p-2">
+            <p class="m-0"><strong>{{ $user->posts()->count() }}</strong>
+                @if($user->posts()->count() == 1)
+                    Post
+                @else
+                    Posts
+                @endif
+            </p>
+            <p class="m-0"><strong>{{ $user->followers()->count() }}</strong>
+                @if($user->followers()->count() == 1)
+                    Follower
+                @else
+                    Followers
+                @endif
+            </p>
+            <p class="m-0"><strong>{{ $user->following()->count() }}</strong>
+                    Following
+            </p>
         </div>
         <div class="interactions d-flex gap-2 pb-3 border-bottom">
         @auth
@@ -29,9 +48,10 @@
                 </form>
             @endif
             @if (auth()->user()->id != $user->id)
-                <button id="followButton" data-user-id="{{ $user->id }}"
-                    class="button {{ $isFollowedByAuth ? 'btn-secondary' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
-                <script src="{{ asset('js/follow.js') }}"></script>
+                <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                    @csrf
+                    <button type="submit" class="button m-0 {{ $isFollowedByAuth ? 'btn-danger' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
+                </form>
             @endif
         @endauth
         </div>

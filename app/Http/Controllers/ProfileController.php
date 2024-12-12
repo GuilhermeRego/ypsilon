@@ -135,23 +135,25 @@ class ProfileController extends Controller
         return redirect()->route('home')->with('status', 'User deleted successfully');
     }
 
-    public function toggleFollow($id)
+
+    public function toggleFollow($username)
     {
+        $user = User::where('username',$username)->firstOrFail();
         $authUserId = Auth::id();
 
         $existingFollow = Follow::where('follower_id', $authUserId)
-            ->where('followed_id', $id)
+            ->where('followed_id', $user->id)
             ->first();
 
         if ($existingFollow) {
             $existingFollow->delete();
-            return response()->json(['message' => 'Unfollowed successfully']);
+            return redirect()->route('profile.show', $username)->with('success', 'You have successfully unfollowed this user!');
         } else {
             Follow::create([
                 'follower_id' => $authUserId,
-                'followed_id' => $id,
+                'followed_id' => $user->id,
             ]);
-            return response()->json(['message' => 'Followed successfully']);
+            return redirect()->route('profile.show', $username)->with('success', 'You have successfully followed this user!');
         }
     }
 

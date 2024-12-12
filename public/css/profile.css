@@ -15,12 +15,12 @@
     border: 5px solid white;
 }
 
-.profile-info h2,
-.profile-info h4,
-.profile-info p {
-    margin: 10px 0;
+.bio {
+    font-size: 14px;
 }
 
-.profile-info .btn {
-    margin-top: 10px;
-}
+.profile-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+  }
