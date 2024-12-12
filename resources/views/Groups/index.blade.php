@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="container p-4">
+<div class="container p-4" style="overflow-y: scroll">
     <div class="profile-header container d-flex flex-column">
         <div class="image-container w-100 p-4 d-flex align-items-end" 
             style="height: 250px; background-image: url('{{ $group->groupBanner ? asset('storage/' . $group->groupBanner->url) : asset('images/banner-default.png') }}');">

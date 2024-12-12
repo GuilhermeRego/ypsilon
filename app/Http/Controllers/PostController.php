@@ -41,7 +41,7 @@ class PostController extends Controller
             'group_id' => $request->group_id
         ]);
 
-        return redirect()->route('post.show', $post)->with('success', 'Post created successfully!');
+        return redirect()->back()->with('success', 'Post created successfully!');
     }
 
     /**
