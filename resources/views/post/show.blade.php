@@ -54,19 +54,10 @@
     </div>
 </div>
 
+<div class="comments" style="overflow-y: scroll">
 <!-- Create Comment -->
  @auth
-    <div class="create-comment mt-3 p-3 bg-white rounded shadow-sm">
-        <form action="{{ route('comment.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="post_id" value="{{ $post->id }}">
-            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-            <input type="hidden" name="date_time" value="{{ now() }}">
-            <div class="form-group mb-3">
-                <textarea class="form-control" id="content" name="content" rows="3" required placeholder="Write a comment..."></textarea>
-            <button type="submit" class="btn btn-primary">Comment</button>
-        </form>
-    </div>
+    @include('comment.create')
 @endauth
 <!-- Comments -->
 <div class="comments mt-3">
@@ -81,7 +72,7 @@
                         <p class="m-0 pl-1">&#64{{ $comment->user->username }}</p>
                     @endif
                 </div>
-                <p class="comment-content">{{ $comment->content }}</p>
+                <p class="comment-content">{!! $comment->content !!}</p>
                 <p class="comment-date"><small class="text-muted">{{ $comment->date_time }}</small></p>
                 @auth
                     @if (auth()->check() && (auth()->user()->id == $comment->user_id || auth()->user()->isAdmin()))
@@ -100,5 +91,6 @@
     @empty
         <p>No comments yet.</p>
     @endforelse
+</div>
 </div>
 @endsection

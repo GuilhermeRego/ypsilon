@@ -51,6 +51,8 @@
             }
         });
 
+        quill.root.innerHTML = '{!! $post->content !!}';
+
         // Function to validate URL
         function isValidUrl(string) {
             try {

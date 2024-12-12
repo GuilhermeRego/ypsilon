@@ -7,7 +7,6 @@
         @csrf
         @method('PUT')
         <div class="form-group mb-3">
-            <label for="content" class="form-label">Content</label>
             <textarea class="form-control" id="content" name="content" rows="3" required>{{ $comment->content }}</textarea>
             @error('content')
                 <div class="text-danger">{{ $message }}</div>
@@ -16,4 +15,4 @@
         <button type="submit" class="btn btn-primary">Update Comment</button>
     </form>
 </div>
-@endsection
+@endsection 

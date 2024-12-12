@@ -100,7 +100,7 @@ class User extends Authenticatable
      */
     public function savedPosts()
     {
-        return $this->hasMany(SavedPost::class, 'user_id', 'id');
+        return $this->hasMany(Saved_Post::class, 'user_id', 'id');
     }
 
     /**
@@ -124,7 +124,7 @@ class User extends Authenticatable
      */
     public function joinRequests()
     {
-        return $this->hasMany(JoinRequest::class, 'user_id', 'id');
+        return $this->hasMany(Join_Request::class, 'user_id', 'id');
     }
 
     /**
@@ -164,7 +164,7 @@ class User extends Authenticatable
      */
     public function joinRequestNotification()
     {
-        return $this->hasMany(JoinRequest_Notification::class, 'user_id', 'id');
+        return $this->hasMany(Join_Request_Notification::class, 'user_id', 'id');
     }
 
     /**

@@ -1,4 +1,4 @@
-<div class="container p-4" style="overflow-y: scroll">
+<div class="container p-4">
     <div class="createpost mb-4">
         <div class="post">
             <div class="post-body">
