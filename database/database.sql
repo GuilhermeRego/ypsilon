@@ -81,7 +81,8 @@ CREATE TABLE Post (
     content TEXT NOT NULL,
     group_id INT,
     FOREIGN KEY (user_id) REFERENCES "User"(id),
-    FOREIGN KEY (group_id) REFERENCES "Group"(id)
+    FOREIGN KEY (group_id) REFERENCES "Group"(id),
+    CHECK(LENGTH(content) > 0)
 );
 
 -- Reaction Table
@@ -429,32 +430,61 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Populate User table and capture user IDs
-INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) 
-VALUES ('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password: 1234
+INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) VALUES
+('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
+('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
+('Vasco Rego', 'vascorego', '2010-10-21', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password:1234
 
-INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) 
-VALUES ('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password: 1234
 
 -- Populate Group table and capture group IDs
+INSERT INTO "Group" (name, description) VALUES
+('Fãs do Benfica', 'Grupo para pessoas com bom gosto'),
+('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos'),
+('Fonte do Bastardo Alé', 'Grupo de apoiantes da Fonte do Bastardo'),
+('FEUP', 'Grupo não oficial feito por estudantes da FEUP para estudantes da FEUP'),
+('Fãs do Porto', 'Grupo para pessoas com mau gosto'),
+('Porto Marketplace - Compras e Vendas', 'Venda os pertences que já não dá uso aqui'),
+('Grupo de voleibol da Praia da Vitória', 'Grupo para aqueles que jogam voleibol na praia'),
+('Aqueles que Sabem', 'Só os que sabem podem entrar');
 
-INSERT INTO "Group" (name, description) 
-VALUES ('Fãs do Benfica', 'Grupo nº1 para fãs do Benfica');
+INSERT INTO "Group" (name, description, is_private) VALUES
+('Grupo Super Secreto', 'Apenas os aprovados pelo líder podem entrar', TRUE); -- grupo privado
 
-INSERT INTO "Group" (name, description) 
-VALUES ('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos');
 
 -- Populate Group_Member table using the user and group IDs
 INSERT INTO Group_Member (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
-((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo'));
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo')),
+
+((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); --grupo privado
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
+((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
+((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
+
 
 -- Populate Group_Owner table, making Gonçalo and JaneSmith the owners of their respective groups
 INSERT INTO Group_Owner (member_id) VALUES
 ((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'goncalob') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica'))),
 ((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'janesmith') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo')));
 
+((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'tomasvinhas') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto'))); -- grupo privado
+
+
 -- Populate Post table with posts by Gonçalo and JaneSmith
 INSERT INTO Post (user_id, date_time, content, group_id) VALUES
+((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), '2024-02-02', 'Benfica não jogou nada', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'vascorego'), '2024-02-01', 'saudades dela', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), '2024-03-02', 'Ontem experimentei o jogo Bomb Rush Cyberfunk, devo dizer que estou muito satisfeito com a estética visual e da banda sonora do jogo, excelentes. A jogabilidade deixou um bocadinho a desejar.', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), '2024-02-13', 'EU ODEIO A FEUP!!!!! GRAAAAAAAAAAAAAAH!!!!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), '2024-03-02', 'Viva ao Vitória', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-03-01', 'Alguém sabe de algum grupo onde possa vender as minhas bandas desenhadas antigas?', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), '2024-02-03', 'Benfica joga muito, afinal', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'goncalopriv'), '2024-06-12', 'Criei uma nova conta privada', NULL), -- post de conta privada
+((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), '2024-04-01', 'Adoro usar o Y, é a minha rede social preferida', NULL),
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), '2024-01-01', 'Olá eu sou o Gonçalo Barroso', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
 ((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-02-14', 'Happy Valentines Day!', (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo'));
 
@@ -471,3 +501,7 @@ INSERT INTO Follow (follower_id, followed_id) VALUES
 -- Populate Admin table, making Gonçalo an admin
 INSERT INTO "Admin" (user_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'));
+
+INSERT INTO 'Join_Request' (user_id, group_id) VALUES
+((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
+--Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
