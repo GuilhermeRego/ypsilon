@@ -1,24 +1,28 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container p-4" style="overflow-y: scroll">
-    <form action="{{ route('comment.update', ['comment' => $comment->id]) }}" method="POST" id="comment-form">
-        @csrf
-        @method('PUT')
-        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-        <input type="hidden" name="post_id" value="{{ $comment->post_id }}">
-        <input type="hidden" name="date_time" value="{{ now() }}">
-        <div class="form-group mb-3">
-            <div id="editor-container" style="height: 200px;"></div>
-            <input type="hidden" id="content" name="content">
-            @error('content')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+<div class="container p-4">
+    <div class="createpost mb-4">
+        <div class="comment">
+            <div class="comment-body">
+                <form action="{{ route('comment.store') }}" method="POST" id="comment-form">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                <input type="hidden" name="post_id" value="{{ $post->id }}">
+                <input type="hidden" name="date_time" value="{{ now() }}">
+                <div class="form-group mb-3">
+                    <div id="editor-container" style="height: 100px;"></div>
+                    <input type="hidden" id="content" name="content">
+                    @error('content')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                @if(isset($group))
+                    <input type="hidden" name="group_id" value="{{ $group->id }}">
+                @endif
+                <button type="submit" class="btn btn-primary">Comment</button>
+                </form>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Update Comment</button>
-    </form>
+    </div>
 </div>
-@endsection
 
 @section('scripts')
 <script>
@@ -49,8 +53,6 @@
                 }
             }
         });
-
-        quill.root.innerHTML = '{!! $comment->content !!}';
 
         // Function to validate URL
         function isValidUrl(string) {

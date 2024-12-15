@@ -134,8 +134,7 @@ CREATE TABLE Comment (
     date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     content TEXT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES "User"(id),
-    FOREIGN KEY (post_id) REFERENCES Post(id) ON DELETE CASCADE,
-    CHECK (LENGTH(content) <= 1000)
+    FOREIGN KEY (post_id) REFERENCES Post(id) ON DELETE CASCADE
 );
 
 -- Comment Notification Table

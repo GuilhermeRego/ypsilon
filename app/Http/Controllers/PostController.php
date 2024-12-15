@@ -29,7 +29,6 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // Adicione validação para garantir que o conteúdo não esteja vazio
         $request->validate([
             'content' => 'required',
         ]);
@@ -49,6 +48,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post = Post::with(['comments' => function ($query) {
+            $query->orderBy('date_time', 'desc');
+        }])->findOrFail($post->id);
         return view('post.show', compact('post'));
     }
 
@@ -73,7 +75,7 @@ class PostController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->route('post.show', $post)->with('success', 'Post updated successfully!');
+        return redirect()->back()->with('success', 'Post updated successfully!');
     }
 
     /**
