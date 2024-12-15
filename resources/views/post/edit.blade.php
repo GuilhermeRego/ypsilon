@@ -35,36 +35,16 @@
                     ],
                     handlers: {
                         'image': function() {
-                            var input = document.createElement('input');
-                            input.setAttribute('type', 'file');
-                            input.setAttribute('accept', 'image/*');
-                            input.click();
-
-                            input.onchange = function() {
-                                var file = input.files[0];
-                                if (/^image\//.test(file.type)) {
-                                    var formData = new FormData();
-                                    formData.append('image', file);
-
-                                    fetch('{{ route('image.upload') }}', {
-                                        method: 'POST',
-                                        body: formData,
-                                        headers: {
-                                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                        }
-                                    })
-                                    .then(response => response.json())
-                                    .then(result => {
-                                        var range = quill.getSelection();
-                                        quill.insertEmbed(range.index, 'image', result.url);
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                    });
+                            var range = this.quill.getSelection();
+                            var value = prompt('What is the image URL');
+                            if (value) {
+                                // Ensure the URL is valid
+                                if (isValidUrl(value)) {
+                                    this.quill.insertEmbed(range.index, 'image', value, Quill.sources.USER);
                                 } else {
-                                    console.warn('You could only upload images.');
+                                    alert('Invalid URL');
                                 }
-                            };
+                            }
                         }
                     }
                 }
@@ -73,6 +53,17 @@
 
         quill.root.innerHTML = '{!! $post->content !!}';
 
+        // Function to validate URL
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;  
+            }
+        }
+
+        // Update the hidden input with the content of the editor
         var form = document.getElementById('post-form');
         form.onsubmit = function() {
             var content = document.querySelector('input[name=content]');

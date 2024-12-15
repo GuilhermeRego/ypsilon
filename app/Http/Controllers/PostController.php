@@ -75,7 +75,7 @@ class PostController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->back()->with('success', 'Post updated successfully!');
+        return redirect()->route('post.show', $post->id)->with('success', 'Post updated successfully!');
     }
 
     /**
