@@ -40,7 +40,7 @@ class PostController extends Controller
             'group_id' => $request->group_id
         ]);
 
-        return redirect()->route('post.show', $post)->with('success', 'Post created successfully!');
+        return redirect()->back()->with('success', 'Post created successfully!');
     }
 
     /**
@@ -48,6 +48,9 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post = Post::with(['comments' => function ($query) {
+            $query->orderBy('date_time', 'desc');
+        }])->findOrFail($post->id);
         return view('post.show', compact('post'));
     }
 
@@ -72,7 +75,7 @@ class PostController extends Controller
             'content' => $request->content,
         ]);
 
-        return redirect()->route('post.show', $post)->with('success', 'Post updated successfully!');
+        return redirect()->back()->with('success', 'Post updated successfully!');
     }
 
     /**

@@ -54,11 +54,12 @@
     </div>
 </div>
 
-<div class="comments" style="overflow-y: scroll">
 <!-- Create Comment -->
+<div class="comments" style="overflow-y: scroll">
  @auth
     @include('comment.create')
 @endauth
+
 <!-- Comments -->
 <div class="comments mt-3">
     @forelse ($post->comments as $comment)
