@@ -72,7 +72,7 @@
                 No posts yet.
             </div>
         @else
-            @foreach($user->posts()->orderBy('date_time', 'desc')->get() as $post)
+            @foreach($user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get() as $post)
                 @include('post.post')
             @endforeach
         @endif

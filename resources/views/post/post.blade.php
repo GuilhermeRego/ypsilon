@@ -35,18 +35,20 @@
                     <input type="hidden" name="is_like" value="false">
                     <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-hand-thumbs-down"></i> {{ $post->dislikesCount() }}</button>
                 </form>
-                @if(!auth()->user()->savedPosts()->where('post_id', $post->id)->exists())
-                <form action="{{ route('saved.create', ['post'=>$post->id]) }}" method="POST" class="d-inline reaction-form">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy"></i></button>
-                </form>
-                @else
-                <form action="{{ route('saved.destroy',['post'=>$post->id]) }}" method="POST" class="d-inline reaction-form">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill"></i></button>
-                </form>
-                @endif
+                @if($post->group_id===null)
+                    @if(!auth()->user()->savedPosts()->where('post_id', $post->id)->exists())
+                    <form action="{{ route('saved.create', ['post'=>$post->id]) }}" method="POST" class="d-inline reaction-form">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy"></i></button>
+                    </form>
+                    @else
+                    <form action="{{ route('saved.destroy',['post'=>$post->id]) }}" method="POST" class="d-inline reaction-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill"></i></button>
+                    </form>
+                    @endif
+                @endif    
 
 
             @endauth

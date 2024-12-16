@@ -25,6 +25,9 @@ class SavedController extends Controller
     public function create($post)
     {
         $post = Post::findOrFail($post);
+        if($post->group_id !== null) {
+            abort(403);
+        }
         Saved_Post::create([
             'user_id' => auth()->user()->id,
             'post_id' => $post->id,
@@ -34,7 +37,11 @@ class SavedController extends Controller
     }
     public function destroy($post)
     {
+        
         $post = Post::findOrFail($post);
+        if($post->group_id !== null) {
+            abort(403);
+        }
         $saved = Saved_Post::where('user_id', auth()->user()->id)->where('post_id', $post->id)->first();
         $saved->delete();
         return redirect()->back()->with('success', 'Post removed successfully!');
