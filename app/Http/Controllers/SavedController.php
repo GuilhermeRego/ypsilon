@@ -15,11 +15,8 @@ class SavedController extends Controller
         abort(403);  
         }
     $user = User::where('username', $username)->firstOrFail();
-    $posts = $user->savedPosts()->with('post')->get();
-    $postsArray = $posts->map(function($savedPost) {
-        return $savedPost->post;  
-    });
-    return view("saved.index", ['posts' => $postsArray]);
+    $posts = $user->savedPosts()->with('post')->get()->pluck('post');
+    return view("saved.index", ['posts' => $posts]);
 }
     public function create($post)
     {
