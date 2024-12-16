@@ -15,7 +15,11 @@ class SavedController extends Controller
         abort(403);  
         }
     $user = User::where('username', $username)->firstOrFail();
-    $posts = $user->savedPosts()->with('post')->get()->pluck('post');
+    $posts = $user->savedPosts()
+    ->with('post')  
+    ->orderBy('date_time', 'desc')  
+    ->get()
+    ->pluck('post');
     return view("saved.index", ['posts' => $posts]);
 }
     public function create($post)
