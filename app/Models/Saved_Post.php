@@ -13,7 +13,7 @@ class Saved_Post extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Saved_Post';
+    protected $table = 'saved_post';
 
     /**
      * The attributes that are mass assignable.

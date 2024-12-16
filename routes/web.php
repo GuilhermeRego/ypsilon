@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SavedController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,3 +131,6 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->mi
 
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');
+
+//saved posts
+Route::get('/saved/{username}', [SavedController::class, 'index'])->name('saved.index');
