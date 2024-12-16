@@ -48,9 +48,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+
         $post = Post::with(['comments' => function ($query) {
             $query->orderBy('date_time', 'desc');
         }])->findOrFail($post->id);
+        if ($post->group && $post->group->is_private) {
+            if (!auth()->user()||!auth()->user()->can('isMember', $post->group)) {
+                abort(403, 'Private group, you do not have access to this post.');
+            }
+        }
         return view('post.show', compact('post'));
     }
 
