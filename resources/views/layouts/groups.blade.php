@@ -31,9 +31,10 @@
   </div>
 </div>
 
-<!-- Floating Add Group Button -->
-<a href="{{  url('groups/create') }}" class="floating-add-group-btn">
+@auth
+<a href="{{  url(path: 'groups/create') }}" class="floating-add-group-btn">
   <i class="fa fa-plus"></i>
 </a>
+@endif
 
 @endsection

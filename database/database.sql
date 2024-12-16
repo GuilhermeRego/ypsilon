@@ -26,6 +26,7 @@ DROP TABLE IF EXISTS Reaction CASCADE;
 DROP TABLE IF EXISTS Post CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Image" CASCADE;
+DROP TABLE IF EXISTS password_reset_tokens CASCADE;
 DROP TYPE IF EXISTS Image_TYPE CASCADE;
 
 
@@ -255,6 +256,13 @@ CREATE TABLE "Admin" (
     FOREIGN KEY (user_id) REFERENCES "User"(id) ON DELETE CASCADE
 );
 
+CREATE TABLE password_reset_tokens (
+    email VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (email)
+);
+
 CREATE INDEX IDX01 ON "User" (username);
 CREATE INDEX IDX02 ON Post (user_id);
 CREATE INDEX IDX03 ON Comment (post_id);
@@ -436,7 +444,7 @@ INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, pass
 ('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
 ('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
 ('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
-('Vasco Rego', 'vascorego', '2010-10-21', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password:1234
+('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
 
 
 -- Populate Group table and capture group IDs
@@ -458,18 +466,16 @@ INSERT INTO "Group" (name, description, is_private) VALUES
 INSERT INTO Group_Member (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
 ((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo')),
-
-((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); --grupo privado
-((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
-((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
+((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')), --grupo privado
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')),
+((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')),
 ((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 
 
 -- Populate Group_Owner table, making Gonçalo and JaneSmith the owners of their respective groups
 INSERT INTO Group_Owner (member_id) VALUES
 ((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'goncalob') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica'))),
-((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'janesmith') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo')));
-
+((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'janesmith') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo'))),
 ((SELECT Group_Member.id FROM Group_Member WHERE user_id = (SELECT "User".id FROM "User" WHERE username = 'tomasvinhas') AND group_id = (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto'))); -- grupo privado
 
 
@@ -501,6 +507,6 @@ INSERT INTO Follow (follower_id, followed_id) VALUES
 INSERT INTO "Admin" (user_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'));
 
-INSERT INTO 'Join_Request' (user_id, group_id) VALUES
+INSERT INTO Join_Request (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
