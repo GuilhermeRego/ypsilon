@@ -138,4 +138,4 @@ Route::get('/results', [ResultsController::class, 'index'])->name('results');
 //saved posts
 Route::get('/saved/{username}', [SavedController::class, 'index'])->name('saved.index');
 Route::post('/saved/add/{post}', [SavedController::class,'create'])->name('saved.create');
-Route::post('/saved/remove/{post}', [SavedController::class,'destroy'])->name('saved.destroy');
+Route::delete('/saved/remove/{post}', [SavedController::class,'destroy'])->name('saved.destroy');

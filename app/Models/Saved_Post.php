@@ -22,7 +22,8 @@ class Saved_Post extends Model
      */
     protected $fillable = [
         'user_id',
-        'post_id'
+        'post_id',
+        'date_time'
     ];
 
     protected $primaryKey = 'id';

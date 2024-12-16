@@ -154,6 +154,7 @@ CREATE TABLE Saved_Post (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     post_id INT NOT NULL,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES "User"(id) ON DELETE CASCADE,
     FOREIGN KEY (post_id) REFERENCES Post(id)
 );
