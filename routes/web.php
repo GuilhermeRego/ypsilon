@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ResultsController;
 use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +49,8 @@ Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'showRegistrationForm')->name('register');
     Route::post('/register', 'register');
 });
+
+Auth::routes(['verify' => true]);
 
 // Groups:
 Route::redirect('/groups', '/groups/discover');
