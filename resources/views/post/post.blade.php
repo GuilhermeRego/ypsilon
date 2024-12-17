@@ -81,6 +81,14 @@
                     </form>
                 </div>
             @endif
+            <div class="report">
+                <a href="{{ route('report.post', ['post' => $post->id]) }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-flag"></i> Report</a>
+            </div>
         @endauth
+        @guest
+            <div class="report">
+                <a href="{{ route('login') }}" class="btn btn-outline-danger btn-sm"><i class="bi bi-flag"></i> Report</a>
+            </div>
+        @endguest
     </div>
 </div>

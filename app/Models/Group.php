@@ -51,6 +51,12 @@ class Group extends Model
         return $this->hasMany(Join_Request::class, 'group_id', 'id');
     }
 
+    // Eloquent relationship with Report.
+    public function report()
+    {
+        return $this->hasMany(Report::class, 'reported_group_id', 'id');
+    }
+
     // Eloquent relationship with Image (group_image).
     public function groupImage()
     {

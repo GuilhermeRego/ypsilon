@@ -70,6 +70,12 @@ class Post extends Model
         return $this->hasMany(Repost::class, 'post_id', 'id');
     }
 
+    // Eloquent relationship between Post and Report.
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'reported_post_id', 'id');
+    }
+
     // Number of likes on the post.
     public function likesCount()
     {

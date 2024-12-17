@@ -19,6 +19,7 @@ use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -135,7 +136,11 @@ Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->mi
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');
 
-//saved posts
+// Saved posts
 Route::get('/saved/{username}', [SavedController::class, 'index'])->name('saved.index');
 Route::post('/saved/add/{post}', [SavedController::class,'create'])->name('saved.create');
 Route::delete('/saved/remove/{post}', [SavedController::class,'destroy'])->name('saved.destroy');
+
+// Reports
+Route::get('/report/post/{post}', [ReportController::class, 'post'])->name('report.post');
+Route::post('/report', [ReportController::class, 'store'])->name('report.store');
