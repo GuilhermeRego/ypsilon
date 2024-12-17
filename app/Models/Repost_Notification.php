@@ -13,7 +13,7 @@ class Repost_Notification extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Repost_Notification';
+    protected $table = 'repost_notification';
 
     /**
      * The attributes that are mass assignable.

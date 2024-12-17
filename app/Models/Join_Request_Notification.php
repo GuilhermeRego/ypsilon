@@ -13,7 +13,7 @@ class Join_Request_Notification extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Join_Request_Notification';
+    protected $table = 'join_request_notification';
 
     /**
      * The attributes that are mass assignable.
