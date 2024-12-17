@@ -19,6 +19,7 @@ use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,3 +140,6 @@ Route::get('/results', [ResultsController::class, 'index'])->name('results');
 Route::get('/saved/{username}', [SavedController::class, 'index'])->name('saved.index');
 Route::post('/saved/add/{post}', [SavedController::class,'create'])->name('saved.create');
 Route::delete('/saved/remove/{post}', [SavedController::class,'destroy'])->name('saved.destroy');
+
+// Notifications:
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
