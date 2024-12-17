@@ -32,6 +32,7 @@ class User extends Authenticatable
         'profile_image',
         'banner_image',
         'password',
+        'is_private',
     ];
 
     /**

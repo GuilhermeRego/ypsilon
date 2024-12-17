@@ -57,45 +57,46 @@ class ProfileController extends Controller
         ]);
 
         $user->nickname = $request->nickname;
-    $user->bio = $request->bio;
+        $user->bio = $request->bio;
+        $user->is_private = $request->has('is_private') ? 1 : 0;
 
-    // Handle profile image
-    if ($request->hasFile('profile_image')) {
-        $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
-        if ($user->profile_image) {
-            // Update the existing profile image
-            $user->profileImage->update(['url' => $profileImagePath]);
-        } else {
-            // Create a new profile image
-            $profileImage = Image::create([
-                'url' => $profileImagePath,
-                'type' => 'user_profile',
-            ]);
-            $user->profile_image = $profileImage->id; // Associate new image
+        // Handle profile image
+        if ($request->hasFile('profile_image')) {
+            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+            if ($user->profile_image) {
+                // Update the existing profile image
+                $user->profileImage->update(['url' => $profileImagePath]);
+            } else {
+                // Create a new profile image
+                $profileImage = Image::create([
+                    'url' => $profileImagePath,
+                    'type' => 'user_profile',
+                ]);
+                $user->profile_image = $profileImage->id; // Associate new image
+            }
         }
-    }
 
     // Handle banner image
-    if ($request->hasFile('banner_image')) {
-        $bannerImagePath = $request->file('banner_image')->store('banner_images', 'public');
-        if ($user->banner_image) {
-            // Update the existing banner image
-            $user->bannerImage->update(['url' => $bannerImagePath]);
-        } else {
-            // Create a new banner image
-            $bannerImage = Image::create([
-                'url' => $bannerImagePath,
-                'type' => 'user_banner',
-            ]);
-            $user->banner_image = $bannerImage->id; // Associate new image
+        if ($request->hasFile('banner_image')) {
+            $bannerImagePath = $request->file('banner_image')->store('banner_images', 'public');
+            if ($user->banner_image) {
+                // Update the existing banner image
+                $user->bannerImage->update(['url' => $bannerImagePath]);
+            } else {
+                // Create a new banner image
+                $bannerImage = Image::create([
+                    'url' => $bannerImagePath,
+                    'type' => 'user_banner',
+                ]);
+                $user->banner_image = $bannerImage->id; // Associate new image
+            }
         }
-    }
-    // Save user profile changes
-    $user->save();
+        // Save user profile changes
+        $user->save();
 
-    // Redirect back to the profile page with a success message
-    return redirect()->route('profile.show', $user->username)
-        ->with('success', 'Profile updated successfully!');
+        // Redirect back to the profile page with a success message
+        return redirect()->route('profile.show', $user->username)
+            ->with('success', 'Profile updated successfully!');
     }
 
 
