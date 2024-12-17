@@ -13,7 +13,7 @@ class Follow_Notification extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Follow_Notification';
+    protected $table = 'follow_notification';
 
     /**
      * The attributes that are mass assignable.

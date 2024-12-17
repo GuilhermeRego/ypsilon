@@ -11,11 +11,17 @@
         <ul class="list-group">
             @foreach($notifications as $notification)
                 <li class="list-group-item">
-                    <a href="{{ route('post.show', ['post' => $notification->reaction->post_id]) }}">
-                        {{ $notification->reaction->user->nickname }} 
-                        {{ $notification->reaction->is_like ? 'liked' : 'disliked' }} 
-                        your post.
-                    </a>
+                    @if($notification instanceof App\Models\Reaction_Notification)
+                        <a href="{{ route('post.show', ['post' => $notification->reaction->post_id]) }}">
+                            {{ $notification->reaction->user->nickname }} 
+                            {{ $notification->reaction->is_like ? 'liked' : 'disliked' }} 
+                            your post.
+                        </a>
+                    @elseif($notification instanceof App\Models\Follow_Notification)
+                        <a href="{{ route('profile.show', ['username' => $notification->follow->follower->username]) }}">
+                            {{ $notification->follow->follower->nickname }} started following you.
+                        </a>
+                    @endif
                     <small class="text-muted">{{ $notification->date_time }}</small>
                 </li>
             @endforeach

@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Reaction_Notification;
+use App\Models\Follow_Notification;
 
 class NotificationController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        $notifications = Reaction_Notification::where('notified_id', $user->id)->get();
+        $reactionNotifications = Reaction_Notification::where('notified_id', $user->id)->get();
+        $followNotifications = Follow_Notification::where('notified_id', $user->id)->get();
+
+        $notifications = $reactionNotifications->merge($followNotifications)->sortByDesc('date_time');
 
         return view('notifications.index', compact('notifications'));
     }
