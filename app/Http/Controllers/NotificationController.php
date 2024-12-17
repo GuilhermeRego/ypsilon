@@ -15,7 +15,8 @@ class NotificationController extends Controller
         $followNotifications = Follow_Notification::where('notified_id', $user->id)->get();
 
         $notifications = $reactionNotifications->merge($followNotifications)->sortByDesc('date_time');
+        $unreadCount = $notifications->where('is_read', false)->count();
 
-        return view('notifications.index', compact('notifications'));
+        return view('notifications.index', compact('notifications', 'unreadCount'));
     }
 }
