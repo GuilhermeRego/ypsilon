@@ -21,6 +21,10 @@
                         <a href="{{ route('profile.show', ['username' => $notification->follow->follower->username]) }}">
                             {{ $notification->follow->follower->nickname }} started following you.
                         </a>
+                    @elseif($notification instanceof App\Models\Comment_Notification)
+                        <a href="{{ route('post.show', ['post' => $notification->comment->post_id]) }}">
+                            {{ $notification->comment->user->nickname }} commented on your post.
+                        </a>
                     @endif
                     <small class="text-muted">{{ $notification->date_time }}</small>
                 </li>
