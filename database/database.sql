@@ -515,7 +515,7 @@ INSERT INTO Post (user_id, date_time, content, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalopriv'), '2024-06-12', 'Criei uma nova conta privada', NULL), -- post de conta privada
 ((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), '2024-04-01', 'Adoro usar o Y, é a minha rede social preferida', NULL),
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), '2024-01-01', 'Olá eu sou o Gonçalo Barroso', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
-((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-02-14', 'Happy Valentines Day!', (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo'));
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-02-14', 'Happy Valentines Day!', NULL);
 
 -- Populate Comment table with comments on posts
 INSERT INTO Comment (user_id, post_id, date_time, content) VALUES
