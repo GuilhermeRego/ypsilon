@@ -21,7 +21,7 @@ class Post extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',   
+        'user_id',
         'date_time',
         'content',
         'group_id',
@@ -92,6 +92,12 @@ class Post extends Model
     public function repostsCount()
     {
         return $this->reposts()->count();
+    }
+
+    // Number of saves on the post.
+    public function savedCount()
+    {
+        return $this->saved_post()->count();
     }
 
     protected static function boot()
