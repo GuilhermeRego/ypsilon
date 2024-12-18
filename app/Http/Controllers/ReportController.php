@@ -16,6 +16,21 @@ class ReportController extends Controller
         return view('report.post', compact('post'));
     }
 
+    public function comment(Comment $comment)
+    {
+        return view('report.comment', compact('comment'));
+    }
+
+    public function user(User $user)
+    {
+        return view('report.user', compact('user'));
+    }
+
+    public function group(Group $group)
+    {
+        return view('report.group', compact('group'));
+    }
+
     public function store(Request $request)
     {
         if ($request->reported_user_id != NULL) {

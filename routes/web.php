@@ -143,4 +143,7 @@ Route::delete('/saved/remove/{post}', [SavedController::class,'destroy'])->name(
 
 // Reports
 Route::get('/report/post/{post}', [ReportController::class, 'post'])->name('report.post');
+Route::get('/report/comment/{comment}', [ReportController::class, 'comment'])->name('report.comment');
+Route::get('/report/user/{user}', [ReportController::class, 'user'])->name('report.user');
+Route::get('/report/group/{group}', [ReportController::class, 'group'])->name('report.group');
 Route::post('/report', [ReportController::class, 'store'])->name('report.store');

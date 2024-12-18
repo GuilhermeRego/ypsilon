@@ -12,9 +12,9 @@
     <body>
         <div class="container mt-5">
             <h2>Report Submission</h2>
-            <form action="{{ route('report.store', ['post' => $post->id]) }}" method="POST">
+            <form action="{{ route('report.store', ['group' => $group->id]) }}" method="POST">
                 @csrf
-                <input type="hidden" name="reported_post_id" value="{{ $post->id }}">
+                <input type="hidden" name="reported_group_id" value="{{ $group->id }}">
                 <div class="form-group">
                     <label for="justification">Tell us why do you want to report this:</label>
                     <textarea class="form-control" id="justification" name="justification" rows="5" required></textarea>
