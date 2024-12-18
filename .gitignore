@@ -19,3 +19,5 @@ yarn-error.log
 /.vscode
 /public/group_banners
 /public/group_images
+/public/profile_images
+/public/profile_banners
