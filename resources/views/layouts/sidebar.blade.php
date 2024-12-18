@@ -34,10 +34,11 @@
             <ul class="nav flex-column">
                 <li class="nav-item"><a href="{{ url('home/trending') }}" class="nav-link"><i class="bi bi-house"></i> Home</a></li>
                 <li class="nav-item"><a href="{{ url('results') }}" class="nav-link"><i class="bi bi-search"></i> Search</a></li>
+                @auth
                 <li class="nav-item">
                     <a href="{{ route('notifications.index') }}" class="nav-link position-relative">
                         <i class="bi bi-bell"></i>
-                        @if($unreadCount > 0)
+                        @if(isset($unreadCount) && $unreadCount > 0)
                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="transform: translate(-50%, -50%)">
                                 <span class="visually-hidden">Unread notifications</span>
                             </span>
@@ -45,6 +46,7 @@
                         Notifications
                     </a>
                 </li>
+                @endauth
                 @guest
                 <li class="nav-item"><a href="{{ route('login') }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
                 @else
