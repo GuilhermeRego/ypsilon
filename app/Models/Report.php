@@ -35,13 +35,13 @@ class Report extends Model
     // Eloquent relationship between User Repoorter and Report.
     public function reporter()
     {
-        return $this->belongsTo(User::class, 'reporter_user_id', 'id');
+        return $this->belongsTo(User::class, 'reporter_user_id');
     }
 
     // Eloquent relationship between User Repoorted and Report.
     public function reported_user()
     {
-        return $this->belongsTo(User::class, 'reported_user_id', 'id');
+        return $this->belongsTo(User::class, 'reported_user_id');
     }
 
     // Eloquent relationship between Post and Report.

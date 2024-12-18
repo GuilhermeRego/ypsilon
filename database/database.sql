@@ -54,6 +54,7 @@ CREATE TABLE "User" (
     banner_image INT,
     password VARCHAR(255) NOT NULL,
     remember_token VARCHAR(256) DEFAULT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_image) REFERENCES "Image"(id),
     FOREIGN KEY (banner_image) REFERENCES "Image"(id),
     CHECK (AGE(CURRENT_DATE, birth_date) >= INTERVAL '16 years'),
@@ -70,6 +71,7 @@ CREATE TABLE "Group" (
     group_image INT,
     group_banner INT,
     is_private BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_image) REFERENCES "Image"(id),
     FOREIGN KEY (group_banner) REFERENCES "Image"(id),
     CHECK(LENGTH(description) <= 1000)
@@ -461,26 +463,26 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Populate User table and capture user IDs
-INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) VALUES
-('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
-('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
-('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
+INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password, created_at) VALUES
+('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-01'), -- password: 1234
+('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-02-01'), -- password: 1234
+('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-02'), -- password: 1234
+('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-01'), -- password: 1234
+('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-03'), ---password: 1234 
+('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-06'), --password: 1234
+('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e', '2024-01-05'); -- password:1234
 
 
 -- Populate Group table and capture group IDs
-INSERT INTO "Group" (name, description) VALUES
-('Fãs do Benfica', 'Grupo para pessoas com bom gosto'),
-('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos'),
-('Fonte do Bastardo Alé', 'Grupo de apoiantes da Fonte do Bastardo'),
-('FEUP', 'Grupo não oficial feito por estudantes da FEUP para estudantes da FEUP'),
-('Fãs do Porto', 'Grupo para pessoas com mau gosto'),
-('Porto Marketplace - Compras e Vendas', 'Venda os pertences que já não dá uso aqui'),
-('Grupo de voleibol da Praia da Vitória', 'Grupo para aqueles que jogam voleibol na praia'),
-('Aqueles que Sabem', 'Só os que sabem podem entrar');
+INSERT INTO "Group" (name, description, created_at) VALUES
+('Fãs do Benfica', 'Grupo para pessoas com bom gosto', '2024-01-01'),
+('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos', '2024-01-02'),
+('Fonte do Bastardo Alé', 'Grupo de apoiantes da Fonte do Bastardo', '2024-01-03'),
+('FEUP', 'Grupo não oficial feito por estudantes da FEUP para estudantes da FEUP', '2024-01-04'),
+('Fãs do Porto', 'Grupo para pessoas com mau gosto', '2024-01-05'),
+('Porto Marketplace - Compras e Vendas', 'Venda os pertences que já não dá uso aqui', '2024-01-06'),
+('Grupo de voleibol da Praia da Vitória', 'Grupo para aqueles que jogam voleibol na praia', '2024-01-07'),
+('Aqueles que Sabem', 'Só os que sabem podem entrar', '2024-01-08');
 
 INSERT INTO "Group" (name, description, is_private) VALUES
 ('Grupo Super Secreto', 'Apenas os aprovados pelo líder podem entrar', TRUE); -- grupo privado

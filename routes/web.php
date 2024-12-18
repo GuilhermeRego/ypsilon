@@ -132,6 +132,10 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 // Show administration page
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
+Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users')->middleware('auth');
+Route::get('/admin/posts', [AdminController::class, 'posts'])->name('admin.posts')->middleware('auth');
+Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups')->middleware('auth');
+Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports')->middleware('auth');
 
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');

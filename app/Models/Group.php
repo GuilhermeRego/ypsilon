@@ -26,6 +26,7 @@ class Group extends Model
         'group_image',
         'group_banner',
         'is_private',
+        'created_at',
     ];
 
     protected $primaryKey = 'id';
@@ -66,5 +67,10 @@ class Group extends Model
     public function groupBanner()
     {
         return $this->belongsTo(Image::class, 'group_banner', 'id')->where('type', 'group_banner');
+    }
+
+    // Function to get the group's number of posts.
+    public function postCount() {
+        return $this->post()->count();
     }
 }

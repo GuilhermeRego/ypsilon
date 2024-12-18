@@ -33,6 +33,7 @@ class User extends Authenticatable
         'banner_image',
         'password',
         'is_private',
+        'created_at'
     ];
 
     /**
