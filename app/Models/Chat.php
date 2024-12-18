@@ -13,7 +13,7 @@ class Chat extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Chat';
+    protected $table = 'chat';
 
     protected $primaryKey = 'id';
 

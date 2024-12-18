@@ -19,6 +19,9 @@ use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
+use App\Http\Controllers\InboxController;
+use App\Http\Controllers\ChatController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +111,9 @@ Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->na
 Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
 Route::post('/profile/{username}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.follow');
 
+// Direct Messages:
+Route::get('direct/inbox',[InboxController::class, 'index'])->name('inbox.index');
+Route::get('/direct/{chat}', [ChatController::class, 'show'])->name('chat.show');
 // Posts:
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');

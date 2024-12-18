@@ -207,7 +207,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class, 'id', 'id');
     }
-
+    
     /**
      * Get the membership of the chats that the user is a member of.
      */
@@ -215,6 +215,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chat_Member::class, 'user_id', 'id');
     }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_member', 'user_id', 'chat_id');
+    }
+    
 
     /**
      * Is the user an admin?

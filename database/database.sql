@@ -446,7 +446,7 @@ INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, pass
 ('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
 ('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
 ('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
-
+('João Ratão', 'johnrat','2004-10-4','jhonrat@gmail.com','João Ratão jovem bem famoso, FEUP 20y',FALSE,"$2y$10$MSw0MqUiy4.n/Ib1LtWVveQ2p712EPeMS4ph0QeXzeY3b/qI4HkMG"); -- password:contateste123
 
 -- Populate Group table and capture group IDs
 INSERT INTO "Group" (name, description) VALUES
@@ -511,3 +511,63 @@ INSERT INTO "Admin" (user_id) VALUES
 INSERT INTO Join_Request (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member VALUES
+(1,1),
+(1,8);
+-- Insert messages for Chat 1
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(1, 1, 'Hello from user 1 in chat 1!', NOW() - INTERVAL '5 minutes'),
+(1, 8, 'Hello from user 8 in chat 1!', NOW() - INTERVAL '4 minutes'),
+(1, 1, 'How are you?', NOW() - INTERVAL '3 minutes'),
+(1, 8, 'I am good, thanks!', NOW() - INTERVAL '2 minutes'),
+(1, 1, 'Great to hear!', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member VALUES
+(2,2),
+(2,8);
+-- Insert messages for Chat 2
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(2, 2, 'Hi, user 2 here in chat 2!', NOW() - INTERVAL '5 minutes'),
+(2, 8, 'Hi, user 8 here in chat 2!', NOW() - INTERVAL '4 minutes'),
+(2, 2, 'How is everything?', NOW() - INTERVAL '3 minutes'),
+(2, 8, 'All good, what about you?', NOW() - INTERVAL '2 minutes'),
+(2, 2, 'Same here, all good.', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member VALUES
+(3,3),
+(3,8);
+-- Insert messages for Chat 3
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(3, 3, 'Hello from user 3 in chat 3!', NOW() - INTERVAL '5 minutes'),
+(3, 8, 'Hello from user 8 in chat 3!', NOW() - INTERVAL '4 minutes'),
+(3, 3, 'Long time no see!', NOW() - INTERVAL '3 minutes'),
+(3, 8, 'Indeed, how have you been?', NOW() - INTERVAL '2 minutes'),
+(3, 3, 'Pretty good, thanks.', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member VALUES
+(4,4),
+(4,8);
+-- Insert messages for Chat 4
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(4, 4, 'Hi from user 4 in chat 4!', NOW() - INTERVAL '5 minutes'),
+(4, 8, 'Hi from user 8 in chat 4!', NOW() - INTERVAL '4 minutes'),
+(4, 4, 'What’s new?', NOW() - INTERVAL '3 minutes'),
+(4, 8, 'Not much, just the usual.', NOW() - INTERVAL '2 minutes'),
+(4, 4, 'Got it, take care!', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member VALUES
+(5,5),
+(5,8);
+-- Insert messages for Chat 5
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(5, 5, 'Hey from user 5 in chat 5!', NOW() - INTERVAL '5 minutes'),
+(5, 8, 'Hey from user 8 in chat 5!', NOW() - INTERVAL '4 minutes'),
+(5, 5, 'How’s life treating you?', NOW() - INTERVAL '3 minutes'),
+(5, 8, 'Pretty good, no complaints.', NOW() - INTERVAL '2 minutes'),
+(5, 5, 'Awesome, catch you later.', NOW() - INTERVAL '1 minute');
