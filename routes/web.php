@@ -20,6 +20,7 @@ use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,3 +148,5 @@ Route::get('/report/comment/{comment}', [ReportController::class, 'comment'])->n
 Route::get('/report/user/{user}', [ReportController::class, 'user'])->name('report.user');
 Route::get('/report/group/{group}', [ReportController::class, 'group'])->name('report.group');
 Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+// Notifications:
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

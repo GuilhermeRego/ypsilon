@@ -13,7 +13,7 @@ class Message_Notification extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Message_Notification';
+    protected $table = 'message_notification';
 
     /**
      * The attributes that are mass assignable.
