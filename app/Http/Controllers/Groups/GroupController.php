@@ -14,7 +14,6 @@ class GroupController extends Controller
 
     public function index($group)
     {
-        // Get the group with the given ID and its posts
         $group = Group::findOrFail($group);
         $posts = $group->post()->orderBy('date_time', 'desc')->get();
 
@@ -28,7 +27,6 @@ class GroupController extends Controller
             ]);
         }
 
-        // Check if the current user is a member of the group
         $memberId = Group_Member::where('user_id', Auth()->user()->id)
             ->where('group_id', $group->id)
             ->value('id');
@@ -36,7 +34,7 @@ class GroupController extends Controller
         $isMember = $memberId ? true : false;
 
         $isOwner = $isMember && Group_Owner::where('member_id', $memberId)->exists();
-        $has_join_request=($group->join_request()->where('user_id', auth()->id())->exists());
+        $has_join_request = ($group->join_request()->where('user_id', auth()->id())->exists());
         return view('Groups.index', [
             'group' => $group,
             'isMember' => $isMember,
@@ -54,20 +52,19 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
             'is_private' => 'nullable|boolean'
-
         ]);
 
-        // Construct group
         $groupImageId = null;
         if ($request->hasFile('group_image')) {
-            $imagePath = $request->file('group_image')->store('group_images', 'public');
+            $imageName = time() . '_' . $request->file('group_image')->getClientOriginalName();
+            $imagePath = $request->file('group_image')->move(public_path('group_images'), $imageName);
+
             $groupImage = Image::create([
-                'url' => $imagePath,
+                'url' => 'group_images/' . $imageName,
                 'type' => 'group_profile',
             ]);
             $groupImageId = $groupImage->id;
@@ -75,20 +72,21 @@ class GroupController extends Controller
 
         $groupBannerId = null;
         if ($request->hasFile('group_banner')) {
-            $bannerPath = $request->file('group_banner')->store('group_banners', 'public');
+            $bannerName = time() . '_' . $request->file('group_banner')->getClientOriginalName();
+            $bannerPath = $request->file('group_banner')->move(public_path('group_banners'), $bannerName);
+
             $groupBanner = Image::create([
-                'url' => $bannerPath,
+                'url' => 'group_banners/' . $bannerName,
                 'type' => 'group_banner',
             ]);
-            $groupBannerId = $groupBanner->id; // Get the ID of the created banner
+            $groupBannerId = $groupBanner->id;
         }
 
-        // Store the group along with the image and banner IDs
         $group = Group::create([
             'name' => $request->name,
             'description' => $request->description,
-            'group_image' => $groupImageId,  // Store the ID of the group image
-            'group_banner' => $groupBannerId, // Store the ID of the group banner
+            'group_image' => $groupImageId,
+            'group_banner' => $groupBannerId,
             'is_private' => $request->has('is_private'),
         ]);
 
@@ -96,30 +94,27 @@ class GroupController extends Controller
             'group_id' => $group->id,
             'user_id' => auth()->user()->id,
         ]);
+
         Group_Owner::create([
             'member_id' => $group_member->id,
         ]);
+
         return redirect()->route('groups.my-groups')->with('success', 'Group created successfully.');
     }
-
     public function joinGroup($groupId)
     {
-        // Check if the user is a guest
         if (!Auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to join a group.');
         }
 
-        // Check if the user is already a member of the group
         $existingMember = Group_Member::where('user_id', Auth()->user()->id)
             ->where('group_id', $groupId)
             ->exists();
 
-        // If the user is already a member, redirect with an error message
         if ($existingMember) {
             return redirect()->route('group.show', $groupId)->with('error', 'You are already a member of this group.');
         }
 
-        // If not, create a new group member with the user ID and group ID
         Group_Member::create([
             'user_id' => Auth()->user()->id,
             'group_id' => $groupId
@@ -130,21 +125,17 @@ class GroupController extends Controller
     }
     public function leaveGroup($groupId)
     {
-        // Check if the user is a guest
         if (!Auth()->check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to leave a group.');
         }
 
-        // Check if the user is a member of the group
         $groupMember = Group_Member::where('user_id', Auth()->user()->id)
             ->where('group_id', $groupId);
 
-        // If the user is not a member, redirect with an error message
         if (!$groupMember) {
             return redirect()->route('group.show', $groupId)->with('error', 'You are not a member of this group.');
         }
 
-        // If the user is a member, delete the group member record
         $groupMember->delete();
 
         return redirect()->route('group.show', $groupId)->with('success', 'You have successfully left the group!');
@@ -168,16 +159,16 @@ class GroupController extends Controller
 
     public function update(Request $request, Group $group)
     {
-
         $request->validate([
             'name' => 'required|string|max:16',
             'description' => 'required|string|max:1000',
         ]);
+    
         $previousIsPrivate = $group->is_private;
         $group->name = $request->name;
         $group->description = $request->description;
         $group->is_private = $request->has('is_private');
-
+    
         if ($previousIsPrivate && !$group->is_private) {
             $joinRequests = $group->join_request;
     
@@ -190,46 +181,50 @@ class GroupController extends Controller
     
             Join_Request::where('group_id', $group->id)->delete();
         }
-
+    
         if ($request->hasFile('group_image')) {
-            $groupImagePath = $request->file('group_image')->store('group_images', 'public');
+            $imageName = time() . '_' . $request->file('group_image')->getClientOriginalName();
+            $imagePath = $request->file('group_image')->move(public_path('group_images'), $imageName);
+    
             if ($group->group_image) {
-                $group->groupImage->update(['url' => $groupImagePath]);
+                $group->groupImage->update(['url' => 'group_images/' . $imageName]);
             } else {
                 $groupImage = Image::create([
-                    'url' => $groupImagePath,
+                    'url' => 'group_images/' . $imageName,
                     'type' => 'group_profile',
                 ]);
                 $group->group_image = $groupImage->id;
             }
         }
-
         if ($request->hasFile('group_banner')) {
-            $groupBannerPath = $request->file('group_banner')->store('group_banners', 'public');
+            $bannerName = time() . '_' . $request->file('group_banner')->getClientOriginalName();
+            $bannerPath = $request->file('group_banner')->move(public_path('group_banners'), $bannerName);
+    
             if ($group->group_banner) {
-                $group->groupBanner->update(['url' => $groupBannerPath]);
+                $group->groupBanner->update(['url' => 'group_banners/' . $bannerName]);
             } else {
                 $groupBanner = Image::create([
-                    'url' => $groupBannerPath,
+                    'url' => 'group_banners/' . $bannerName,
                     'type' => 'group_banner',
                 ]);
                 $group->group_banner = $groupBanner->id;
             }
         }
-
-
+    
         $group->save();
-
+    
         return redirect()->route('group.show', $group)->with('success', 'Group updated successfully!');
     }
-    public function destroy(Group $group){
+        public function destroy(Group $group)
+    {
         foreach ($group->post as $post)
             $post->delete();
         $group->delete();
         return redirect()->route('groups.my-groups')->with('success', 'Group deleted successfully!');
     }
 
-    public function sendJoinRequest($groupId){
+    public function sendJoinRequest($groupId)
+    {
         $group = Group::findOrFail($groupId);
         if (!$group->is_private) {
             return redirect()->route('group.show', $groupId)->with('error', 'This group is not private.');
@@ -249,13 +244,14 @@ class GroupController extends Controller
         ]);
         return redirect()->route('group.show', $groupId)->with('success', 'Your join request has been sent!');
     }
-    public function cancelJoinRequest($groupId){
+    public function cancelJoinRequest($groupId)
+    {
         $group = Group::findOrFail($groupId);
         $joinRequest = Join_Request::where('group_id', $groupId)
-        ->where('user_id', auth()->id());
+            ->where('user_id', auth()->id());
         if ($joinRequest) {
             $joinRequest->delete();
-    
+
             return redirect()->route('group.show', $groupId)->with('success', 'Join request has been canceled.');
         } else {
             return redirect()->route('group.show', $groupId)->with('error', 'No join request found to cancel.');
