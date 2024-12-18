@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS Post CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Image" CASCADE;
 DROP TABLE IF EXISTS password_reset_tokens CASCADE;
+DROP TABLE IF EXISTS Report CASCADE;
 DROP TYPE IF EXISTS Image_TYPE CASCADE;
 
 
@@ -262,6 +263,28 @@ CREATE TABLE password_reset_tokens (
     token VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (email)
+);
+
+CREATE TABLE Report (
+    id SERIAL PRIMARY KEY, 
+    reporter_user_id INT NOT NULL, 
+    reported_user_id INT,
+    reported_post_id INT,
+    reported_comment_id INT,
+    reported_group_id INT, 
+    justification TEXT NOT NULL,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reporter_user_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_user_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_post_id) REFERENCES Post(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_comment_id) REFERENCES Comment(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_group_id) REFERENCES "Group"(id) ON DELETE CASCADE,
+    CHECK (
+        (reported_user_id IS NOT NULL)::int
+        + (reported_post_id IS NOT NULL)::int
+        + (reported_comment_id IS NOT NULL)::int
+        + (reported_group_id IS NOT NULL)::int = 1
+    )
 );
 
 CREATE INDEX IDX01 ON "User" (username);
@@ -511,3 +534,6 @@ INSERT INTO "Admin" (user_id) VALUES
 INSERT INTO Join_Request (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
+
+INSERT INTO Report (reporter_user_id, reported_user_id, justification) VALUES
+((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), (SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), 'Não gosto dele.')

@@ -217,6 +217,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the reports that the user has created.
+     */
+    public function reportsCreated()
+    {
+        return $this->hasMany(Report::class, 'reporter_user_id', 'id');
+    }
+
+    /**
+     * Get the reports that the user has been reported in.
+     */
+    public function reportsReceived()
+    {
+        return $this->hasMany(Report::class, 'reported_user_id', 'id');
+    }
+
+    /**
      * Is the user an admin?
      */
     public function isAdmin()

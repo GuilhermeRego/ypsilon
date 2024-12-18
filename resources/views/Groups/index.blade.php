@@ -58,8 +58,8 @@
                         @method('DELETE')
                         <button type="submit" class="button btn-danger m-0">Cancel Join Request</button>
                     </form>
-
                 @endif
+                <a href="{{ route('report.group', ['group' => $group->id]) }}" class="button btn-danger m-0">Report</a>
             @endauth
         </div>
     </div>

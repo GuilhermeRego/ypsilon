@@ -38,12 +38,18 @@ class Comment extends Model
     // Eloquent relationship between Comment and Comment_Notification.
     public function commentNotification()
     {
-        return $this->hasOne(Comment_Reaction::class);
+        return $this->hasOne(Comment_Notification::class);
     }	
 
     // Eloquent relationship between Comment and Post.
     public function post()
     {
         return $this->belongsTo(Post::class, 'post_id', 'id');
+    }
+
+    // Eloquent relationship between Comment and Report.
+    public function report()
+    {
+        return $this->hasMany(Report::class, 'reported_comment_id', 'id');
     }
 }

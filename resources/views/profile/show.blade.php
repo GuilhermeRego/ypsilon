@@ -52,6 +52,7 @@
                     @csrf
                     <button type="submit" class="button m-0 {{ $isFollowedByAuth ? 'btn-danger' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
                 </form>
+                <a href="{{ route('report.user', ['user' => $user->id]) }}" class="button btn-danger m-0">Report</a>
             @endif
         @endauth
         </div>

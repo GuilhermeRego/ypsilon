@@ -49,6 +49,12 @@
                                 </form>
                             </div>
                         @endif
+                        @if (auth()->user()->id != $comment->user_id)
+                            <div class="comment-actions mt-3">
+                                <a href="{{ route('report.comment', ['comment' => $comment->id]) }}"
+                                    class="btn btn-outline-danger btn-sm"><i class="bi bi-flag"></i> Report</a>
+                            </div>
+                        @endif
                     @endauth
                 </div>
             </div>
