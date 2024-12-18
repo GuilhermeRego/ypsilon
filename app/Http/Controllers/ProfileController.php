@@ -53,6 +53,8 @@ class ProfileController extends Controller
         $validatedData = $request->validate([
             'nickname' => 'required|string|max:16',
             'bio' => 'nullable|string|max:1000',
+            'profile_image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user->nickname = $request->nickname;
