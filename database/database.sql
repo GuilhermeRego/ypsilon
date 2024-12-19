@@ -555,12 +555,12 @@ INSERT INTO Post (user_id, date_time, content, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'fabiomendes'), '2024-01-18', 'Ei, alguém da FEUP com dicas para o próximo semestre? Estou a precisar de um empurrãozinho!', (SELECT "Group".id FROM "Group" WHERE name = 'FEUP')),
 ((SELECT "User".id FROM "User" WHERE username = 'anacosta'), '2024-01-19', 'Alguém mais aqui do Porto? Estou a pensar em me juntar ao grupo do FCPorto, mas tenho dúvidas...', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Porto')),
 ((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), '2024-01-20', 'Acabei de colocar umas coisas à venda no Marketplace do Porto, quem estiver interessado, é só falar!', (SELECT "Group".id FROM "Group" WHERE name = 'Porto Marketplace - Compras e Vendas')),
-((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), '2024-01-21', 'Hoje joguei voleibol na Praia da Vitória, incrível! Alguém mais vai à praia durante a semana?', (SELECT "Group".id FROM "Group" WHERE name = 'Grupo de voleibol da Praia da Vitória')),
+((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), '2024-01-21', 'Hoje joguei voleibol na Praia da Vitória, incrível! Alguém mais vai à praia durante a semana?', (SELECT "Group".id FROM "Group" WHERE name = 'Grupo de voleibol da Praia da Vitória'));
 
 -- Populate Comment table with comments on posts
 INSERT INTO Comment (user_id, post_id, date_time, content) VALUES
-((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE content = 'Happy Valentines Day!'), '2024-01-01', 'Ganda post!'),
-((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT Post.id FROM Post WHERE content = 'Olá eu sou o Gonçalo Barroso'), '2024-02-14', 'Nice one!');
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE id = 1), '2024-01-01', 'Ganda post!'),
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT Post.id FROM Post WHERE id = 2), '2024-02-14', 'Nice one!');
 
 -- Populate Follow table to set up follower relationships
 INSERT INTO Follow (follower_id, followed_id) VALUES

@@ -29,10 +29,6 @@ class CommentController extends Controller
     */
     public function store(Request $request)
     {
-        $request->validate([
-            'content' => 'required',
-        ]);
-
         $comment = Comment::create([
             'user_id' => auth()->id(),
             'date_time' => now(),
