@@ -53,7 +53,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:16',
+            'name' => 'required|string|max:30',
             'description' => 'required|string|max:1000',
             'is_private' => 'nullable|boolean',
             'group_image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
@@ -162,7 +162,7 @@ class GroupController extends Controller
     public function update(Request $request, Group $group)
     {
         $request->validate([
-            'name' => 'required|string|max:16',
+            'name' => 'required|string|max:30',
             'description' => 'required|string|max:1000',
             'group_image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
             'group_banner' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
