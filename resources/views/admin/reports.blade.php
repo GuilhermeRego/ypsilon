@@ -1,35 +1,32 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Reports</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Report ID</th>
-                <th>Reporter Username</th>
-                <th>Reported Item</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($reports as $report)
-            <tr>
-                <td>{{ $report->id }}</td>
-                <td>{{ $report->reporter_user_id->username }}</td>
-                <td>
-                    @if($report->reported_user_id != NULL)
-                        User: {{ $report->reported_user_id }}
-                    @elseif($report->type != NULL)
-                        Post ID: {{ $report->reported_post_id }}
-                    @elseif($report->type != NULL)
-                        Comment ID: {{ $report->reported_comment_id }}
-                    @elseif($report->type != NULL)
-                        Group: {{ $report->reported_group_id }}
+<div class="container" style="overflow-y: scroll;">
+    <h1 class="my-4">All Reports</h1>
+    <div class="row">
+        @foreach ($reports as $report)
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <p class="card-text"><strong>Reporter:</strong><a href="{{ route('profile.show', $report->reporter->username) }}" class="text-decoration-none"> {{ $report->reporter->username }}</a></p>
+                    @if ($report->reported_user)
+                        <p><strong>Reported User:</strong><a href="{{ route('profile.show', $report->reported_user->username) }}" class="card-title text-decoration-none"> {{ $report->reported_user->username }}</a></p>
                     @endif
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    @if ($report->group)
+                        <p><strong>Reported Group:</strong><a href="{{ route('group.show', $report->group->id) }}" class="card-title text-decoration-none"> {{ $report->group->name }}</a></p>
+                    @endif
+                    @if ($report->post)
+                        <p><strong>Reported Post:</strong><a href="{{ route('post.show', $report->post->id) }}" class="card-title text-decoration-none"> {!! $report->post->content !!}</a></p>
+                    @endif
+                    @if ($report->comment)
+                        <p><strong>Reported Comment:</strong><a href="{{ route('post.show', $report->comment->post) }}" class="card-title text-decoration-none"> {!! $report->comment->content !!}</a></p>
+                    @endif
+                    <p class="card-text"><strong>Reason:</strong> {{ $report->justification }}</p>
+                    <p class="card-text"><strong>Date:</strong> {{ $report->date_time }}</light></p>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
 </div>
 @endsection

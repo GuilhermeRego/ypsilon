@@ -36,7 +36,10 @@ class Group extends Model
     {
         return $this->hasMany(Group_Member::class, 'group_id', 'id');
     }
-    public function memberCount() {
+
+    // Accessor for member count
+    public function memberCount()
+    {
         return $this->group_member()->count();
     }
 
@@ -44,6 +47,12 @@ class Group extends Model
     public function post()
     {
         return $this->hasMany(Post::class, 'group_id', 'id');
+    }
+
+    // Accessor for post count
+    public function getPostCountAttribute()
+    {
+        return $this->post()->count();
     }
 
     // Eloquent relationship with Join_Request.
@@ -67,10 +76,5 @@ class Group extends Model
     public function groupBanner()
     {
         return $this->belongsTo(Image::class, 'group_banner', 'id')->where('type', 'group_banner');
-    }
-
-    // Function to get the group's number of posts.
-    public function postCount() {
-        return $this->post()->count();
     }
 }
