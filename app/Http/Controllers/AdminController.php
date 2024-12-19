@@ -42,7 +42,7 @@ class AdminController extends Controller
     public function reports()
     {
         if (auth()->user()->isAdmin()) {
-            $reports = Report::all();
+            $reports = Report::with(['reporter', 'reported_user', 'group', 'post', 'comment'])->get();
             return view('admin.reports', compact('reports'));
         } else {
             abort(403);
