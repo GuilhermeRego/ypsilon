@@ -29,14 +29,25 @@ class CommentController extends Controller
     */
     public function store(Request $request)
     {
-        $comment = Comment::create([
-            'user_id' => auth()->id(),
-            'date_time' => now(),
-            'content' => $request->content,
-            'post_id' => $request->post_id
+        $request->validate([
+            'content' => 'required',
         ]);
 
-        return redirect()->back()->with('success', 'Comment created successfully!');
+        $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
+        $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
+
+        if ($trimmedContentWithoutTags == '') {
+            return redirect()->back()->with('error', 'Comment cannot be empty!');
+        }
+
+        $comment = Comment::create([
+            'user_id' => auth()->id(),
+            'post_id' => $request->post_id, // Assuming you have a post_id field
+            'content' => $request->content,
+            'date_time' => now(),
+        ]);
+
+        return redirect()->route('post.show', $request->post_id)->with('success', 'Comment submitted successfully!');
     }
 
     /*
