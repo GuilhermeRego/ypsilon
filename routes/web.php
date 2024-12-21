@@ -166,7 +166,7 @@ Route::delete('/report/{report}', [ReportController::class, 'destroy'])->name('r
 
 // Notifications:
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware('auth');
+Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead')->middleware('auth');
 
 // Pusher Authentication ( For messages and notifications in the future)
 Route::post('/pusher/auth', [PusherAuthController::class, 'authenticate']);
-

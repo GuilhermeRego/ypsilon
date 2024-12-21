@@ -21,4 +21,19 @@ class NotificationController extends Controller
 
         return view('notifications.index', compact('notifications', 'unreadCount'));
     }
+
+    public function markAsRead()
+    {
+        try {
+            $user = auth()->user();
+            Reaction_Notification::where('notified_id', $user->id)->where('is_read', false)->update(['is_read' => true]);
+            Follow_Notification::where('notified_id', $user->id)->where('is_read', false)->update(['is_read' => true]);
+            Comment_Notification::where('notified_id', $user->id)->where('is_read', false)->update(['is_read' => true]);
+
+            return redirect()->route('notifications.index')->with('success', 'All notifications marked as read.');
+        } catch (\Exception $e) {
+            \Log::error('Error marking notifications as read: ' . $e->getMessage());
+            return redirect()->route('notifications.index')->with('error', 'Failed to mark notifications as read.');
+        }
+    }
 }
