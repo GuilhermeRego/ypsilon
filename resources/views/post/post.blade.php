@@ -50,14 +50,14 @@
                         <form action="{{ route('saved.create', ['post' => $post->id]) }}" method="POST"
                             class="d-inline reaction-form">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy"></i></button>
+                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy">{{ $post->savedCount() }}</i></button>
                         </form>
                     @else
                         <form action="{{ route('saved.destroy', ['post' => $post->id]) }}" method="POST"
                             class="d-inline reaction-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill"></i></button>
+                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill">{{ $post->savedCount() }}</i></button>
                         </form>
                     @endif
                 @endif
@@ -79,6 +79,13 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
                     </form>
+                </div>
+            @endif
+            @if (auth()->user()->id != $post->user_id)
+                <div class="post-report">
+                    <a href="{{ route('report.post', ['post' => $post->id]) }}" class="btn btn-outline-danger btn-sm"><i
+                            class="bi bi-flag"></i> Report
+                    </a>
                 </div>
             @endif
         @endauth

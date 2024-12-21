@@ -30,8 +30,16 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'required',
+            'content' => 'required|min:1',
         ]);
+
+        // Check if the post is not empty
+        $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
+        $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
+
+        if ($trimmedContentWithoutTags == '') {
+            return redirect()->back()->with('error', 'Post cannot be empty!');
+        }
 
         $post = Post::create([
             'user_id' => auth()->id(),
@@ -74,7 +82,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $request->validate([
-            'content' => 'required',
+            'content' => 'required|min:1',
         ]);
 
         $post->update([

@@ -21,8 +21,7 @@ class ProfileController extends Controller
         $isFollowedByAuth = Follow::where('follower_id', Auth::id())
             ->where('followed_id', $user->id)
             ->exists();
-
-        return view('profile.show', compact('user','isFollowedByAuth'));
+        return view('profile.show', compact('user', 'isFollowedByAuth'));
     }
 
     /**
@@ -31,8 +30,9 @@ class ProfileController extends Controller
     public function edit($username)
     {
         // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username && !(auth()->user()->isAdmin())) abort(403);
-        
+        if (auth()->user()->username != $username && !(auth()->user()->isAdmin()))
+            abort(403);
+
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
 
@@ -44,60 +44,58 @@ class ProfileController extends Controller
      */
     public function update(Request $request, $username)
     {
-        // Check if the current user is the owner of the profile
-        if (auth()->user()->username != $username && !(auth()->user()->isAdmin())) abort(403);
+        if (auth()->user()->username != $username && !(auth()->user()->isAdmin()))
+            abort(403);
 
-        // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
 
-        // Validate Data
         $validatedData = $request->validate([
             'nickname' => 'required|string|max:16',
             'bio' => 'nullable|string|max:1000',
+            'profile_image' => 'nullable|image|mimes:jpeg,gif,png,jpg|max:2048',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user->nickname = $request->nickname;
         $user->bio = $request->bio;
         $user->is_private = $request->has('is_private') ? 1 : 0;
 
-        // Handle profile image
         if ($request->hasFile('profile_image')) {
-            $profileImagePath = $request->file('profile_image')->store('profile_images', 'public');
+            $imageName = time() . '_' . $request->file('profile_image')->getClientOriginalName();
+            $imagePath = $request->file('profile_image')->move(public_path('profile_images'), $imageName);
+
             if ($user->profile_image) {
-                // Update the existing profile image
-                $user->profileImage->update(['url' => $profileImagePath]);
+                $user->profileImage->update(['url' => 'profile_images/' . $imageName]);
             } else {
-                // Create a new profile image
                 $profileImage = Image::create([
-                    'url' => $profileImagePath,
+                    'url' => 'profile_images/' . $imageName,
                     'type' => 'user_profile',
                 ]);
-                $user->profile_image = $profileImage->id; // Associate new image
+                $user->profile_image = $profileImage->id; 
             }
         }
 
-    // Handle banner image
         if ($request->hasFile('banner_image')) {
-            $bannerImagePath = $request->file('banner_image')->store('banner_images', 'public');
+            $bannerName = time() . '_' . $request->file('banner_image')->getClientOriginalName();
+            $bannerPath = $request->file('banner_image')->move(public_path('profile_banners'), $bannerName);
+
             if ($user->banner_image) {
-                // Update the existing banner image
-                $user->bannerImage->update(['url' => $bannerImagePath]);
+                $user->bannerImage->update(['url' => 'profile_banners/' . $bannerName]);
             } else {
-                // Create a new banner image
                 $bannerImage = Image::create([
-                    'url' => $bannerImagePath,
+                    'url' => 'banner_images/' . $bannerName,
                     'type' => 'user_banner',
                 ]);
-                $user->banner_image = $bannerImage->id; // Associate new image
+                $user->banner_image = $bannerImage->id; 
             }
         }
-        // Save user profile changes
+
         $user->save();
 
-        // Redirect back to the profile page with a success message
         return redirect()->route('profile.show', $user->username)
             ->with('success', 'Profile updated successfully!');
     }
+
 
 
     public function destroy($username)
@@ -139,7 +137,7 @@ class ProfileController extends Controller
 
     public function toggleFollow($username)
     {
-        $user = User::where('username',$username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         $authUserId = Auth::id();
 
         $existingFollow = Follow::where('follower_id', $authUserId)

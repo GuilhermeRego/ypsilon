@@ -13,7 +13,7 @@ class Comment_Notification extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Comment_Notification';
+    protected $table = 'comment_notification';
 
     /**
      * The attributes that are mass assignable.

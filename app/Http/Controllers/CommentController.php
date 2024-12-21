@@ -33,14 +33,21 @@ class CommentController extends Controller
             'content' => 'required',
         ]);
 
+        $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
+        $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
+
+        if ($trimmedContentWithoutTags == '') {
+            return redirect()->back()->with('error', 'Comment cannot be empty!');
+        }
+
         $comment = Comment::create([
             'user_id' => auth()->id(),
-            'date_time' => now(),
+            'post_id' => $request->post_id, // Assuming you have a post_id field
             'content' => $request->content,
-            'post_id' => $request->post_id
+            'date_time' => now(),
         ]);
 
-        return redirect()->back()->with('success', 'Comment created successfully!');
+        return redirect()->route('post.show', $request->post_id)->with('success', 'Comment submitted successfully!');
     }
 
     /*

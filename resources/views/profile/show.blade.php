@@ -6,8 +6,8 @@
 <div class="container p-4" style="overflow-y: scroll">
     <div class="profile-header container d-flex flex-column">
         <div class="image-container w-100 p-4 d-flex align-items-end" 
-            style="height: 250px; background-image: url('{{ $user->bannerImage ? asset('storage/' . $user->bannerImage->url) : asset('images/banner-default.png') }}');">
-            <img src="{{ $user->profileImage ? asset('storage/' . $user->profileImage->url) : asset('images/profile-default.png') }}"
+            style="height: 250px; background-image: url('{{ $user->bannerImage ? asset( $user->bannerImage->url) : asset('images/banner-default.png') }}');">
+            <img src="{{ $user->profileImage ? asset( $user->profileImage->url) : asset('images/profile-default.png') }}"
                 class="img-thumbnail rounded-circle mb-3" 
                 alt="Profile Image" 
                 style="width: 150px; height: 150px;">
@@ -52,6 +52,7 @@
                     @csrf
                     <button type="submit" class="button m-0 {{ $isFollowedByAuth ? 'btn-danger' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
                 </form>
+                <a href="{{ route('report.user', ['user' => $user->id]) }}" class="button btn-danger m-0">Report</a>
             @endif
         @endauth
         </div>

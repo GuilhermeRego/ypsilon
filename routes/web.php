@@ -19,6 +19,8 @@ use App\Http\Controllers\Groups\ManagementController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,11 +133,26 @@ Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->nam
 
 // Show administration page
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index')->middleware('auth');
+Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users')->middleware('auth');
+Route::get('/admin/posts', [AdminController::class, 'posts'])->name('admin.posts')->middleware('auth');
+Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups')->middleware('auth');
+Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports')->middleware('auth');
 
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');
 
-//saved posts
+// Saved posts
 Route::get('/saved/{username}', [SavedController::class, 'index'])->name('saved.index');
 Route::post('/saved/add/{post}', [SavedController::class,'create'])->name('saved.create');
 Route::delete('/saved/remove/{post}', [SavedController::class,'destroy'])->name('saved.destroy');
+
+// Reports
+Route::get('/report/post/{post}', [ReportController::class, 'post'])->name('report.post');
+Route::get('/report/comment/{comment}', [ReportController::class, 'comment'])->name('report.comment');
+Route::get('/report/user/{user}', [ReportController::class, 'user'])->name('report.user');
+Route::get('/report/group/{group}', [ReportController::class, 'group'])->name('report.group');
+Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+Route::delete('/report/{report}', [ReportController::class, 'destroy'])->name('report.destroy');
+
+// Notifications:
+Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware('auth');

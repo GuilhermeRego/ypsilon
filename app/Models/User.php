@@ -33,6 +33,7 @@ class User extends Authenticatable
         'banner_image',
         'password',
         'is_private',
+        'created_at'
     ];
 
     /**
@@ -214,6 +215,22 @@ class User extends Authenticatable
     public function chatMembers()
     {
         return $this->hasMany(Chat_Member::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the reports that the user has created.
+     */
+    public function reportsCreated()
+    {
+        return $this->hasMany(Report::class, 'reporter_user_id', 'id');
+    }
+
+    /**
+     * Get the reports that the user has been reported in.
+     */
+    public function reportsReceived()
+    {
+        return $this->hasMany(Report::class, 'reported_user_id', 'id');
     }
 
     /**

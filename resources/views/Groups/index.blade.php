@@ -6,8 +6,8 @@
 <div class="container p-4" style="overflow-y: scroll">
     <div class="profile-header container d-flex flex-column">
         <div class="image-container w-100 p-4 d-flex align-items-end"
-            style="height: 250px; background-image: url('{{ $group->groupBanner ? asset('storage/' . $group->groupBanner->url) : asset('images/banner-default.png') }}');">
-            <img src="{{ $group->groupImage ? asset('storage/' . $group->groupImage->url) : asset('images/group-default.png') }}"
+            style="height: 250px; background-image: url('{{ $group->groupBanner ? asset( $group->groupBanner->url) : asset('images/banner-default.png') }}');">
+            <img src="{{ $group->groupImage ? asset( $group->groupImage->url) : asset('images/group-default.png') }}"
                 class="img-thumbnail rounded-circle mb-3" alt="Group Image" style="width: 150px; height: 150px;">
         </div>
         <div class="identification p-2">
@@ -58,8 +58,8 @@
                         @method('DELETE')
                         <button type="submit" class="button btn-danger m-0">Cancel Join Request</button>
                     </form>
-
                 @endif
+                <a href="{{ route('report.group', ['group' => $group->id]) }}" class="button btn-danger m-0">Report</a>
             @endauth
         </div>
     </div>
@@ -76,23 +76,7 @@
                 </div>
             @endif
             @if ($isMember)
-                <div class="createpost mb-4">
-                    <div class="post">
-                        <div class="post-body">
-                            <form action="{{ route('post.store.group', $group->id) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                                <input type="hidden" name="date_time" value="{{ now() }}">
-                                <div class="form-group mb-3">
-                                    <textarea class="form-control" id="content" name="content" rows="3" required
-                                        placeholder="Write something..."></textarea>
-                                </div>
-                                <input type="hidden" name="group_id" value="{{ $group->id}}">
-                                <button type="submit" class="btn btn-primary">Post</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+                @include('post.create')
             @endif
             @if($posts->count() == 0)
                 <div class="alert alert-info">

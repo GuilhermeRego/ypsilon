@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS Post CASCADE;
 DROP TABLE IF EXISTS "User" CASCADE;
 DROP TABLE IF EXISTS "Image" CASCADE;
 DROP TABLE IF EXISTS password_reset_tokens CASCADE;
+DROP TABLE IF EXISTS Report CASCADE;
 DROP TYPE IF EXISTS Image_TYPE CASCADE;
 
 
@@ -53,6 +54,7 @@ CREATE TABLE "User" (
     banner_image INT,
     password VARCHAR(255) NOT NULL,
     remember_token VARCHAR(256) DEFAULT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (profile_image) REFERENCES "Image"(id),
     FOREIGN KEY (banner_image) REFERENCES "Image"(id),
     CHECK (AGE(CURRENT_DATE, birth_date) >= INTERVAL '16 years'),
@@ -69,6 +71,7 @@ CREATE TABLE "Group" (
     group_image INT,
     group_banner INT,
     is_private BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_image) REFERENCES "Image"(id),
     FOREIGN KEY (group_banner) REFERENCES "Image"(id),
     CHECK(LENGTH(description) <= 1000)
@@ -264,6 +267,28 @@ CREATE TABLE password_reset_tokens (
     PRIMARY KEY (email)
 );
 
+CREATE TABLE Report (
+    id SERIAL PRIMARY KEY, 
+    reporter_user_id INT NOT NULL, 
+    reported_user_id INT,
+    reported_post_id INT,
+    reported_comment_id INT,
+    reported_group_id INT, 
+    justification TEXT NOT NULL,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reporter_user_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_user_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_post_id) REFERENCES Post(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_comment_id) REFERENCES Comment(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_group_id) REFERENCES "Group"(id) ON DELETE CASCADE,
+    CHECK (
+        (reported_user_id IS NOT NULL)::int
+        + (reported_post_id IS NOT NULL)::int
+        + (reported_comment_id IS NOT NULL)::int
+        + (reported_group_id IS NOT NULL)::int = 1
+    )
+);
+
 CREATE INDEX IDX01 ON "User" (username);
 CREATE INDEX IDX02 ON Post (user_id);
 CREATE INDEX IDX03 ON Comment (post_id);
@@ -438,29 +463,39 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Populate User table and capture user IDs
-INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) VALUES
-('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
-('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
-('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
-('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
+INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password, created_at) VALUES
+('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '1234', '2024-01-01'), -- password: 1234
+('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '1234', '2024-02-01'), -- password: 1234
+('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '1234', '2024-01-02'), -- password: 1234
+('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '1234', '2024-01-01'), -- password: 1234
+('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '1234', '2024-01-03'), ---password: 1234 
+('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '1234', '2024-01-06'), --password: 1234
+('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '1234', '2024-01-05'), -- password:1234
+('Sara Lima', 'saralima', '2000-11-10', 'sara.lima@example.com', 'Gosta de viajar e de aventuras!', FALSE, '1234', '2024-01-07'), -- password: 1234
+('Miguel Pinto', 'miguelpinto', '1999-07-15', 'miguel.pinto@gmail.com', 'Estudante de Engenharia, amante de tecnologia', FALSE, '1234', '2024-01-08'), -- password: 1234
+('Pedro Silva', 'pedrosilva', '2001-03-03', 'pedro.silva@example.com', 'Futuro engenheiro, sempre em busca de desafios!', FALSE, '1234', '2024-01-09'), -- password: 1234
+('Luana Costa', 'luanacosta', '2002-12-20', 'luanacosta@gmail.com', 'Apaixonada por design gráfico e redes sociais', FALSE, '1234', '2024-01-10'), -- password: 1234
+('Rafael Almeida', 'rafaelalmeida', '1998-06-05', 'rafael.almeida@example.com', 'Amante de música e café', FALSE, '1234', '2024-01-11'), -- password: 1234
+('Carla Fernandes', 'carlafernandes', '2000-08-28', 'carla.fernandes@gmail.com', 'Viciada em livros e filmes de mistério', FALSE, '1234', '2024-01-12'), -- password: 1234
+('Fábio Mendes', 'fabiomendes', '2001-09-14', 'fabio.mendes@gmail.com', 'Gosto de futebol, viagens e boa comida', TRUE, '1234', '2024-01-13'), -- password: 1234
+('Ana Costa', 'anacosta', '2003-05-18', 'ana.costa@example.com', 'Estudante de Arquitetura, apaixonada por arte e cultura', FALSE, '1234', '2024-01-14'), -- password: 1234
+('Ricardo Martins', 'ricardomartins', '2004-01-30', 'ricardo.martins@gmail.com', 'Sempre tentando melhorar no que faço, adoro aprender', FALSE, '1234', '2024-01-15'), -- password: 1234
+('Joana Ferreira', 'joanaferreira', '2000-09-09', 'joana.ferreira@gmail.com', 'Jornalista em formação, viciada em notícias e café', FALSE, '1234', '2024-01-16'); -- password: 1234
 
 
 -- Populate Group table and capture group IDs
-INSERT INTO "Group" (name, description) VALUES
-('Fãs do Benfica', 'Grupo para pessoas com bom gosto'),
-('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos'),
-('Fonte do Bastardo Alé', 'Grupo de apoiantes da Fonte do Bastardo'),
-('FEUP', 'Grupo não oficial feito por estudantes da FEUP para estudantes da FEUP'),
-('Fãs do Porto', 'Grupo para pessoas com mau gosto'),
-('Porto Marketplace - Compras e Vendas', 'Venda os pertences que já não dá uso aqui'),
-('Grupo de voleibol da Praia da Vitória', 'Grupo para aqueles que jogam voleibol na praia'),
-('Aqueles que Sabem', 'Só os que sabem podem entrar');
+INSERT INTO "Group" (name, description, created_at) VALUES
+('Fãs do Benfica', 'Grupo para pessoas com bom gosto', '2024-01-01'),
+('Loucos por Tijolo', 'Um grupo para pessoas que amam tijolos', '2024-01-02'),
+('Fonte do Bastardo Alé', 'Grupo de apoiantes da Fonte do Bastardo', '2024-01-03'),
+('FEUP', 'Grupo não oficial feito por estudantes da FEUP para estudantes da FEUP', '2024-01-04'),
+('Fãs do Porto', 'Grupo para pessoas com mau gosto', '2024-01-05'),
+('Porto Marketplace - Compras e Vendas', 'Venda os pertences que já não dá uso aqui', '2024-01-06'),
+('Grupo de voleibol da Praia da Vitória', 'Grupo para aqueles que jogam voleibol na praia', '2024-01-07'),
+('Aqueles que Sabem', 'Só os que sabem podem entrar', '2024-01-08');
 
-INSERT INTO "Group" (name, description, is_private) VALUES
-('Grupo Super Secreto', 'Apenas os aprovados pelo líder podem entrar', TRUE); -- grupo privado
+INSERT INTO "Group" (name, description, is_private, created_at) VALUES
+('Grupo Super Secreto', 'Apenas os aprovados pelo líder podem entrar', TRUE, '2024-01-09'); -- grupo privado
 
 
 -- Populate Group_Member table using the user and group IDs
@@ -492,12 +527,40 @@ INSERT INTO Post (user_id, date_time, content, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalopriv'), '2024-06-12', 'Criei uma nova conta privada', NULL), -- post de conta privada
 ((SELECT "User".id FROM "User" WHERE username = 'tomasvinhas'), '2024-04-01', 'Adoro usar o Y, é a minha rede social preferida', NULL),
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), '2024-01-01', 'Olá eu sou o Gonçalo Barroso', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
-((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-02-14', 'Happy Valentines Day!', (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo'));
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), '2024-02-14', 'Feliz dia de S. Valentim', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'saralima'), '2024-01-07', 'Começando o dia com uma boa caminhada na natureza!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'miguelpinto'), '2024-01-08', 'Testando um novo framework para o projeto, espero que funcione!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'pedrosilva'), '2024-01-09', 'Alguém mais aqui gosta do novo filme da Marvel?', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'luanacosta'), '2024-01-10', 'Novo projeto de design, está ficando incrível!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'rafaelalmeida'), '2024-01-11', 'Fui ao café e experimentei o novo menu, 10/10 para o cappuccino!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'carlafernandes'), '2024-01-12', 'Acabei de terminar de ler meu novo livro favorito, recomendo para todos!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'fabiomendes'), '2024-01-13', 'Estou viciado em futebol, vi todos os jogos desta semana!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'anacosta'), '2024-01-14', 'Ando a fazer o meu primeiro esboço de arquitetura para a faculdade, wish me luck!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'ricardomartins'), '2024-01-15', 'Vamos fazer uma maratona de filmes este fim de semana, sugestões?', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), '2024-01-16', 'Senti-me tão inspirada com as últimas notícias, vou escrever um artigo sobre isso!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'saralima'), '2024-01-18', 'Planeando a minha próxima viagem para a Ásia. Alguém tem dicas?', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'miguelpinto'), '2024-01-19', 'Estou a começar um novo curso sobre Inteligência Artificial. Alguém já fez? Vale a pena?', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'pedrosilva'), '2024-01-20', 'Ando a treinar para uma corrida, espero conseguir o meu melhor tempo!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'luanacosta'), '2024-01-21', 'Fui à exposição de arte moderna, incrível como a arte pode emocionar!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'rafaelalmeida'), '2024-01-22', 'Adoro fazer café enquanto trabalho, faz toda a diferença na minha produtividade.', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'carlafernandes'), '2024-01-23', 'Estou a começar a escrever meu próprio livro, tenho algumas ideias que estou a desenvolver.', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'fabiomendes'), '2024-01-24', 'Não consigo parar de pensar na última partida do Benfica, vitória épica!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'anacosta'), '2024-01-25', 'Participei de um workshop de sustentabilidade, super interessante aprender sobre as novas tendências!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'ricardomartins'), '2024-01-26', 'Este fim de semana vou aproveitar para estudar para as provas, preciso de toda a concentração possível!', NULL),
+((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), '2024-01-27', 'Já comecei meu novo artigo sobre o impacto das redes sociais no jornalismo atual.', NULL),
+-- Posts de Grupos:
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), '2024-01-15', 'Benfica é sempre Benfica, já nada me surpreende, mas ainda assim, viva o Glorioso!', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Benfica')),
+((SELECT "User".id FROM "User" WHERE username = 'luanacosta'), '2024-01-16', 'Estou a fazer uma coleção de tijolos antigos, alguém me pode ajudar a encontrar mais?', (SELECT "Group".id FROM "Group" WHERE name = 'Loucos por Tijolo')),
+((SELECT "User".id FROM "User" WHERE username = 'ricardomartins'), '2024-01-17', 'Fonte do Bastardo Alé, sempre com garra! Vamos ganhar mais uma vez!', (SELECT "Group".id FROM "Group" WHERE name = 'Fonte do Bastardo Alé')),
+((SELECT "User".id FROM "User" WHERE username = 'fabiomendes'), '2024-01-18', 'Ei, alguém da FEUP com dicas para o próximo semestre? Estou a precisar de um empurrãozinho!', (SELECT "Group".id FROM "Group" WHERE name = 'FEUP')),
+((SELECT "User".id FROM "User" WHERE username = 'anacosta'), '2024-01-19', 'Alguém mais aqui do Porto? Estou a pensar em me juntar ao grupo do FCPorto, mas tenho dúvidas...', (SELECT "Group".id FROM "Group" WHERE name = 'Fãs do Porto')),
+((SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), '2024-01-20', 'Acabei de colocar umas coisas à venda no Marketplace do Porto, quem estiver interessado, é só falar!', (SELECT "Group".id FROM "Group" WHERE name = 'Porto Marketplace - Compras e Vendas')),
+((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), '2024-01-21', 'Hoje joguei voleibol na Praia da Vitória, incrível! Alguém mais vai à praia durante a semana?', (SELECT "Group".id FROM "Group" WHERE name = 'Grupo de voleibol da Praia da Vitória'));
 
 -- Populate Comment table with comments on posts
 INSERT INTO Comment (user_id, post_id, date_time, content) VALUES
-((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE content = 'Happy Valentines Day!'), '2024-01-01', 'Ganda post!'),
-((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT Post.id FROM Post WHERE content = 'Olá eu sou o Gonçalo Barroso'), '2024-02-14', 'Nice one!');
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE id = 1), '2024-01-01', 'Ganda post!'),
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT Post.id FROM Post WHERE id = 2), '2024-02-14', 'Nice one!');
 
 -- Populate Follow table to set up follower relationships
 INSERT INTO Follow (follower_id, followed_id) VALUES
@@ -511,3 +574,6 @@ INSERT INTO "Admin" (user_id) VALUES
 INSERT INTO Join_Request (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
+
+INSERT INTO Report (reporter_user_id, reported_user_id, justification) VALUES
+((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), (SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), 'Não gosto dele.')

@@ -18,3 +18,8 @@ yarn-error.log
 /.idea
 /.vscode
 .DS_Store
+/public/group_banners
+/public/group_images
+/public/profile_images
+/public/profile_banners
+
