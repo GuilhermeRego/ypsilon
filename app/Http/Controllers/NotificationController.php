@@ -16,7 +16,7 @@ class NotificationController extends Controller
         $followNotifications = Follow_Notification::where('notified_id', $user->id)->get();
         $commentNotifications = Comment_Notification::where('notified_id', $user->id)->get();
 
-        $notifications = $reactionNotifications->merge($followNotifications)->merge($commentNotifications)->sortByDesc('date_time');
+        $notifications = $reactionNotifications->merge($followNotifications)->merge($commentNotifications)->sortByDesc('date_time')->take(30);
         $unreadCount = $notifications->where('is_read', false)->count();
 
         return view('notifications.index', compact('notifications', 'unreadCount'));

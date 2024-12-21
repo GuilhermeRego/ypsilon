@@ -1,5 +1,3 @@
-<!-- resources/views/notifications/index.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
@@ -30,7 +28,7 @@
                             {{ $notification->comment->user->nickname }} commented on your post.
                         </a>
                     @endif
-                    <small class="text-muted">{{ $notification->date_time }}</small>
+                    <small class="text-muted">{{ \Carbon\Carbon::parse($notification->date_time)->format('Y-m-d H:i') }}</small>
                 </li>
             @endforeach
         </ul>
