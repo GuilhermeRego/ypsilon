@@ -49,10 +49,31 @@
                 </form>
             @endif
             @if (auth()->user()->id != $user->id)
-                <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
-                    @csrf
-                    <button type="submit" class="button m-0 {{ $isFollowedByAuth ? 'btn-danger' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
-                </form>
+                @if ($isFollowedByAuth)
+                    <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                        @csrf
+                        <button type="submit" class="button m-0 btn-danger">Unfollow</button>
+                    </form>
+                @else
+                    @if (!$user->is_private)
+                    <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                        @csrf
+                        <button type="submit" class="button m-0 btn-primary">Follow</button>
+                    </form>
+                    @else
+                        @if (!$hasFollowRequest)
+                        <form action="{{ route('profile.followRequest', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                            @csrf
+                            <button type="submit" class="button m-0 btn-primary">Send Follow Request</button>
+                        </form>
+                        @else
+                        <form action="{{ route('profile.followRequest', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                            @csrf
+                            <button type="submit" class="button m-0 btn-danger">Cancel Follow Request</button>
+                        </form>
+                        @endif 
+                    @endif
+                @endif
             @endif
         @endauth
         </div>
@@ -72,7 +93,7 @@
             <div class="alert alert-info">
                 No posts yet.
             </div>
-        @elseif($user->is_private && !$isFollowedByAuth)
+        @elseif($user->is_private && !$isFollowedByAuth && !$user->isAdmin())
             <div class="alert alert-info">
                 This account is private, follow this user to see their posts.
             </div>

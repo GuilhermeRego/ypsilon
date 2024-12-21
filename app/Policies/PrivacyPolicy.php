@@ -12,6 +12,10 @@ class PrivacyPolicy
      */
     public function view(User $user, Post $post)
     {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         // If the user is the author, allow viewing
         if ($user->id === $post->user_id) {
             return true;

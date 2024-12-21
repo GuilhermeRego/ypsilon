@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS Group_Member CASCADE;
 DROP TABLE IF EXISTS "Group" CASCADE;
 DROP TABLE IF EXISTS Follow_Notification CASCADE;
 DROP TABLE IF EXISTS Follow CASCADE;
+DROP TABLE IF EXISTS Follow_Request CASCADE;
+DROP TABLE IF EXISTS Follow_Request_Notification CASCADE;
 DROP TABLE IF EXISTS Saved_Post CASCADE;
 DROP TABLE IF EXISTS Comment_Notification CASCADE;
 DROP TABLE IF EXISTS Comment CASCADE;
@@ -196,7 +198,7 @@ CREATE TABLE Follow_Request_Notification (
     date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     notified_id INT NOT NULL,
     FOREIGN KEY (notified_id) REFERENCES "User"(id) ON DELETE CASCADE,
-    FOREIGN KEY (follow_id) REFERENCES Follow(id) ON DELETE CASCADE
+    FOREIGN KEY (follow_id) REFERENCES Follow_Request(id) ON DELETE CASCADE
 );
 
 -- Group Member Table
@@ -479,8 +481,8 @@ INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, pass
 ('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
 ('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
 ('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
-('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
-('João Ratão', 'johnrat','2004-10-4','jhonrat@gmail.com','João Ratão jovem bem famoso, FEUP 20y',FALSE,"$2y$10$MSw0MqUiy4.n/Ib1LtWVveQ2p712EPeMS4ph0QeXzeY3b/qI4HkMG"); -- password:contateste123
+('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password:1234
+('João Ratão', 'johnrat','2004-10-4','jhonrat@gmail.com','João Ratão jovem bem famoso, FEUP 20y',FALSE,'$2y$10$MSw0MqUiy4.n/Ib1LtWVveQ2p712EPeMS4ph0QeXzeY3b/qI4HkMG'); -- password:contateste123
 
 -- Populate Group table and capture group IDs
 INSERT INTO "Group" (name, description) VALUES
@@ -547,7 +549,7 @@ INSERT INTO Join_Request (user_id, group_id) VALUES
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
 
 INSERT INTO Chat DEFAULT VALUES;
-INSERT INTO Chat_Member VALUES
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
 (1,1),
 (1,8);
 -- Insert messages for Chat 1
@@ -559,7 +561,7 @@ INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
 (1, 1, 'Great to hear!', NOW() - INTERVAL '1 minute');
 
 INSERT INTO Chat DEFAULT VALUES;
-INSERT INTO Chat_Member VALUES
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
 (2,2),
 (2,8);
 -- Insert messages for Chat 2
@@ -571,7 +573,7 @@ INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
 (2, 2, 'Same here, all good.', NOW() - INTERVAL '1 minute');
 
 INSERT INTO Chat DEFAULT VALUES;
-INSERT INTO Chat_Member VALUES
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
 (3,3),
 (3,8);
 -- Insert messages for Chat 3
@@ -583,7 +585,7 @@ INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
 (3, 3, 'Pretty good, thanks.', NOW() - INTERVAL '1 minute');
 
 INSERT INTO Chat DEFAULT VALUES;
-INSERT INTO Chat_Member VALUES
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
 (4,4),
 (4,8);
 -- Insert messages for Chat 4
@@ -595,7 +597,7 @@ INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
 (4, 4, 'Got it, take care!', NOW() - INTERVAL '1 minute');
 
 INSERT INTO Chat DEFAULT VALUES;
-INSERT INTO Chat_Member VALUES
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
 (5,5),
 (5,8);
 -- Insert messages for Chat 5

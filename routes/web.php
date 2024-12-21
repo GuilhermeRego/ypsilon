@@ -110,6 +110,7 @@ Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->na
 // Delete Profile
 Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
 Route::post('/profile/{username}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.follow');
+Route::post('/profile/{username}/follow-request', [ProfileController::class, 'toggleFollowRequest'])->name('profile.followRequest');
 Route::get('/profile/{username}/management/followers', [ProfileController::class,'manageFollowers'])->name('profile.manageFollowers');
 Route::get('/profile/{username}/management/requests', [ProfileController::class,'manageRequests'])->name('profile.manageRequests');
 Route::delete('/profile/{username}/management/followers/remove-follower/{followerId}', [ProfileController::class, 'removeFollower'])->name('profile.removeFollower');

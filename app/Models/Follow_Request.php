@@ -27,7 +27,9 @@ class Follow_Request extends Model
 
     protected $primaryKey = 'id';
 
-    // Eloquent relationship to User model.
+    /**
+     * Get the user that owns the follower.
+     */
     public function follower()
     {
         return $this->belongsTo(User::class, 'follower_id', 'id');
