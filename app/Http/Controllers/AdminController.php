@@ -15,6 +15,7 @@ class AdminController extends Controller
     {
         if (auth()->user()->isAdmin()) {
             $users = User::all();
+            $users = $users->sortByDesc('created_at');
             return view('admin.users', compact('users'));
         }
         else abort(403);
@@ -24,6 +25,7 @@ class AdminController extends Controller
     {
         if (auth()->user()->isAdmin()) {
             $posts = Post::all();
+            $posts = $posts->sortByDesc('date_time');
             return view('admin.posts', compact('posts'));
         }
         else abort(403);
@@ -33,6 +35,7 @@ class AdminController extends Controller
     {
         if (auth()->user()->isAdmin()) {
             $groups = Group::all();
+            $groups = $groups->sortByDesc('created_at');
             return view('admin.groups', compact('groups'));
         } else {
             abort(403);
@@ -43,6 +46,7 @@ class AdminController extends Controller
     {
         if (auth()->user()->isAdmin()) {
             $reports = Report::with(['reporter', 'reported_user', 'group', 'post', 'comment'])->get();
+            $reports = $reports->sortByDesc('created_at');
             return view('admin.reports', compact('reports'));
         } else {
             abort(403);

@@ -68,4 +68,16 @@ class ReportController extends Controller
         
         return redirect()->route('home')->with('success', 'Report submitted successfully!');
     }
+
+    public function destroy($id)
+    {
+        $report = Report::find($id);
+        $report->delete();
+        return redirect()->route('admin.reports')->with('success', 'Report deleted successfully!');
+    }
+
+    public function index(Report $report)
+    {
+        return view('report.index', compact('report'));
+    }
 }

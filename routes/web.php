@@ -152,6 +152,7 @@ Route::get('/report/comment/{comment}', [ReportController::class, 'comment'])->n
 Route::get('/report/user/{user}', [ReportController::class, 'user'])->name('report.user');
 Route::get('/report/group/{group}', [ReportController::class, 'group'])->name('report.group');
 Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+Route::delete('/report/{report}', [ReportController::class, 'destroy'])->name('report.destroy');
 
 // Notifications:
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware('auth');
