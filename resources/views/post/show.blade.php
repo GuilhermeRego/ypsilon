@@ -2,6 +2,7 @@
 @extends('layouts.app')
 
 @section('content')
+@can('view', $post)
 <!-- Post -->
 @include('post.post')
 
@@ -63,4 +64,5 @@
         @endforelse
     </div>
 </div>
+@endcan
 @endsection

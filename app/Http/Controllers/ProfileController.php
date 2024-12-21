@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follow_Request;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
@@ -18,10 +19,14 @@ class ProfileController extends Controller
     {
         // Find the user by its username
         $user = User::where('username', $username)->firstOrFail();
-        $isFollowedByAuth = Follow::where('follower_id', Auth::id())
+        $isFollowedByAuth = Follow::where('follower_id', auth()->id())
             ->where('followed_id', $user->id)
             ->exists();
-        return view('profile.show', compact('user', 'isFollowedByAuth'));
+        $hasFollowRequest = Follow_Request::where('follower_id', auth()->id())
+            ->where('followed_id', $user->id)
+            ->exists();
+        return view('profile.show', compact('user','isFollowedByAuth','hasFollowRequest'));
+
     }
 
     /**
@@ -156,6 +161,66 @@ class ProfileController extends Controller
         }
     }
 
+    public function manageFollowers($username) {
+        $user = User::where('username',$username)->firstOrFail();
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        } 
+        $followers = $user->followers;
+
+        return view("profile.manageFollowers", compact('user', 'followers'));
+    }
+
+    public function manageRequests($username) {
+        $user = User::where('username',$username)->firstOrFail();
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        } 
+        $follower_requests = $user->follower_requests;
+
+        return view("profile.manageRequests", compact('user', 'follower_requests'));
+    }
+
+    public function removeFollower($username, $followerId)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        }
+
+        $follow = Follow::where('follower_id', $followerId)
+            ->where('followed_id', $user->id)
+            ->first();
+
+        if ($follow) {
+            $follow->delete();
+            return redirect()->route('profile.manageFollowers', $username)->with('success', 'Follower removed successfully!');
+        } else {
+            return redirect()->route('profile.manageFollowers', $username)->with('error', 'This user is not following you.');
+        }
+    }
+
+public function toggleFollowRequest($username)
+    {
+        $user = User::where('username',$username)->firstOrFail();
+        $authUserId = Auth::id();
+
+        $existingFollowRequest = Follow_Request::where('follower_id', $authUserId)
+            ->where('followed_id', $user->id)
+            ->first();
+
+        if ($existingFollowRequest) {
+            $existingFollowRequest->delete();
+            return redirect()->route('profile.show', $username)->with('success', 'You have cancelled your follow request.');
+        } else {
+            Follow_Request::create([
+                'follower_id' => $authUserId,
+                'followed_id' => $user->id,
+            ]);
+            return redirect()->route('profile.show', $username)->with('success', 'You have requested to follow this user!');
+        }
+    }
 }
 
 

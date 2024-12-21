@@ -41,6 +41,7 @@
             @if (auth()->user()->id == $user->id || auth()->user()->isAdmin())
                 <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="button btn-primary m-0">Edit
                     Profile</a>
+                <a href="{{ route('profile.manageFollowers', ['username' => $user->username]) }}" class="button btn-primary m-0">Manage Followers</a>
                 <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST" class="mb-0">
                     @csrf
                     @method('DELETE')
@@ -48,10 +49,31 @@
                 </form>
             @endif
             @if (auth()->user()->id != $user->id)
-                <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
-                    @csrf
-                    <button type="submit" class="button m-0 {{ $isFollowedByAuth ? 'btn-danger' : 'btn-primary' }}">{{ $isFollowedByAuth ? 'Unfollow' : 'Follow' }}</button>
-                </form>
+                @if ($isFollowedByAuth)
+                    <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                        @csrf
+                        <button type="submit" class="button m-0 btn-danger">Unfollow</button>
+                    </form>
+                @else
+                    @if (!$user->is_private)
+                    <form action="{{ route('profile.follow', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                        @csrf
+                        <button type="submit" class="button m-0 btn-primary">Follow</button>
+                    </form>
+                    @else
+                        @if (!$hasFollowRequest)
+                        <form action="{{ route('profile.followRequest', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                            @csrf
+                            <button type="submit" class="button m-0 btn-primary">Send Follow Request</button>
+                        </form>
+                        @else
+                        <form action="{{ route('profile.followRequest', ['username'=> $user->username]) }}" method="POST" class="mb-0">
+                            @csrf
+                            <button type="submit" class="button m-0 btn-danger">Cancel Follow Request</button>
+                        </form>
+                        @endif 
+                    @endif
+                @endif
                 <a href="{{ route('report.user', ['user' => $user->id]) }}" class="button btn-danger m-0">Report</a>
             @endif
         @endauth
@@ -72,9 +94,15 @@
             <div class="alert alert-info">
                 No posts yet.
             </div>
+        @elseif($user->is_private && !$isFollowedByAuth && !$user->isAdmin())
+            <div class="alert alert-info">
+                This account is private, follow this user to see their posts.
+            </div>
         @else
             @foreach($user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get() as $post)
-                @include('post.post')
+                @can('view', $post)
+                    @include('post.post')
+                @endcan
             @endforeach
         @endif
     </div>

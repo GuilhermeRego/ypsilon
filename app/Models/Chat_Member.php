@@ -13,8 +13,8 @@ class Chat_Member extends Model
     public $timestamps = false;
 
     // Table that this model refers to.
-    protected $table = 'Chat_Member';
-
+    protected $table = 'chat_member';
+    
     /* The attributes that are mass assignable.
      *
      * @var array<int, string>

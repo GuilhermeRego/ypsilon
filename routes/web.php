@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SavedController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\InboxController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\PusherAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +66,6 @@ Route::get('/groups/my-groups', [UserGroupsController::class, 'index'])->name('g
 Route::get('/groups/create', [GroupController::class, 'create'])
     ->middleware('auth') 
     ->name('groups.create'); 
-
 // Create group
 Route::post('/dumb', [GroupController::class, 'store'])->name('group.store');
 // Show a specific group
@@ -109,7 +111,15 @@ Route::put('/profile/{username}/edit', [ProfileController::class, 'update'])->na
 // Delete Profile
 Route::delete('/profile/{username}', [ProfileController::class, 'destroy'])->name('profile.destroy')->middleware('auth');
 Route::post('/profile/{username}/follow', [ProfileController::class, 'toggleFollow'])->name('profile.follow');
+Route::post('/profile/{username}/follow-request', [ProfileController::class, 'toggleFollowRequest'])->name('profile.followRequest');
+Route::get('/profile/{username}/management/followers', [ProfileController::class,'manageFollowers'])->name('profile.manageFollowers');
+Route::get('/profile/{username}/management/requests', [ProfileController::class,'manageRequests'])->name('profile.manageRequests');
+Route::delete('/profile/{username}/management/followers/remove-follower/{followerId}', [ProfileController::class, 'removeFollower'])->name('profile.removeFollower');
 
+// Direct Messages:
+Route::get('direct/inbox',[InboxController::class, 'index'])->name('inbox.index');
+Route::get('/direct/{chat}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('/direct/{chat}', [ChatController::class, 'storeMessage'])->name('chat.storeMessage')->middleware('auth');;
 // Posts:
 // Edit Post
 Route::get('/post/{post}/edit', [PostController::class, 'edit'])->name('post.edit');
@@ -156,3 +166,7 @@ Route::delete('/report/{report}', [ReportController::class, 'destroy'])->name('r
 
 // Notifications:
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware('auth');
+
+// Pusher Authentication ( For messages and notifications in the future)
+Route::post('/pusher/auth', [PusherAuthController::class, 'authenticate']);
+

@@ -56,16 +56,39 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-
         $post = Post::with(['comments' => function ($query) {
             $query->orderBy('date_time', 'desc');
         }])->findOrFail($post->id);
-        if ($post->group && $post->group->is_private) {
-            if (!auth()->user()||!auth()->user()->can('isMember', $post->group)) {
-                abort(403, 'Private group, you do not have access to this post.');
+
+        $user = auth()->user();
+
+        // If post is in a group, its always visible, unless its from a private group I'm not a member of
+        if ($post->group) {
+            if (!$post->group->is_private) {
+                return view('post.show', compact('post'));
             }
+
+            if ($user && $post->group->members->contains($user->id)) {
+                return view('post.show', compact('post'));
+            }
+
+            abort(403, 'Private group, you do not have access to this post.');
         }
-        return view('post.show', compact('post'));
+
+        // If its not from a group, I can see it unless it's from a private account I don't follow
+        if (!$post->group) {
+            if (!$post->user->is_private) {
+                return view('post.show', compact('post'));
+            }
+
+            if ($user && $user->following->contains('followed_id', $post->user_id)) {
+                return view('post.show', compact('post'));
+            }
+
+            abort(403, 'Private account, you do not have access to this post.');
+        }
+
+        abort(403, 'You do not have access to this post.');
     }
 
     /**

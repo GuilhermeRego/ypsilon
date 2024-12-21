@@ -89,6 +89,23 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'followed_id', 'id');
     }
 
+
+    /**
+     * Get the users that the user has requested to follow
+     */
+    public function following_requests()
+    {
+        return $this->hasMany(Follow_Request::class, 'follower_id', 'id');
+    }
+
+    /**
+     * Get the users that requested to follow the user.
+     */
+    public function follower_requests()
+    {
+        return $this->hasMany(Follow_Request::class, 'followed_id', 'id');
+    }
+
     /**
      * Get the messages that the user has sent.
      */
@@ -208,7 +225,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Admin::class, 'id', 'id');
     }
-
+    
     /**
      * Get the membership of the chats that the user is a member of.
      */
@@ -216,6 +233,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chat_Member::class, 'user_id', 'id');
     }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class, 'chat_member', 'user_id', 'chat_id');
+    }
+    
 
     /**
      * Get the reports that the user has created.

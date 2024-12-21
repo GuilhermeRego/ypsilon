@@ -52,14 +52,13 @@
                 @else
                 <li class="nav-item"><a href="{{ route('saved.index', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
                 @endif
-                <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people-fill"></i> Groups</a></li>
+                <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people"></i> Groups</a></li>
                 <li class="nav-item"><a href="{{ url('support') }}" class="nav-link"><i class="bi bi-question-circle"></i> Support</a></li>
-            </ul>
-            <ul class="nav flex-column">
                 @auth
                     @if (auth()->user()->isAdmin())
                         <li class="nav-item"><a href="{{ url('admin') }}" class="nav-link"><i class="bi bi-shield-fill"></i> Admin</a></li>
                     @endif
+                    <li class="nav-item"><a href="{{ route('inbox.index') }}" class="nav-link"><i class="bi bi bi-chat-dots"></i> Inbox</a></li>
                     <li class="nav-item"><a href="{{ route('profile.show', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-person-circle"></i> Profile</a></li>
                     <li class="nav-item">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

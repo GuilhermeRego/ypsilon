@@ -16,6 +16,8 @@ DROP TABLE IF EXISTS Group_Member CASCADE;
 DROP TABLE IF EXISTS "Group" CASCADE;
 DROP TABLE IF EXISTS Follow_Notification CASCADE;
 DROP TABLE IF EXISTS Follow CASCADE;
+DROP TABLE IF EXISTS Follow_Request CASCADE;
+DROP TABLE IF EXISTS Follow_Request_Notification CASCADE;
 DROP TABLE IF EXISTS Saved_Post CASCADE;
 DROP TABLE IF EXISTS Comment_Notification CASCADE;
 DROP TABLE IF EXISTS Comment CASCADE;
@@ -180,6 +182,26 @@ CREATE TABLE Follow_Notification (
     notified_id INT NOT NULL,
     FOREIGN KEY (notified_id) REFERENCES "User"(id) ON DELETE CASCADE,
     FOREIGN KEY (follow_id) REFERENCES Follow(id) ON DELETE CASCADE
+);
+
+-- Follow Request Table
+CREATE TABLE Follow_Request (
+    id SERIAL PRIMARY KEY,
+    follower_id INT NOT NULL,
+    followed_id INT NOT NULL,
+    FOREIGN KEY (follower_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (followed_id) REFERENCES "User"(id) ON DELETE CASCADE
+);
+
+-- Follow Request Notification Table
+CREATE TABLE Follow_Request_Notification (
+    id SERIAL PRIMARY KEY,
+    follow_id INT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    notified_id INT NOT NULL,
+    FOREIGN KEY (notified_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (follow_id) REFERENCES Follow_Request(id) ON DELETE CASCADE
 );
 
 -- Group Member Table
@@ -366,6 +388,20 @@ CREATE TRIGGER after_follow_insert
 AFTER INSERT ON Follow
 FOR EACH ROW EXECUTE FUNCTION create_follow_notification();
 
+-- Function to create a notification upon a new follow request
+CREATE OR REPLACE FUNCTION create_follow_request_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO Follow_Request_Notification (follow_id, is_read, date_time, notified_id)
+    VALUES (NEW.id, FALSE, NOW(), NEW.followed_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_follow_request_insert
+AFTER INSERT ON Follow_Request
+FOR EACH ROW EXECUTE FUNCTION create_follow_request_notification();
+
 -- Function to create a notification upon a new message in a chat
 CREATE OR REPLACE FUNCTION create_message_notification()
 RETURNS TRIGGER AS $$
@@ -463,24 +499,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Populate User table and capture user IDs
-INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password, created_at) VALUES
-('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '1234', '2024-01-01'), -- password: 1234
-('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '1234', '2024-02-01'), -- password: 1234
-('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '1234', '2024-01-02'), -- password: 1234
-('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '1234', '2024-01-01'), -- password: 1234
-('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '1234', '2024-01-03'), ---password: 1234 
-('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '1234', '2024-01-06'), --password: 1234
-('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '1234', '2024-01-05'), -- password:1234
-('Sara Lima', 'saralima', '2000-11-10', 'sara.lima@example.com', 'Gosta de viajar e de aventuras!', FALSE, '1234', '2024-01-07'), -- password: 1234
-('Miguel Pinto', 'miguelpinto', '1999-07-15', 'miguel.pinto@gmail.com', 'Estudante de Engenharia, amante de tecnologia', FALSE, '1234', '2024-01-08'), -- password: 1234
-('Pedro Silva', 'pedrosilva', '2001-03-03', 'pedro.silva@example.com', 'Futuro engenheiro, sempre em busca de desafios!', FALSE, '1234', '2024-01-09'), -- password: 1234
-('Luana Costa', 'luanacosta', '2002-12-20', 'luanacosta@gmail.com', 'Apaixonada por design gráfico e redes sociais', FALSE, '1234', '2024-01-10'), -- password: 1234
-('Rafael Almeida', 'rafaelalmeida', '1998-06-05', 'rafael.almeida@example.com', 'Amante de música e café', FALSE, '1234', '2024-01-11'), -- password: 1234
-('Carla Fernandes', 'carlafernandes', '2000-08-28', 'carla.fernandes@gmail.com', 'Viciada em livros e filmes de mistério', FALSE, '1234', '2024-01-12'), -- password: 1234
-('Fábio Mendes', 'fabiomendes', '2001-09-14', 'fabio.mendes@gmail.com', 'Gosto de futebol, viagens e boa comida', TRUE, '1234', '2024-01-13'), -- password: 1234
-('Ana Costa', 'anacosta', '2003-05-18', 'ana.costa@example.com', 'Estudante de Arquitetura, apaixonada por arte e cultura', FALSE, '1234', '2024-01-14'), -- password: 1234
-('Ricardo Martins', 'ricardomartins', '2004-01-30', 'ricardo.martins@gmail.com', 'Sempre tentando melhorar no que faço, adoro aprender', FALSE, '1234', '2024-01-15'), -- password: 1234
-('Joana Ferreira', 'joanaferreira', '2000-09-09', 'joana.ferreira@gmail.com', 'Jornalista em formação, viciada em notícias e café', FALSE, '1234', '2024-01-16'); -- password: 1234
+INSERT INTO "User" (nickname, username, birth_date, email, bio, is_private, password) VALUES
+('Gonçalo', 'goncalob', '2004-05-08', 'gnbarroso@gmail.com', 'Goncalo Barroso, 20 anos, FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('JaneSmith', 'janesmith', '1985-05-15', 'jane@example.com', 'Hey there! I am Jane.', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Gabriel Braga', 'gabrielbraga', '2003-02-12', 'gabrialbraga@gmail.com', 'FEUP Student, 20 years old', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Tomás Vinhas', 'tomasvinhas', '2002-04-21', 'tomasvinhas@gmail.com', 'Vinhas já não vens?', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), -- password: 1234
+('Gonçalo Basorro', 'goncalopriv', '2004-05-08', 'gnprivado@gmail.com', 'Versão privada da conta goncalob', TRUE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), ---password: 1234 
+('Guilherme Rego', 'guilhermerego', '2004-10-31', 'guilhermerego@gmail.com', 'O gajo mais bonito da FEUP, alegadamente. Benfica', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'), --password: 1234
+('Vasco Rego', 'vascorego', '2005-05-20', 'vascorego@gmail.com', 'O irmão do, alegadamente, gajo mais bonito da FEUP', FALSE, '$2y$10$e0MYzXyjpJS7Pd0RVvHwHeFUp0K1Z1Ff1W8a8Y6K9l8eK9l8eK9l8e'); -- password:1234
 
 
 -- Populate Group table and capture group IDs
@@ -574,6 +600,66 @@ INSERT INTO "Admin" (user_id) VALUES
 INSERT INTO Join_Request (user_id, group_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'vascorego'), (SELECT "Group".id FROM "Group" WHERE name = 'Grupo Super Secreto')); 
 --Vasco Rego pede ao Grupo Super Secreto para entrar, neste caso a conta 'vascorego' envia um Join Request aos owners do grupo, ou seja, 'tomasvinhas'
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
+(1,1),
+(1,8);
+-- Insert messages for Chat 1
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(1, 1, 'Hello from user 1 in chat 1!', NOW() - INTERVAL '5 minutes'),
+(1, 8, 'Hello from user 8 in chat 1!', NOW() - INTERVAL '4 minutes'),
+(1, 1, 'How are you?', NOW() - INTERVAL '3 minutes'),
+(1, 8, 'I am good, thanks!', NOW() - INTERVAL '2 minutes'),
+(1, 1, 'Great to hear!', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
+(2,2),
+(2,8);
+-- Insert messages for Chat 2
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(2, 2, 'Hi, user 2 here in chat 2!', NOW() - INTERVAL '5 minutes'),
+(2, 8, 'Hi, user 8 here in chat 2!', NOW() - INTERVAL '4 minutes'),
+(2, 2, 'How is everything?', NOW() - INTERVAL '3 minutes'),
+(2, 8, 'All good, what about you?', NOW() - INTERVAL '2 minutes'),
+(2, 2, 'Same here, all good.', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
+(3,3),
+(3,8);
+-- Insert messages for Chat 3
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(3, 3, 'Hello from user 3 in chat 3!', NOW() - INTERVAL '5 minutes'),
+(3, 8, 'Hello from user 8 in chat 3!', NOW() - INTERVAL '4 minutes'),
+(3, 3, 'Long time no see!', NOW() - INTERVAL '3 minutes'),
+(3, 8, 'Indeed, how have you been?', NOW() - INTERVAL '2 minutes'),
+(3, 3, 'Pretty good, thanks.', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
+(4,4),
+(4,8);
+-- Insert messages for Chat 4
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(4, 4, 'Hi from user 4 in chat 4!', NOW() - INTERVAL '5 minutes'),
+(4, 8, 'Hi from user 8 in chat 4!', NOW() - INTERVAL '4 minutes'),
+(4, 4, 'What’s new?', NOW() - INTERVAL '3 minutes'),
+(4, 8, 'Not much, just the usual.', NOW() - INTERVAL '2 minutes'),
+(4, 4, 'Got it, take care!', NOW() - INTERVAL '1 minute');
+
+INSERT INTO Chat DEFAULT VALUES;
+INSERT INTO Chat_Member (chat_id, user_id) VALUES
+(5,5),
+(5,8);
+-- Insert messages for Chat 5
+INSERT INTO "Message" (chat_id, sender_id, content, date_time) VALUES
+(5, 5, 'Hey from user 5 in chat 5!', NOW() - INTERVAL '5 minutes'),
+(5, 8, 'Hey from user 8 in chat 5!', NOW() - INTERVAL '4 minutes'),
+(5, 5, 'How’s life treating you?', NOW() - INTERVAL '3 minutes'),
+(5, 8, 'Pretty good, no complaints.', NOW() - INTERVAL '2 minutes'),
+(5, 5, 'Awesome, catch you later.', NOW() - INTERVAL '1 minute');
 
 INSERT INTO Report (reporter_user_id, reported_user_id, justification) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'guilhermerego'), (SELECT "User".id FROM "User" WHERE username = 'gabrielbraga'), 'Não gosto dele.')
