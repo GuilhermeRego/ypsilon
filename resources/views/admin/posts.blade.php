@@ -1,41 +1,62 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container" style="overflow-y: scroll;">
-    <h1 class="my-4">All Posts</h1>
-    <div class="row">
-        @foreach ($posts as $post)
-        <div class="col-md-4">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    @if ($post->user_id == NULL)
-                        <h5 class="card-title text-dark ">Anonymous</h5>
-                    @else
-                        <a href="{{ route('profile.show', $post->user->username) }}" class="text-decoration-none">
-                            <h5 class="card-title text-primary">{{ $post->user->username }}</h5>
-                        </a>
-                    @endif
-                    <p class="card-text"><strong>Created At:</strong> {{ $post->date_time }}</p>
-                    <div class="card-text">
-                        <a href="{{ route('post.show', $post->id) }}" class="text-decoration-none text-dark">
-                            <strong>Content:</strong>
-                            <p>{!! $post->content !!}</p>
-                        </a>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                            <form action="{{ route('post.destroy', $post->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="container my-5" style="overflow-y: scroll;">
+    <h1 class="mb-4 text-center">Post Management</h1>
+
+    <!-- Table Wrapper -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Author</th>
+                        <th>Content</th>
+                        <th>Created At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($posts as $post)
+                    <tr>
+                        <!-- Author -->
+                        <td>
+                            @if ($post->user_id == NULL)
+                                <span class="text-secondary"><i class="fas fa-user-slash me-2"></i>Anonymous</span>
+                            @else
+                                <a href="{{ route('profile.show', $post->user->username) }}" class="text-primary fw-bold text-decoration-none">
+                                    <i class="fas fa-user-circle me-2"></i>{{ $post->user->username }}
+                                </a>
+                            @endif
+                        </td>
+
+                        <!-- Content -->
+                        <td class="text-truncate" style="max-width: 250px;">
+                            {!! Str::limit(strip_tags($post->content), 50, '...') !!}
+                        </td>
+
+                        <!-- Created At -->
+                        <td>{{ $post->date_time }}</td>
+
+                        <!-- Actions -->
+                        <td>
+                            <div>
+                                <a href="{{ route('post.edit', $post->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <form action="{{ route('post.destroy', $post->id) }}" method="POST" class="d-inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        @endforeach
     </div>
-</div>
 @endsection
