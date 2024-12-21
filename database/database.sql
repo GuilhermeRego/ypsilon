@@ -179,6 +179,26 @@ CREATE TABLE Follow_Notification (
     FOREIGN KEY (follow_id) REFERENCES Follow(id) ON DELETE CASCADE
 );
 
+-- Follow Request Table
+CREATE TABLE Follow_Request (
+    id SERIAL PRIMARY KEY,
+    follower_id INT NOT NULL,
+    followed_id INT NOT NULL,
+    FOREIGN KEY (follower_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (followed_id) REFERENCES "User"(id) ON DELETE CASCADE
+);
+
+-- Follow Request Notification Table
+CREATE TABLE Follow_Request_Notification (
+    id SERIAL PRIMARY KEY,
+    follow_id INT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    date_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    notified_id INT NOT NULL,
+    FOREIGN KEY (notified_id) REFERENCES "User"(id) ON DELETE CASCADE,
+    FOREIGN KEY (follow_id) REFERENCES Follow(id) ON DELETE CASCADE
+);
+
 -- Group Member Table
 CREATE TABLE Group_Member (
     id SERIAL PRIMARY KEY,
@@ -340,6 +360,20 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER after_follow_insert
 AFTER INSERT ON Follow
 FOR EACH ROW EXECUTE FUNCTION create_follow_notification();
+
+-- Function to create a notification upon a new follow request
+CREATE OR REPLACE FUNCTION create_follow_request_notification()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO Follow_Request_Notification (follow_id, is_read, date_time, notified_id)
+    VALUES (NEW.id, FALSE, NOW(), NEW.followed_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER after_follow_request_insert
+AFTER INSERT ON Follow_Request
+FOR EACH ROW EXECUTE FUNCTION create_follow_request_notification();
 
 -- Function to create a notification upon a new message in a chat
 CREATE OR REPLACE FUNCTION create_message_notification()

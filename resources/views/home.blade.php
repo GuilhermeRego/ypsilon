@@ -32,9 +32,11 @@
             @guest
                 @include('post.post')
             @else
-                @if ($post->user_id != auth()->user()->id)
-                    @include('post.post')
-                @endif
+                @can('view', $post)
+                    @if ($post->user_id != auth()->user()->id)
+                        @include('post.post')
+                    @endif
+                @endcan
             @endguest
         @endforeach
     </div>

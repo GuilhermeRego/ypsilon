@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\Message;
+use App\Events\MessageSent;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
@@ -40,6 +42,32 @@ class ChatController extends Controller
             'usersArray' => $usersArray,
             'chats' => $chats
         ]);
+    }
+
+    public function storeMessage(Request $request, Chat $chat)
+    {
+        $request->validate([
+            'content' => 'required|string|max:255',
+        ]);
+
+        $user = auth()->user();
+        $isMember = $chat->chat_member()->where('user_id', $user->id)->exists();
+
+        if (!$isMember) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $message = new Message();
+        $message->chat_id = $chat->id;
+        $message->sender_id = $user->id;
+        $message->content = $request->content;
+        $message->date_time = now();
+        $message->save();
+
+        // Broadcast the message
+        broadcast(new MessageSent($message))->toOthers();
+
+        return response()->json(['message' => $message]);
     }
 }
 

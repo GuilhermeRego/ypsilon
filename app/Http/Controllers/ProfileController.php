@@ -158,6 +158,46 @@ class ProfileController extends Controller
         }
     }
 
+    public function manageFollowers($username) {
+        $user = User::where('username',$username)->firstOrFail();
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        } 
+        $followers = $user->followers;
+
+        return view("profile.manageFollowers", compact('user', 'followers'));
+    }
+
+    public function manageRequests($username) {
+        $user = User::where('username',$username)->firstOrFail();
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        } 
+        $follower_requests = $user->follower_requests;
+
+        return view("profile.manageRequests", compact('user', 'follower_requests'));
+    }
+
+    public function removeFollower($username, $followerId)
+{
+    $user = User::where('username', $username)->firstOrFail();
+
+    if (auth()->user()->id != $user->id) {
+        abort(403, "This isn't your account");
+    }
+
+    $follow = Follow::where('follower_id', $followerId)
+        ->where('followed_id', $user->id)
+        ->first();
+
+    if ($follow) {
+        $follow->delete();
+        return redirect()->route('profile.manageFollowers', $username)->with('success', 'Follower removed successfully!');
+    } else {
+        return redirect()->route('profile.manageFollowers', $username)->with('error', 'This user is not following you.');
+    }
+}
+
 }
 
 

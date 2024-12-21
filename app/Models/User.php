@@ -88,6 +88,23 @@ class User extends Authenticatable
         return $this->hasMany(Follow::class, 'followed_id', 'id');
     }
 
+
+    /**
+     * Get the users that the user has requested to follow
+     */
+    public function following_requests()
+    {
+        return $this->hasMany(Follow_Request::class, 'follower_id', 'id');
+    }
+
+    /**
+     * Get the users that requested to follow the user.
+     */
+    public function follower_requests()
+    {
+        return $this->hasMany(Follow_Request::class, 'followed_id', 'id');
+    }
+
     /**
      * Get the messages that the user has sent.
      */

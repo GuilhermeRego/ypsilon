@@ -14,8 +14,12 @@
         @else
             <a href="{{ url('/login') }}">My Groups</a>
         @endauth
-    @elseif (Request::is('groups/' . $group->id . '/management/members') || Request::is('groups/' . $group->id . '/management/requests'))
-        <a href="{{ url('groups/' . $group->id . '/management/members') }}"class="{{ Request::is('groups/' . $group->id . '/management/members') ? 'selected' : '' }}">Manage Members</a>
+    
+    @elseif (isset($group) && (Request::is('groups/' . $group->id . '/management/members') || Request::is('groups/' . $group->id . '/management/requests')))
+        <a href="{{ url('groups/' . $group->id . '/management/members') }}" class="{{ Request::is('groups/' . $group->id . '/management/members') ? 'selected' : '' }}">Manage Members</a>
         <a href="{{ url('groups/' . $group->id . '/management/requests') }}" class="{{ Request::is('groups/' . $group->id . '/management/requests') ? 'selected' : '' }}">Manage Join Requests</a>
+    @elseif (isset($user) && (Request::is('profile/' . $user->username . '/management/followers') || Request::is('profile/' . $user->username . '/management/requests')))
+        <a href="{{ url('profile/' . $user->username . '/management/followers') }}" class="{{ Request::is('profile/' . $user->username . '/management/followers') ? 'selected' : '' }}">Manage Followers</a>
+        <a href="{{ url('profile/' . $user->username . '/management/requests') }}" class="{{ Request::is('profile/' . $user->username . '/management/requests') ? 'selected' : '' }}">Manage Follow Requests</a>
     @endif
 </div>
