@@ -1,7 +1,10 @@
 @extends('layouts.app')
 @section('content')
+@if ($group->is_private)
 @include('layouts.upperbarmenu')
+@endif
 <div class="request-list" style="overflow-y: scroll">
+    <h1>Manage Join Requests</h1>
     @foreach ($group->join_request as $request)
         <div class="request-item">
             <a href="{{ route('profile.show', ['username' => $request->user->username]) }}"

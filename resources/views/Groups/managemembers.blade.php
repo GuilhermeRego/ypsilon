@@ -1,6 +1,8 @@
 @extends('layouts.app')
 @section('content')
+@if ($group->is_private)
 @include('layouts.upperbarmenu')
+@endif
 <div class="container p-4" style="overflow-y: scroll">
     <h1>Manage Group Members</h1>
 
