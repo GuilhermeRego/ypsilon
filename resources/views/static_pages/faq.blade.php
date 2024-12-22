@@ -44,7 +44,7 @@
 
         <div class="border border-top-2 rounded-4">
             <h3 class="p-2 pb-2 border-bottom border-1 text-center bg-dark text-white fw-bold rounded-top-4">7. What types of content can I share?</h3>
-            <p class="p-2 fw-bold">Users can share text posts, images, videos, and audio clips. This versatility allows you to express yourself in the way that suits you best.</p>
+            <p class="p-2 fw-bold">Users can share text post sand images. This versatility allows you to express yourself in the way that suits you best.</p>
         </div>
 
         <div class="border border-top-2 rounded-4">
