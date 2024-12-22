@@ -21,6 +21,16 @@
                     <input type="file" id="imageInput" style="display:none;">
                     <button type="submit" class="btn btn-primary">Update Comment</button>
                 </form>
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -41,7 +51,6 @@
                     ],
                     handlers: {
                         'image': function() {
-                            // Trigger hidden file input
                             document.querySelector('#imageInput').click();
                         }
                     }
@@ -49,10 +58,8 @@
             }
         });
 
-        // Load existing content into Quill editor
         quill.root.innerHTML = `{!! $comment->content !!}`;
 
-        // File input event listener
         document.querySelector('#imageInput').addEventListener('change', function() {
             var file = this.files[0];
             if (file) {
@@ -61,21 +68,13 @@
                     var range = quill.getSelection();
                     quill.insertEmbed(range.index, 'image', e.target.result, Quill.sources.USER);
                 };
-                reader.readAsDataURL(file); // Convert image to Base64
+                reader.readAsDataURL(file); 
             }
         });
 
-        // Sync Quill content to hidden input before form submit
         document.querySelector('#comment-form').addEventListener('submit', function(event) {
             var content = document.querySelector('#editor-container .ql-editor').innerHTML;
             document.querySelector('#content').value = content;
-
-            // Check if content is empty
-            var trimmedContent = content.replace(/<p><br><\/p>/g, '').replace(/<[^>]*>/g, '').trim();
-            if (trimmedContent === '') {
-                event.preventDefault();
-                alert('Comment cannot be empty!');
-            }
         });
     });
 </script>

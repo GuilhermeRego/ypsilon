@@ -38,6 +38,7 @@
      document.addEventListener('DOMContentLoaded', function() {
             var quill = new Quill('#editor-container', {
                 theme: 'snow',
+                placeholder: 'Create a new post...',
                 modules: {
                     toolbar: {
                         container: [

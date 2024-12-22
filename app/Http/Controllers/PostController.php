@@ -68,7 +68,7 @@ class PostController extends Controller
                 return view('post.show', compact('post'));
             }
 
-            if ($user && $post->group->members->contains($user->id)) {
+            if ($user && $post->group->group_member->contains($user->id)) {
                 return view('post.show', compact('post'));
             }
 
@@ -81,7 +81,7 @@ class PostController extends Controller
                 return view('post.show', compact('post'));
             }
 
-            if ($user && $user->following->contains('followed_id', $post->user_id)) {
+            if ($user && $user->following->contains('followed_id', $post->user_id) || auth()->user()->isAdmin()) {
                 return view('post.show', compact('post'));
             }
 
@@ -107,6 +107,12 @@ class PostController extends Controller
         $request->validate([
             'content' => 'required|min:1',
         ]);
+        $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
+        $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
+
+        if ($trimmedContentWithoutTags == '') {
+            return redirect()->back()->with('error', 'Post cannot be empty!');
+        }
 
         $post->update([
             'content' => $request->content,

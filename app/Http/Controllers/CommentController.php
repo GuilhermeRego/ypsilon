@@ -30,9 +30,9 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'required',
+            'content' => 'required|min:1',
         ]);
-
+        
         $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
         $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
 
@@ -76,6 +76,16 @@ class CommentController extends Controller
         if (auth()->user()->id != $comment->user_id && !(auth()->user()->isAdmin()))
             abort(403);
 
+            $request->validate([
+                'content' => 'required|min:1',
+            ]);
+
+            $trimmedContent = trim(preg_replace('/<p><br><\/p>/', '', $request->content));
+            $trimmedContentWithoutTags = trim(strip_tags($trimmedContent, '<img>'));
+    
+            if ($trimmedContentWithoutTags == '') {
+                return redirect()->back()->with('error', 'Comment cannot be empty!');
+            }
         $comment->content = $request->content;
         $comment->save();
 

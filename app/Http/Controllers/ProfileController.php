@@ -25,7 +25,19 @@ class ProfileController extends Controller
         $hasFollowRequest = Follow_Request::where('follower_id', auth()->id())
             ->where('followed_id', $user->id)
             ->exists();
-        return view('profile.show', compact('user','isFollowedByAuth','hasFollowRequest'));
+        $posts = $user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get();
+        $reposts = $user->reposts()->with('post')->orderBy('created_at', 'desc')->get();
+
+        // Combine posts and reposts
+        $combinedPosts = $posts->merge($reposts->pluck('post')->each(function ($post) use ($reposts) {
+            $repost = $reposts->firstWhere('post_id', $post->id);
+            if ($repost) {
+                $post->repost_created_at = $repost->created_at;
+            }
+        }))->sortByDesc(function ($post) {
+            return $post->repost_created_at ?? $post->date_time ?? $post->created_at;
+        });
+        return view('profile.show', compact('user', 'isFollowedByAuth', 'hasFollowRequest', 'username', 'combinedPosts'));
 
     }
 
@@ -76,7 +88,7 @@ class ProfileController extends Controller
                     'url' => 'profile_images/' . $imageName,
                     'type' => 'user_profile',
                 ]);
-                $user->profile_image = $profileImage->id; 
+                $user->profile_image = $profileImage->id;
             }
         }
 
@@ -91,7 +103,7 @@ class ProfileController extends Controller
                     'url' => 'banner_images/' . $bannerName,
                     'type' => 'user_banner',
                 ]);
-                $user->banner_image = $bannerImage->id; 
+                $user->banner_image = $bannerImage->id;
             }
         }
 
@@ -161,21 +173,23 @@ class ProfileController extends Controller
         }
     }
 
-    public function manageFollowers($username) {
-        $user = User::where('username',$username)->firstOrFail();
+    public function manageFollowers($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
         if (auth()->user()->id != $user->id) {
             abort(403, "This isn't your account");
-        } 
+        }
         $followers = $user->followers;
 
         return view("profile.manageFollowers", compact('user', 'followers'));
     }
 
-    public function manageRequests($username) {
-        $user = User::where('username',$username)->firstOrFail();
+    public function manageRequests($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
         if (auth()->user()->id != $user->id) {
             abort(403, "This isn't your account");
-        } 
+        }
         $follower_requests = $user->follower_requests;
 
         return view("profile.manageRequests", compact('user', 'follower_requests'));
@@ -201,9 +215,9 @@ class ProfileController extends Controller
         }
     }
 
-public function toggleFollowRequest($username)
+    public function toggleFollowRequest($username)
     {
-        $user = User::where('username',$username)->firstOrFail();
+        $user = User::where('username', $username)->firstOrFail();
         $authUserId = Auth::id();
 
         $existingFollowRequest = Follow_Request::where('follower_id', $authUserId)

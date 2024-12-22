@@ -3,13 +3,6 @@
 @section('content')
 @include('layouts.upperbarmenu')
 <div class="container p-4" style="overflow-y: scroll">
-    <div class="container-fluid">
-        <form action="{{ route('results') }}" method="GET" id="searchForm">
-            <input type="text" id="userSearch" name="query" placeholder="Search users..." class="form-control">
-        </form>
-        <ul id="userResults" class="list-group mt-2"></ul>
-    </div>
-    <script src="{{ asset('js/search.js') }}"></script>  
     <h1 class="mb-4">Welcome to the Trending Page</h1>
 
     @if(session('success'))

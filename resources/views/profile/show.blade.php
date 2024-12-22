@@ -41,7 +41,9 @@
             @if (auth()->user()->id == $user->id || auth()->user()->isAdmin())
                 <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="button btn-primary m-0">Edit
                     Profile</a>
-                <a href="{{ route('profile.manageFollowers', ['username' => $user->username]) }}" class="button btn-primary m-0">Manage Followers</a>
+                @if(auth()->user()->id == $user->id)
+                    <a href="{{ route('profile.manageFollowers', ['username' => $user->username]) }}" class="button btn-primary m-0">Manage Followers</a>
+                @endif
                 <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST" class="mb-0">
                     @csrf
                     @method('DELETE')
@@ -99,8 +101,10 @@
                 This account is private, follow this user to see their posts.
             </div>
         @else
-            @foreach($user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get() as $post)
-                @include('post.post')
+            @foreach($combinedPosts as $post)
+                @can('view', $post)
+                    @include('post.post')
+                @endcan
             @endforeach
         @endif
     </div>

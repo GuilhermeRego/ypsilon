@@ -24,6 +24,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PusherAuthController;
+use App\Http\Controllers\RepostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -147,6 +148,9 @@ Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users
 Route::get('/admin/posts', [AdminController::class, 'posts'])->name('admin.posts')->middleware('auth');
 Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups')->middleware('auth');
 Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports')->middleware('auth');
+Route::get('/admin/users/search', [AdminController::class, 'searchUsers'])->name('admin.users.search')->middleware('auth');
+Route::get('/admin/posts/search', [AdminController::class, 'searchPosts'])->name('admin.posts.search')->middleware('auth');
+Route::get('/admin/groups/search', [AdminController::class, 'searchGroups'])->name('admin.groups.search')->middleware('auth');
 
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');
@@ -166,7 +170,11 @@ Route::delete('/report/{report}', [ReportController::class, 'destroy'])->name('r
 
 // Notifications:
 Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index')->middleware('auth');
+Route::post('/notifications/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead')->middleware('auth');
 
 // Pusher Authentication ( For messages and notifications in the future)
 Route::post('/pusher/auth', [PusherAuthController::class, 'authenticate']);
 
+// Reposts
+Route::post('/repost/{post}', [RepostController::class, 'store'])->name('repost.store');
+Route::delete('/repost/{post}', [RepostController::class, 'destroy'])->name('repost.destroy');

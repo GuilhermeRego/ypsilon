@@ -34,9 +34,14 @@ class ReactionController extends Controller
                                     ->first();
         
         if ($existingReaction) {
-            // Update the existing reaction
-            $existingReaction->is_like = $request->is_like;
-            $existingReaction->save();
+            // If the existing reaction matches the current reaction type, remove it
+            if ($existingReaction->is_like == $request->is_like) {
+                $existingReaction->delete();
+            } else {
+                // Update the existing reaction
+                $existingReaction->is_like = $request->is_like;
+                $existingReaction->save();
+            }
         } else {
             // Create a new reaction
             $reaction = new Reaction;

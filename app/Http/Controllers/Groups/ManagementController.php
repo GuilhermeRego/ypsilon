@@ -33,6 +33,7 @@ class ManagementController extends Controller
     public function manageRequests($group)
     {
         $group = Group::findOrFail($group);
+        if(!$group->is_private)abort(403, 'Not found');
         if ($this->authorize('isOwner', $group)) {
             return view("Groups.managerequests", ['group'=>$group]);
         } else {

@@ -1,8 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container my-5" style="overflow-y: scroll">
+<div class="container my-5" style="overflow-y: scroll;">
     <h1 class="mb-4 text-center">Group Management</h1>
+
+    <!-- Search Form -->
+    <form action="{{ route('admin.groups.search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Search groups..." value="{{ request('query') }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
 
     <!-- Table Wrapper -->
     <div class="card shadow-sm border-0">
@@ -66,6 +74,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="pagination-container mt-4">
+        {{ $groups->links('pagination::bootstrap-4') }}
     </div>
 </div>
 @endsection

@@ -30,6 +30,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         var quill = new Quill('#editor-container', {
             theme: 'snow',
+            placeholder: 'Write a comment...',
             modules: {
                 toolbar: {
                     container: [
