@@ -34,7 +34,7 @@
         </div>
     </form>
 </div>
-{{-- JS Script for handling sent messages and incoming messages using pusher --}}
+
 <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
 <script>
     const chatId = {{ $chat->id }};
