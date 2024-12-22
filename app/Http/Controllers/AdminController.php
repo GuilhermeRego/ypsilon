@@ -25,10 +25,10 @@ class AdminController extends Controller
     public function searchUsers(Request $request)
     {
         if (auth()->user()->isAdmin()) {
-            $query = $request->input('query');
-            $users = User::where('username', 'LIKE', "%{$query}%")
-                        ->orWhere('email', 'LIKE', "%{$query}%")
-                        ->orWhere('nickname', 'LIKE', "%{$query}%")
+            $query = strtolower($request->input('query'));
+            $users = User::whereRaw('LOWER(username) LIKE ?', ["%{$query}%"])
+                        ->orWhereRaw('LOWER(email) LIKE ?', ["%{$query}%"])
+                        ->orWhereRaw('LOWER(nickname) LIKE ?', ["%{$query}%"])
                         ->get();
             return view('admin.users', compact('users'));
         } else {
@@ -49,10 +49,10 @@ class AdminController extends Controller
     public function searchPosts(Request $request)
     {
         if (auth()->user()->isAdmin()) {
-            $query = $request->input('query');
-            $posts = Post::where('content', 'LIKE', "%{$query}%")
+            $query = strtolower($request->input('query'));
+            $posts = Post::whereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
                         ->orWhereHas('user', function($q) use ($query) {
-                            $q->where('username', 'LIKE', "%{$query}%");
+                            $q->whereRaw('LOWER(username) LIKE ?', ["%{$query}%"]);
                         })
                         ->get();
             return view('admin.posts', compact('posts'));
@@ -66,6 +66,19 @@ class AdminController extends Controller
         if (auth()->user()->isAdmin()) {
             $groups = Group::all();
             $groups = $groups->sortByDesc('created_at');
+            return view('admin.groups', compact('groups'));
+        } else {
+            abort(403);
+        }
+    }
+
+    public function searchGroups(Request $request)
+    {
+        if (auth()->user()->isAdmin()) {
+            $query = strtolower($request->input('query'));
+            $groups = Group::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
+                        ->orWhereRaw('LOWER(description) LIKE ?', ["%{$query}%"])
+                        ->get();
             return view('admin.groups', compact('groups'));
         } else {
             abort(403);
