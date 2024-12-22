@@ -4,6 +4,14 @@
 <div class="container my-5" style="overflow-y: scroll;">
     <h1 class="mb-4 text-center">User Management</h1>
 
+    <!-- Search Form -->
+    <form action="{{ route('admin.users.search') }}" method="GET" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="query" class="form-control" placeholder="Search users..." value="{{ request('query') }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
     <!-- Table Wrapper -->
     <div class="card shadow-sm border-0">
         <div class="card-body p-4">

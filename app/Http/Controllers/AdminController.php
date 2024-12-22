@@ -8,6 +8,7 @@ use App\Models\Group;
 use Carbon\Carbon;
 use App\Models\Reaction;
 use App\Models\Report;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -19,6 +20,20 @@ class AdminController extends Controller
             return view('admin.users', compact('users'));
         }
         else abort(403);
+    }
+
+    public function searchUsers(Request $request)
+    {
+        if (auth()->user()->isAdmin()) {
+            $query = $request->input('query');
+            $users = User::where('username', 'LIKE', "%{$query}%")
+                        ->orWhere('email', 'LIKE', "%{$query}%")
+                        ->orWhere('nickname', 'LIKE', "%{$query}%")
+                        ->get();
+            return view('admin.users', compact('users'));
+        } else {
+            abort(403);
+        }
     }
 
     public function posts()

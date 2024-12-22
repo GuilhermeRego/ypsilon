@@ -147,6 +147,7 @@ Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users
 Route::get('/admin/posts', [AdminController::class, 'posts'])->name('admin.posts')->middleware('auth');
 Route::get('/admin/groups', [AdminController::class, 'groups'])->name('admin.groups')->middleware('auth');
 Route::get('/admin/reports', [AdminController::class, 'reports'])->name('admin.reports')->middleware('auth');
+Route::get('/admin/users/search', [AdminController::class, 'searchUsers'])->name('admin.users.search')->middleware('auth');
 
 // Show results page
 Route::get('/results', [ResultsController::class, 'index'])->name('results');
