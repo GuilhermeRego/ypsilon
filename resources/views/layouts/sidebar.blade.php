@@ -53,7 +53,7 @@
                 <li class="nav-item"><a href="{{ route('saved.index', ['username' => auth()->user()->username]) }}" class="nav-link"><i class="bi bi-floppy"></i> Saved</a></li>
                 @endif
                 <li class="nav-item"><a href="{{ url('groups') }}" class="nav-link"><i class="bi bi-people"></i> Groups</a></li>
-                <li class="nav-item"><a href="{{ url('support') }}" class="nav-link"><i class="bi bi-question-circle"></i> Support</a></li>
+                <li class="nav-item"><a href="{{ url('/information/about-us') }}" class="nav-link"><i class="bi bi-question-circle"></i> Information</a></li>
                 @auth
                     @if (auth()->user()->isAdmin())
                         <li class="nav-item"><a href="{{ url('admin') }}" class="nav-link"><i class="bi bi-shield-fill"></i> Admin</a></li>
