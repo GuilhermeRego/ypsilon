@@ -4,12 +4,13 @@
 <div class="container p-4" style="overflow-y: scroll">
     <h1>Manage Group Members</h1>
 
-    {{-- Lista de proprietários --}}
     <h2>Group Owners:</h2>
     <ul>
         @foreach ($owners as $owner)
                 <li>
-                    {{ $owner->user->nickname }}
+                    <a href="{{ route('profile.show', ['username' => $owner->user->username]) }}" style="font-size: 1.5em; text-decoration:none">
+                    {{ $owner->user->nickname }}</a> 
+                    <p class="m-0 pl-1" style="display: inline;">&#64{{ $owner->user->username }}</p>
                     @if (auth()->user()->id === $owner->user_id)
                         <span class="badge bg-primary">You</span>
                     @endif
@@ -18,12 +19,13 @@
         @endforeach
     </ul>
 
-    {{-- Lista de membros não proprietários --}}
     <h2>Members:</h2>
     <ul>
         @foreach ($members as $member)
             <li>
-                {{ $member->user->nickname }}
+            <a href="{{ route('profile.show', ['username' => $member->user->username]) }}" style="font-size: 1.5em; text-decoration:none">
+            {{ $member->user->nickname }}</a>
+            <p class="m-0 pl-1" style="display: inline;">&#64{{ $member->user->username }}</p>
                 <form action="{{ route('group.removeMember', ['group' => $group->id, 'member' => $member->user_id]) }}"
                     method="POST" style="display:inline;">
                     @csrf
