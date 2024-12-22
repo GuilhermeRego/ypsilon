@@ -81,7 +81,7 @@ class PostController extends Controller
                 return view('post.show', compact('post'));
             }
 
-            if ($user && $user->following->contains('followed_id', $post->user_id) || auth()->user()->isAdmin()) {
+            if ($user && $user->following->contains('followed_id', $post->user_id) || auth()->user()->isAdmin() || $user->id == auth()->user()->id) {
                 return view('post.show', compact('post'));
             }
 

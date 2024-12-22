@@ -35,15 +35,13 @@
             @enderror
         </div>
         <div class="form-group mb-3">
-            @if ($user->is_private)
-            <input type="checkbox" id="is_private" name="is_private" checked>
-            @else
-            <input type="checkbox" id="is_private" name="is_private">
-            @endif
-            <label for="is_private" class="form-label">Private Profile</label>
-            @error('private')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <div class="mb-3 d-flex align-items-center">
+                <label for="is_private" class="form-label">Private Account</label>
+                <div class="form-check form-switch" style="transform: scale(1.5);">
+                    <input type="checkbox" class="form-check-input" id="is_private" name="is_private" value="1" 
+                    {{ $user->is_private ? 'checked' : '' }}>
+                </div>
+            </div>
         </div>
         <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
