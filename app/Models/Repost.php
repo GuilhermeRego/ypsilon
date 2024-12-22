@@ -23,6 +23,7 @@ class Repost extends Model
     protected $fillable = [
         'user_id',
         'post_id',
+        'created_at',
     ];
 
     protected $primaryKey = 'id';

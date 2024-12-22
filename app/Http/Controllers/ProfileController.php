@@ -25,7 +25,7 @@ class ProfileController extends Controller
         $hasFollowRequest = Follow_Request::where('follower_id', auth()->id())
             ->where('followed_id', $user->id)
             ->exists();
-        return view('profile.show', compact('user','isFollowedByAuth','hasFollowRequest'));
+        return view('profile.show', compact('user','isFollowedByAuth','hasFollowRequest', 'username'));
 
     }
 

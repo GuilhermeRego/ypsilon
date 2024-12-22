@@ -24,6 +24,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\InboxController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PusherAuthController;
+use App\Http\Controllers\RepostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -173,3 +174,7 @@ Route::post('/notifications/mark-as-read', [NotificationController::class, 'mark
 
 // Pusher Authentication ( For messages and notifications in the future)
 Route::post('/pusher/auth', [PusherAuthController::class, 'authenticate']);
+
+// Reposts
+Route::post('/repost/{post}', [RepostController::class, 'store'])->name('repost.store');
+Route::delete('/repost/{post}', [RepostController::class, 'destroy'])->name('repost.destroy');

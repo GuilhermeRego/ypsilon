@@ -99,7 +99,21 @@
                 This account is private, follow this user to see their posts.
             </div>
         @else
-            @foreach($user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get() as $post)
+            <?php 
+                $posts = $user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get();
+                $reposts = $user->reposts()->with('post')->orderBy('created_at', 'desc')->get();
+
+                // Combine posts and reposts
+                $combinedPosts = $posts->merge($reposts->pluck('post')->each(function ($post) use ($reposts) {
+                    $repost = $reposts->firstWhere('post_id', $post->id);
+                    if ($repost) {
+                        $post->repost_created_at = $repost->created_at;
+                    }
+                }))->sortByDesc(function ($post) {
+                    return $post->repost_created_at ?? $post->date_time ?? $post->created_at;
+                });
+            ?>
+            @foreach($combinedPosts as $post)
                 @can('view', $post)
                     @include('post.post')
                 @endcan
