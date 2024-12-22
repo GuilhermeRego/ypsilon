@@ -28,7 +28,7 @@
         @if($results->isEmpty())
             <p>No results found</p>
         @else
-            <ul class="list-group mt-2">
+            <ul class="list-group mt-2" style="overflow-y: scroll; max-height: 750px;">
                 @foreach($results as $result)
                     @if($type === 'users')
                         <li class="list-group-item">
