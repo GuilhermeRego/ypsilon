@@ -255,6 +255,37 @@ class ProfileController extends Controller
             return redirect()->route('profile.manageRequests', $username)->with('error', 'This user has not requested to follow you.');
         }
     }
+
+    public function acceptFollowRequest($username, $followerId)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        $existingFollow = Follow::where('follower_id', $followerId)
+            ->where('followed_id', $user->id)
+            ->first();
+
+        $followRequest = Follow_Request::where('follower_id', $followerId)
+            ->where('followed_id', $user->id)
+            ->first();
+
+        if ($followRequest) {
+            $followRequest->delete();
+        }
+
+        if ($existingFollow) {
+            return redirect()->route('profile.manageRequests', $username)->with('error', 'This user already follows you');
+        } else {
+            if ($followRequest) {
+                Follow::create([
+                    'follower_id' => $followRequest->follower_id,
+                    'followed_id' => $followRequest->followed_id,
+                ]);
+                return redirect()->route('profile.manageRequests', $username)->with('success', 'Follower request accepted!');
+            } else {
+                return redirect()->route('profile.manageRequests', $username)->with('error', 'This user has not requested to follow you.');
+            }
+        }
+    }
 }
 
 

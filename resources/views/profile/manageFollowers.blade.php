@@ -25,8 +25,8 @@
                                 class="rounded-circle mr-3 border border-2" 
                                 alt="Profile Image" 
                                 style="width: 50px; height: 50px;">
-                <h4>{{ $follow->follower->nickname }}</h4>
-                </div>
+                <a href="{{ route('profile.show', ['username' => $follow->follower->username]) }}" style="font-size: 1.5em; text-decoration: none" >{{ $follow->follower->nickname }}</a>
+            </div>
                 <form action="{{ route('profile.removeFollower', ['username' => $user->username, 'followerId' => $follow->follower_id]) }}" method="POST" style="display:inline;" class="m-0">
                     @csrf
                     @method('DELETE')
