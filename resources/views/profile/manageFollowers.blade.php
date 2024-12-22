@@ -30,7 +30,7 @@
                 <form action="{{ route('profile.removeFollower', ['username' => $user->username, 'followerId' => $follow->follower_id]) }}" method="POST" style="display:inline;" class="m-0">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger mr-2" style="width:40px;height:40px"><strong>X</strong></button>
+                    <button type="submit" class="btn btn-danger mr-2" style="width:40px;height:40px"><i class="bi bi-x-lg"></i></button>
                 </form>            
             </div>
         @endforeach

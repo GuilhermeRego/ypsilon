@@ -67,7 +67,7 @@ class Post extends Model
     // Eloquent relationship between Post and Repost.
     public function reposts()
     {
-        return $this->hasMany(Repost::class, 'post_id', 'id');
+        return $this->hasMany(Repost::class);
     }
 
     // Eloquent relationship between Post and Report.

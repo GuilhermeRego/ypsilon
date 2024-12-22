@@ -126,6 +126,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->comments()->delete();
+        $post->reactions()->delete();
+        $post->reports()->delete();
+        $post->reposts()->delete();
+        $post->saved_post()->delete();
         $post->delete();
 
         if ($post->group_id == null) {
