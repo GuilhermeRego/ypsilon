@@ -16,7 +16,6 @@ body {
 /* Sidebar */
 .sidebar {
     background-color: #202020;
-    overflow-y: scroll;
 }
 
 .content,.sidebar {
