@@ -96,15 +96,13 @@
             <div class="alert alert-info">
                 No posts yet.
             </div>
-        @elseif($user->is_private && !$isFollowedByAuth && !$user->isAdmin())
+        @elseif($user->is_private && !$isFollowedByAuth && auth()->user()->id != $user->id && !auth()->user()->isAdmin())
             <div class="alert alert-info">
                 This account is private, follow this user to see their posts.
             </div>
         @else
             @foreach($combinedPosts as $post)
-                @can('view', $post)
-                    @include('post.post')
-                @endcan
+                @include('post.post')
             @endforeach
         @endif
     </div>

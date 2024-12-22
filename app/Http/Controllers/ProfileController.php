@@ -235,6 +235,26 @@ class ProfileController extends Controller
             return redirect()->route('profile.show', $username)->with('success', 'You have requested to follow this user!');
         }
     }
+
+    public function removeFollowRequest($username, $followerId)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+
+        if (auth()->user()->id != $user->id) {
+            abort(403, "This isn't your account");
+        }
+
+        $followRequest = Follow_Request::where('follower_id', $followerId)
+            ->where('followed_id', $user->id)
+            ->first();
+
+        if ($followRequest) {
+            $followRequest->delete();
+            return redirect()->route('profile.manageRequests', $username)->with('success', 'Follower request rejected');
+        } else {
+            return redirect()->route('profile.manageRequests', $username)->with('error', 'This user has not requested to follow you.');
+        }
+    }
 }
 
 

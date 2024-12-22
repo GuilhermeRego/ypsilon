@@ -116,7 +116,7 @@ Route::post('/profile/{username}/follow-request', [ProfileController::class, 'to
 Route::get('/profile/{username}/management/followers', [ProfileController::class,'manageFollowers'])->name('profile.manageFollowers');
 Route::get('/profile/{username}/management/requests', [ProfileController::class,'manageRequests'])->name('profile.manageRequests');
 Route::delete('/profile/{username}/management/followers/remove-follower/{followerId}', [ProfileController::class, 'removeFollower'])->name('profile.removeFollower');
-
+Route::delete('/profile/{username}/management/requests/remove-follower-request/{followerId}', [ProfileController::class, 'removeFollowRequest'])->name('profile.removeFollowRequest');
 // Direct Messages:
 Route::get('direct/inbox',[InboxController::class, 'index'])->name('inbox.index');
 Route::get('/direct/{chat}', [ChatController::class, 'show'])->name('chat.show');

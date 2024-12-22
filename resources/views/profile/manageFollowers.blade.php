@@ -21,7 +21,7 @@
         @foreach ($user->followers as $follow)
             <div class="container p-2 d-flex align-items-center justify-content-between border border-1 rounded m-0 mb-2" style="width:300px">
                 <div class="follower-left d-flex align-items-center">
-                <img src="{{ $user->profileImage ? asset('storage/' . $user->profileImage->url) : asset('images/profile-default.png') }}"
+                <img src="{{ $follow->follower->profileImage ? asset('storage/' . $follow->follower->profileImage->url) : asset('images/profile-default.png') }}"
                                 class="rounded-circle mr-3 border border-2" 
                                 alt="Profile Image" 
                                 style="width: 50px; height: 50px;">
