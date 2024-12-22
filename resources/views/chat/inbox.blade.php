@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="inbox-container">
-    <div class="inbox-bar border-end border-2">
+    <div class="inbox-bar border-end border-2" style="overflow:scroll">
         @foreach ($chats as $chat)
             @php
                 $member = $usersArray[$chat->id] ?? null;

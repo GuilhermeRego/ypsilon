@@ -119,6 +119,7 @@ Route::delete('/profile/{username}/management/followers/remove-follower/{followe
 Route::delete('/profile/{username}/management/requests/remove-follower-request/{followerId}', [ProfileController::class, 'removeFollowRequest'])->name('profile.removeFollowRequest');
 Route::post('/profile/{username}/management/requests/accept-follower-request/{followerId}', [ProfileController::class, 'acceptFollowRequest'])->name('profile.acceptFollowRequest');
 // Direct Messages:
+Route::post('/direct/create/{user}', [ChatController::class, 'create'])->name('chat.create');
 Route::get('direct/inbox',[InboxController::class, 'index'])->name('inbox.index');
 Route::get('/direct/{chat}', [ChatController::class, 'show'])->name('chat.show');
 Route::post('/direct/{chat}', [ChatController::class, 'storeMessage'])->name('chat.storeMessage')->middleware('auth');;

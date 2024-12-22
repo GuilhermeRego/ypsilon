@@ -2,12 +2,6 @@
 @section('content')
 @include('layouts.upperbarmenu')
 <div class="container p-4" style="overflow-y: scroll">
-    @if ($user->followers->count() == 0)
-        <div class="alert alert-info">
-            You have no followers.
-        </div>
-    @else   
-    <h1>Displaying all followers for {{$user->username}}:</h1>
     @if(session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -18,6 +12,12 @@
             {{ session('success') }}
         </div>
     @endif
+    @if ($user->followers->count() == 0)
+        <div class="alert alert-info">
+            You have no followers.
+        </div>
+    @else   
+    <h1>Displaying all followers for {{$user->username}}:</h1>
         @foreach ($user->followers as $follow)
             <div class="container p-2 d-flex align-items-center justify-content-between border border-1 rounded m-0 mb-2" style="width:300px">
                 <div class="follower-left d-flex align-items-center">

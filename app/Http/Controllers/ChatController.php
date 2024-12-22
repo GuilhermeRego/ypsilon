@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\Chat_Member;
 use App\Models\Message;
 use App\Events\MessageSent;
 use Illuminate\Http\Request;
@@ -42,6 +43,40 @@ class ChatController extends Controller
             'usersArray' => $usersArray,
             'chats' => $chats
         ]);
+    }
+
+    public function create(Request $request, $userId)
+    {
+        $authUser = auth()->user();
+
+        $userChats = $authUser->chats()->get();
+
+        // Check if any of these chats already have the other user as a member
+        $existingChat = $userChats->first(function ($chat) use ($userId) {
+            // Check if the other user is a member of the chat
+            return $chat->chat_member->pluck('user_id')->contains($userId);
+        });
+
+        if ($existingChat) {
+            return redirect()->route('chat.show', ['chat' => $existingChat->id]);
+        }
+
+        // Create a new chat
+        $chat = Chat::create();
+
+        // Add the authenticated user and the profile's user as chat members
+        Chat_Member::create([
+            'chat_id' => $chat->id,
+            'user_id' => $authUser->id,
+        ]);
+
+        Chat_Member::create([
+            'chat_id' => $chat->id,
+            'user_id' => $userId,
+        ]);
+
+        // Redirect to the new chat
+        return redirect()->route('chat.show', ['chat' => $chat->id]);
     }
 
     public function storeMessage(Request $request, Chat $chat)

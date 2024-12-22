@@ -169,7 +169,7 @@ class ProfileController extends Controller
                 'follower_id' => $authUserId,
                 'followed_id' => $user->id,
             ]);
-            return redirect()->route('profile.show', $username)->with('success', 'You have successfully followed this user!');
+            return redirect()->route('profile.show', $username)->with('success', 'You have succes sfully followed this user!');
         }
     }
 
@@ -285,6 +285,11 @@ class ProfileController extends Controller
                 return redirect()->route('profile.manageRequests', $username)->with('error', 'This user has not requested to follow you.');
             }
         }
+    }
+
+    public function createChat($username) 
+    {
+        
     }
 }
 

@@ -76,6 +76,10 @@
                         @endif 
                     @endif
                 @endif
+                <form action="{{ route('chat.create', ['user' => $user->id]) }}" method="POST" class="mb-0">
+                    @csrf
+                    <button type="submit" class="button m-0 btn-primary">Send Message</button>
+                </form>
                 <a href="{{ route('report.user', ['user' => $user->id]) }}" class="button btn-danger m-0">Report</a>
             @endif
         @endauth

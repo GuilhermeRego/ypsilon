@@ -2,16 +2,6 @@
 @section('content')
 @include('layouts.upperbarmenu')
 <div class="container p-4" style="overflow-y: scroll">
-    @if (!$user->is_private)
-        <div class="alert alert-info">
-            Your account isn't private, you can't have follow requests.
-        </div>
-    @elseif ($user->follower_requests->count() == 0)
-    <div class="alert alert-info">
-        You have no follow requests.
-    </div>
-    @else
-    <h1>Displaying all follower requests for {{$user->username}}:</h1>
     @if(session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -22,6 +12,16 @@
             {{ session('success') }}
         </div>
     @endif
+    @if (!$user->is_private)
+        <div class="alert alert-info">
+            Your account isn't private, you can't have follow requests.
+        </div>
+    @elseif ($user->follower_requests->count() == 0)
+    <div class="alert alert-info">
+        You have no follow requests.
+    </div>
+    @else
+    <h1>Displaying all follower requests for {{$user->username}}:</h1>
         @foreach ($user->follower_requests as $follow)
             <div class="container p-2 d-flex align-items-center justify-content-between border border-1 rounded m-0 mb-2" style="width:300px">
                 <div class="follower-left d-flex align-items-center">
