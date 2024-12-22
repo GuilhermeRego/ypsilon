@@ -14,6 +14,11 @@
         @else
             <a href="{{ url('/login') }}">My Groups</a>
         @endauth
+    @elseif (Request::is('information/about-us') || Request::is('information/services') || Request::is('information/contacts') || Request::is('information/faq'))
+        <a href="{{ url('/information/about-us') }}" class="{{ Request::is('information/about-us') ? 'selected' : '' }}">About us</a>
+        <a href="{{ url('/information/services') }}" class="{{ Request::is('information/services') ? 'selected' : '' }}">Services</a>
+        <a href="{{ url('/information/contacts') }}" class="{{ Request::is('information/contacts') ? 'selected' : '' }}">Contacts</a>
+        <a href="{{ url('/information/faq') }}" class="{{ Request::is('information/faq') ? 'selected' : '' }}">FAQ's</a>
     
     @elseif (isset($group) && (Request::is('groups/' . $group->id . '/management/members') || Request::is('groups/' . $group->id . '/management/requests')))
         <a href="{{ url('groups/' . $group->id . '/management/members') }}" class="{{ Request::is('groups/' . $group->id . '/management/members') ? 'selected' : '' }}">Manage Members</a>

@@ -25,6 +25,7 @@ use App\Http\Controllers\InboxController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\PusherAuthController;
 use App\Http\Controllers\RepostController;
+use App\Http\Controllers\StaticPagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -180,3 +181,9 @@ Route::post('/pusher/auth', [PusherAuthController::class, 'authenticate']);
 // Reposts
 Route::post('/repost/{post}', [RepostController::class, 'store'])->name('repost.store');
 Route::delete('/repost/{post}', [RepostController::class, 'destroy'])->name('repost.destroy');
+
+//Static Pages
+Route::get('/information/faq', [StaticPagesController::class,'faq'])->name('faq');
+Route::get('/information/services', [StaticPagesController::class,'services'])->name('services');
+Route::get('/information/about-us', [StaticPagesController::class,'aboutUs'])->name('about-us');
+Route::get('/information/contacts', [StaticPagesController::class,'contacts'])->name('contacts');
