@@ -33,6 +33,7 @@
             <button type="submit" class="btn btn-primary">Send</button>
         </div>
     </form>
+
     </div>
     <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
     <script>

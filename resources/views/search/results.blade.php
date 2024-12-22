@@ -4,24 +4,28 @@
 <div class="container mt-4">
     <div class="container-fluid">
         <form action="{{ route('results') }}" method="GET" id="searchForm">
-            <input type="text" id="userSearch" name="query" placeholder="Search users..." class="form-control" value="{{ request('query') }}">
+            <input type="text" id="userSearch" name="query" placeholder="Search users..." class="form-control"
+                value="{{ request('query') }}">
             <input type="hidden" name="type" id="searchType" value="{{ request('type', 'users') }}">
         </form>
         <ul id="userResults" class="list-group mt-2"></ul>
     </div>
-    <script src="{{ asset('js/search.js') }}"></script>  
+    <script src="{{ asset('js/search.js') }}"></script>
     <!-- If we are at /results*, show the following:  -->
-     @if(request('query'))
+    @if(request('query'))
         <h1>Search Results for "{{ $query }}"</h1>
         <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link {{ $type === 'users' ? 'active' : '' }}" href="{{ route('results', ['query' => $query, 'type' => 'users']) }}">Users</a>
+                <a class="nav-link {{ $type === 'users' ? 'active' : '' }}"
+                    href="{{ route('results', ['query' => $query, 'type' => 'users']) }}">Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $type === 'posts' ? 'active' : '' }}" href="{{ route('results', ['query' => $query, 'type' => 'posts']) }}">Posts</a>
+                <a class="nav-link {{ $type === 'posts' ? 'active' : '' }}"
+                    href="{{ route('results', ['query' => $query, 'type' => 'posts']) }}">Posts</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $type === 'groups' ? 'active' : '' }}" href="{{ route('results', ['query' => $query, 'type' => 'groups']) }}">Groups</a>
+                <a class="nav-link {{ $type === 'groups' ? 'active' : '' }}"
+                    href="{{ route('results', ['query' => $query, 'type' => 'groups']) }}">Groups</a>
             </li>
         </ul>
 
@@ -45,7 +49,8 @@
                             <a href="{{ url('groups/' . $result->id) }}" class="text-decoration-none text-dark">
                                 <div class="card my-2 p-3">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset('storage/' . ($result->groupImage ? $result->groupImage->url : 'https://via.placeholder.com/50')) }}" class="rounded-circle me-3" alt="Group Image">
+                                        <img src="{{ asset('storage/' . ($result->groupImage ? $result->groupImage->url : 'https://via.placeholder.com/50')) }}"
+                                            class="rounded-circle me-3" alt="Group Image">
                                         <div>
                                             <h3>{{ $result->name }}</h3>
                                             <p>{{ $result->memberCount() }} Members | {{ $result->description }}</p>
@@ -57,6 +62,9 @@
                     @endif
                 @endforeach
             </ul>
+            <div class="pagination-container">
+                {{ $results->appends(['query' => $query, 'type' => $type])->links('pagination::bootstrap-4') }}
+            </div>
         @endif
     @else
         <h1>Search for users, posts, or groups</h1>

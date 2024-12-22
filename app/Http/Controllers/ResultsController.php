@@ -15,15 +15,15 @@ class ResultsController extends Controller
 
         if ($type === 'posts') {
             $results = Post::WhereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
-                ->get();
+                ->paginate(10);
         } elseif ($type === 'groups') {
             $results = Group::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
                 ->orWhereRaw('LOWER(description) LIKE ?', ["%{$query}%"])
-                ->get();
+                ->paginate(10);
         } else {
             $results = User::whereRaw('LOWER(username) LIKE ?', ["%{$query}%"])
                 ->orWhereRaw('LOWER(nickname) LIKE ?', ["%{$query}%"])
-                ->get();
+                ->paginate(10);
         }
 
         return view('search.results', compact('query', 'results', 'type'));
