@@ -67,5 +67,8 @@
             </table>
         </div>
     </div>
+    <div class="pagination-container mt-4">
+        {{ $posts->links('pagination::bootstrap-4') }}
+    </div>
 </div>
 @endsection

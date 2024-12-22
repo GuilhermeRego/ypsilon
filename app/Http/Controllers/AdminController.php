@@ -15,11 +15,11 @@ class AdminController extends Controller
     public function users()
     {
         if (auth()->user()->isAdmin()) {
-            $users = User::all();
-            $users = $users->sortByDesc('created_at');
+            $users = User::orderByDesc('created_at')->paginate(10); 
             return view('admin.users', compact('users'));
+        } else {
+            abort(403);
         }
-        else abort(403);
     }
 
     public function searchUsers(Request $request)
@@ -27,9 +27,9 @@ class AdminController extends Controller
         if (auth()->user()->isAdmin()) {
             $query = strtolower($request->input('query'));
             $users = User::whereRaw('LOWER(username) LIKE ?', ["%{$query}%"])
-                        ->orWhereRaw('LOWER(email) LIKE ?', ["%{$query}%"])
-                        ->orWhereRaw('LOWER(nickname) LIKE ?', ["%{$query}%"])
-                        ->get();
+                ->orWhereRaw('LOWER(email) LIKE ?', ["%{$query}%"])
+                ->orWhereRaw('LOWER(nickname) LIKE ?', ["%{$query}%"])
+                ->paginate(10);
             return view('admin.users', compact('users'));
         } else {
             abort(403);
@@ -39,11 +39,10 @@ class AdminController extends Controller
     public function posts()
     {
         if (auth()->user()->isAdmin()) {
-            $posts = Post::all();
-            $posts = $posts->sortByDesc('date_time');
+            $posts = Post::orderBy('date_time', 'desc')->paginate(10);
             return view('admin.posts', compact('posts'));
-        }
-        else abort(403);
+        } else
+            abort(403);
     }
 
     public function searchPosts(Request $request)
@@ -51,10 +50,10 @@ class AdminController extends Controller
         if (auth()->user()->isAdmin()) {
             $query = strtolower($request->input('query'));
             $posts = Post::whereRaw('LOWER(content) LIKE ?', ["%{$query}%"])
-                        ->orWhereHas('user', function($q) use ($query) {
-                            $q->whereRaw('LOWER(username) LIKE ?', ["%{$query}%"]);
-                        })
-                        ->get();
+                ->orWhereHas('user', function ($q) use ($query) {
+                    $q->whereRaw('LOWER(username) LIKE ?', ["%{$query}%"]);
+                })
+                ->paginate(10);
             return view('admin.posts', compact('posts'));
         } else {
             abort(403);
@@ -64,8 +63,7 @@ class AdminController extends Controller
     public function groups()
     {
         if (auth()->user()->isAdmin()) {
-            $groups = Group::all();
-            $groups = $groups->sortByDesc('created_at');
+            $groups = Group::orderByDesc('created_at')->paginate(10); 
             return view('admin.groups', compact('groups'));
         } else {
             abort(403);
@@ -77,8 +75,8 @@ class AdminController extends Controller
         if (auth()->user()->isAdmin()) {
             $query = strtolower($request->input('query'));
             $groups = Group::whereRaw('LOWER(name) LIKE ?', ["%{$query}%"])
-                        ->orWhereRaw('LOWER(description) LIKE ?', ["%{$query}%"])
-                        ->get();
+                ->orWhereRaw('LOWER(description) LIKE ?', ["%{$query}%"])
+                ->paginate(10);
             return view('admin.groups', compact('groups'));
         } else {
             abort(403);
@@ -88,8 +86,9 @@ class AdminController extends Controller
     public function reports()
     {
         if (auth()->user()->isAdmin()) {
-            $reports = Report::with(['reporter', 'reported_user', 'group', 'post', 'comment'])->get();
-            $reports = $reports->sortByDesc('created_at');
+            $reports = Report::with(['reporter', 'reported_user', 'group', 'post', 'comment'])
+                ->orderByDesc('date_time') 
+                ->paginate(10); 
             return view('admin.reports', compact('reports'));
         } else {
             abort(403);
@@ -105,18 +104,18 @@ class AdminController extends Controller
 
         // Example data for charts
         $userGrowthData = User::selectRaw('DATE(created_at) as date, COUNT(*) as count')
-                              ->groupBy('date')
-                              ->orderBy('date')
-                              ->get()
-                              ->pluck('count', 'date')
-                              ->toArray();
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
 
         $postActivityData = Post::selectRaw('DATE(date_time) as date, COUNT(*) as count')
-                                ->groupBy('date')
-                                ->orderBy('date')
-                                ->get()
-                                ->pluck('count', 'date')
-                                ->toArray();
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
 
         return view('admin.home', compact('users', 'posts', 'groups', 'reports', 'userGrowthData', 'postActivityData'));
     }
