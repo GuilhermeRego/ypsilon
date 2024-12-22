@@ -100,9 +100,7 @@
             </div>
         @else
             @foreach($user->posts()->whereNull('group_id')->orderBy('date_time', 'desc')->get() as $post)
-                @can('view', $post)
-                    @include('post.post')
-                @endcan
+                @include('post.post')
             @endforeach
         @endif
     </div>

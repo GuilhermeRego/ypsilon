@@ -35,7 +35,9 @@
     <div class="posts">
         @foreach($posts as $post)
             @guest
-                @include('post.post')
+                @if (!$post->user->is_private)
+                    @include('post.post')
+                @endif
             @else
                 @can('view', $post)
                     @if ($post->user_id != auth()->user()->id)
