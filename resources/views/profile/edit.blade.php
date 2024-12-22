@@ -21,14 +21,14 @@
             @enderror
         </div>
         <div class="form-group mb-3">
-            <label for="profile_image" class="form-label">Profile Image</label>
+            <label for="profile_image" class="form-label">Profile Image (Optional)</label>
             <input type="file" class="form-control" id="profile_image" name="profile_image">
             @error('profile_image')
                 <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
         <div class="form-group mb-3">
-            <label for="banner_image" class="form-label">Banner Image</label>
+            <label for="banner_image" class="form-label">Banner Image (Optional)</label>
             <input type="file" class="form-control" id="banner_image" name="banner_image">
             @error('banner_image')
                 <div class="text-danger">{{ $message }}</div>

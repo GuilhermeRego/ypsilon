@@ -30,12 +30,12 @@
 
         <div class="faq-item">
             <h3>4. How do I create an account?</h3>
-            <p>Click the "Sign Up" button, fill in your details, and verify your email address through the confirmation link sent to you. Once verified, you can start using Ypsilon immediately.</p>
+            <p>Click the "Sign Up" button, fill in your details, and you can start using Ypsilon immediately.</p>
         </div>
 
         <div class="faq-item">
             <h3>5. Can I change my profile information?</h3>
-            <p>Yes, you can update your profile by visiting the "Profile" section in your account settings. Changes to your name, email, and other details can be made easily.</p>
+            <p>Yes, you can update your profile by visiting the "Profile" section in your account settings. Changes to your nickname, bio, profile image, profile bannerls and other details can be made easily.</p>
         </div>
 
         <div class="faq-item">
@@ -47,12 +47,12 @@
 
         <div class="faq-item">
             <h3>7. What types of content can I share?</h3>
-            <p>Users can share text posts, images, videos, and audio clips. This versatility allows you to express yourself in the way that suits you best.</p>
+            <p>Users can share text posts and images. This versatility allows you to express yourself in the way that suits you best.</p>
         </div>
 
         <div class="faq-item">
             <h3>8. How do I interact with other users' content?</h3>
-            <p>You can like, comment on, and repost content shared by others. These interactions foster connections and make the platform dynamic and engaging.</p>
+            <p>You can like, comment on, save, and repost content shared by others. These interactions foster connections and make the platform dynamic and engaging.</p>
         </div>
 
         <h2>Roles and Permissions</h2>
@@ -84,12 +84,12 @@
 
         <div class="faq-item">
             <h3>12. How do I report inappropriate content?</h3>
-            <p>You can report inappropriate content or users by clicking the "Report" button available on posts and profiles. Admins review reports and take necessary actions.</p>
+            <p>You can report inappropriate content or users by clicking the "Report" button available on posts, groups, comments and profiles. Admins review reports and take necessary actions.</p>
         </div>
 
         <div class="faq-item">
             <h3>13. Can I delete my account?</h3>
-            <p>Yes, you can delete your account through the "Account Settings" page. Deleting your account will permanently remove all your data from the platform.</p>
+            <p>Yes, you can delete your account through the "Profile" page. Deleting your account will permanently remove all your data from the platform.</p>
         </div>
 
         <div class="faq-item">
