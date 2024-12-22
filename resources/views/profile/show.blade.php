@@ -41,7 +41,9 @@
             @if (auth()->user()->id == $user->id || auth()->user()->isAdmin())
                 <a href="{{ route('profile.edit', ['username' => $user->username]) }}" class="button btn-primary m-0">Edit
                     Profile</a>
-                <a href="{{ route('profile.manageFollowers', ['username' => $user->username]) }}" class="button btn-primary m-0">Manage Followers</a>
+                @if(auth()->user()->id == $user->id)
+                    <a href="{{ route('profile.manageFollowers', ['username' => $user->username]) }}" class="button btn-primary m-0">Manage Followers</a>
+                @endif
                 <form action="{{ route('profile.destroy', ['username' => $user->username]) }}" method="POST" class="mb-0">
                     @csrf
                     @method('DELETE')
