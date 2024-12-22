@@ -29,23 +29,35 @@ class ReactionController extends Controller
     public function store(Request $request)
     {
         // Check if the user has already reacted to this post
-        $existingReaction = Reaction::where('user_id', auth()->user()->id)
+        $existingReaction = Reaction::where('user_id', $request->id)
                                     ->where('post_id', $request->post_id)
                                     ->first();
         
+        if ($request->is_like == 'true') {
+            $request->is_like = true;
+        } else {
+            $request->is_like = false;
+        }
+        
         if ($existingReaction) {
-            // If the existing reaction matches the current reaction type, remove it
-            if ($existingReaction->is_like == $request->is_like) {
-                $existingReaction->delete();
-            } else {
+            \Log::debug('Existing Reaction Found', ['existing_is_like' => $existingReaction->is_like, 'request_is_like' => $request->is_like]);
+
+            if ($existingReaction->is_like != $request->is_like) {
                 // Update the existing reaction
+                \Log::debug('Condition 1');
                 $existingReaction->is_like = $request->is_like;
                 $existingReaction->save();
+            } else {
+                // Delete the existing reaction if the same reaction is being toggled
+                \Log::debug('Condition 2');
+                $existingReaction->delete();
+                return redirect()->back();
             }
         } else {
-            // Create a new reaction
-            $reaction = new Reaction;
-            $reaction->user_id = auth()->user()->id;
+            // Create a new reaction if it doesn't exist
+            \Log::debug('Creating New Reaction');
+            $reaction = new Reaction();
+            $reaction->user_id = $request->user_id;
             $reaction->post_id = $request->post_id;
             $reaction->is_like = $request->is_like;
             $reaction->save();

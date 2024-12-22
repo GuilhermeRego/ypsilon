@@ -679,3 +679,8 @@ INSERT INTO Report (reporter_user_id, reported_user_id, justification) VALUES
 
 INSERT INTO Repost (user_id, post_id) VALUES
 ((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE id = 1));
+
+INSERT INTO Reaction (user_id, post_id, is_like) VALUES
+((SELECT "User".id FROM "User" WHERE username = 'goncalob'), (SELECT Post.id FROM Post WHERE id = 1), TRUE),
+((SELECT "User".id FROM "User" WHERE username = 'janesmith'), (SELECT Post.id FROM Post WHERE id = 1), TRUE),
+((SELECT "User".id FROM "User" WHERE username = 'joanaferreira'), (SELECT Post.id FROM Post WHERE id = 1), TRUE);
