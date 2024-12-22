@@ -7,8 +7,7 @@
                     @if ($post->user_id == null)
                         <h5 class="post-username">Anonymous</h5>
                     @else
-                        <a href="{{ route('profile.show', ['username' => $post->user->username]) }}"
-                            class="btn btn-outline-primary btn-sm mb-0" style="font-size: 1.5em">
+                        <a href="{{ route('profile.show', ['username' => $post->user->username]) }}" style="font-size: 1.5em; text-decoration: none" >
                             {{ $post->user->nickname }}</a>
                         <p class="m-0 pl-1">&#64{{ $post->user->username}}</p>
                     @endif
@@ -50,14 +49,14 @@
                         <form action="{{ route('saved.create', ['post' => $post->id]) }}" method="POST"
                             class="d-inline reaction-form">
                             @csrf
-                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy">{{ $post->savedCount() }}</i></button>
+                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy"></i> {{ $post->savedCount() }}</button>
                         </form>
                     @else
                         <form action="{{ route('saved.destroy', ['post' => $post->id]) }}" method="POST"
                             class="d-inline reaction-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill">{{ $post->savedCount() }}</i></button>
+                            <button type="submit" class="btn btn-outline-dark btn-sm"><i class="bi bi-floppy-fill"></i> {{ $post->savedCount() }}</button>
                         </form>
                     @endif
                 @endif
