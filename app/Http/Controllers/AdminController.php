@@ -46,6 +46,21 @@ class AdminController extends Controller
         else abort(403);
     }
 
+    public function searchPosts(Request $request)
+    {
+        if (auth()->user()->isAdmin()) {
+            $query = $request->input('query');
+            $posts = Post::where('content', 'LIKE', "%{$query}%")
+                        ->orWhereHas('user', function($q) use ($query) {
+                            $q->where('username', 'LIKE', "%{$query}%");
+                        })
+                        ->get();
+            return view('admin.posts', compact('posts'));
+        } else {
+            abort(403);
+        }
+    }
+
     public function groups()
     {
         if (auth()->user()->isAdmin()) {
