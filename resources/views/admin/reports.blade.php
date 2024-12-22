@@ -44,18 +44,28 @@
                                 </div>
                             @endif
                             @if ($report->post)
-                                <div><strong>Post:</strong> 
+                                @if (Str::length(strip_tags($report->post->content)) == 0)
                                     <a href="{{ route('post.show', $report->post->id) }}" class="text-decoration-none">
-                                        {!! Str::limit($report->post->content, 30, '...') !!}
+                                        Post
                                     </a>
-                                </div>
+                                @else
+                                    <strong>Post:</strong> 
+                                    <a href="{{ route('post.show', $report->post->id) }}" class="text-decoration-none">
+                                        {!! Str::limit(strip_tags($report->post->content), 30, '...') !!}
+                                    </a>
+                                @endif
                             @endif
                             @if ($report->comment)
-                                <div><strong>Comment:</strong> 
+                                @if (Str::length(strip_tags($report->comment->content)) == 0)
                                     <a href="{{ route('post.show', $report->comment->post) }}" class="text-decoration-none">
-                                        {!! Str::limit($report->comment->content, 30, '...') !!}
+                                        Comment
                                     </a>
-                                </div>
+                                @else
+                                    <strong>Comment:</strong> 
+                                    <a href="{{ route('post.show', $report->comment->post) }}" class="text-decoration-none">
+                                        {!! Str::limit(strip_tags($report->comment->content), 30, '...') !!}
+                                    </a>
+                                @endif
                             @endif
                         </td>
 
