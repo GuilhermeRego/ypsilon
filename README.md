@@ -1,5 +1,7 @@
 # Ypsilon
 
+This is a project for the Laboratório de Bases de Dados e Aplicações Web (Databases and Web Applications Laboratory) 2024-2025 course at **FEUP**, using various technologies listed and detailed below to build a functional social network that implements features of every known real-world social network, focusing more on Twitter/X.
+
 ## Description
 Ypsilon is a modern, easy-to-use, and intuitive social network that combines the best aspects of contemporary social networks. Share your thoughts, feelings, and life highlights via text, image, video, or even audio. Follow your favorite celebrities, connect with your best friends, visit their profiles, and interact with their posts by liking, replying, or even reposting.
 
